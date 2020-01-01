@@ -141,7 +141,7 @@ Once your code is ready for testing, turn on the eboard, wait for the radio to p
 
 If it fails, you may either have an error in your code, no connection to the radio, or some other error to figure out. Feel free to ask around for help or look up the issue in the event of an error.
 
-If it succeeds, open up the Driver Station, select "Teleoperated" or "Autonomous," and click "Enable" (make sure to announce when you're enabling!). You can click "Disable" to stop running code (or, in the event of an emergency, press SPACE to emergency stop). If you want to see a camera while running code, you can use ShuffleBoard (should open automatically).
+If it succeeds, open up the Driver Station, select "Teleoperated" or "Autonomous," and click "Enable." You can click "Disable" to stop running code (or, in the event of an emergency, press SPACE to emergency stop). *Make sure to announce when you're enabling or disabling code!* If you want to see a camera while running code, you can use ShuffleBoard (should open automatically).
 
 #### Hardware Overview
 If you’re ever confused about the function of any hardware on the eboard, look at https://wpilib.screenstepslive.com/s/currentCS/m/getting_started/l/599672-frc-control-system-hardware-overview.
