@@ -136,11 +136,19 @@ Next, you can type the commit message in the box above it, then press CTRL + Ent
 
 If you need to refresh so that VS Code recognizes new changes, just click on the Refresh icon in the middle of the bar. (**Do NOT press F5; in VS Code F5 will attempt to run and debug your code, not refresh!**)
 
+#### Running/Testing Code
+Once your code is ready for testing, turn on the eboard, wait for the radio to pop up in your available WIFI connections, and press SHIFT + F5 to deploy the code. Wait for the Gradle build to complete.
+
+If it fails, you may either have an error in your code, no connection to the radio, or some other error to figure out. Feel free to ask around for help or look up the issue in the event of an error.
+
+If it succeeds, open up the Driver Station, select "Teleoperated" or "Autonomous," and click "Enable" (make sure to announce when you're enabling!). You can click "Disable" to stop running code (or, in the event of an emergency, press SPACE to emergency stop). If you want to see a camera while running code, you can use ShuffleBoard (should open automatically).
+
 #### Hardware Overview
 If you’re ever confused about the function of any hardware on the eboard, look at https://wpilib.screenstepslive.com/s/currentCS/m/getting_started/l/599672-frc-control-system-hardware-overview.
 
 #### Creating a New Git Repository
 *This section is only relevant to future programming leaders.*
+
 If you're the sorry soul who needs to create next year's code repository, have no fear! Creating a new repository is simple if you follow these instructions.
 
 First, make sure you've installed Git Bash, VS Code, and WPILib. Then, open VS Code and press CTRL + Shift + P to show all commands. Search for "Create a new project" and open up the WPILib Project Creator. Set your project type to Template, your language to Java, and your project base to Timed or Command Robot. Select a project folder on your personal computer (I'd recommend C:/Users/[your username]/2021\_RobotCode\_2849), set your project name to "2021\_RobotCode\_2849," and set the team number to 2849. Click "Generate project."
