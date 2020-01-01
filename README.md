@@ -139,9 +139,14 @@ If you need to refresh so that VS Code recognizes new changes, just click on the
 #### Hardware Overview
 If you’re ever confused about the function of any hardware on the eboard, look at https://wpilib.screenstepslive.com/s/currentCS/m/getting_started/l/599672-frc-control-system-hardware-overview.
 
-#### Creating a New Code Repository
+#### Creating a New Git Repository
 *This section is only relevant to future programming leaders.*
-If you're the sorry soul who needs to create next year's code repository, have no fear! Creating a new repository is simple.
+If you're the sorry soul who needs to create next year's code repository, have no fear! Creating a new repository is simple if you follow these instructions.
 
-First, make sure you've installed Git Bash, VS Code, and WPILib. Then, open VS Code and press CTRL + Shift + P to show all commands. Search for "Create a new project," then select a folder on your personal computer (I'd recommend C:/Users/.../20##\_RobotCode\_2849)
-(will finish later)
+First, make sure you've installed Git Bash, VS Code, and WPILib. Then, open VS Code and press CTRL + Shift + P to show all commands. Search for "Create a new project" and open up the WPILib Project Creator. Set your project type to Template, your language to Java, and your project base to Timed or Command Robot. Select a project folder on your personal computer (I'd recommend C:/Users/[your username]/2021\_RobotCode\_2849), set your project name to "2021\_RobotCode\_2849," and set the team number to 2849. Click "Generate project."
+
+Next, open up a Git Bash terminal (CTRL + SHIFT + \`). Make sure your current directory is in your project folder (if not, type `cd ~/2021_RobotCode_2849`). Type `git init` to initialize the local directory as a Git repository. Type `git add .` to stage all the files you just generated for your commit. Then type `git commit -m "First commit"` to commit your changes.
+
+After committing, type `git remote add origin https://github.com/teamursamajor/2021_RobotCode_2849.git` to set the new remote repository where your local repository will be pushed. Finally, type `git push origin master` to push your commit to the remote repository.
+
+Note that all of your files will be stored in a folder nested inside of the original project folder. Trust me, I tried to get around this but couldn't. Just put up with it. If anything goes horribly wrong, close VS Code, delete the project folder entirely, open VS Code again, open a git terminal, and type `git clone https://github.com/teamursamajor/2021_RobotCode_2849` to add the repo back to your computer. Best of luck!
