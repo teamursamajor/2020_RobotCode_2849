@@ -21,17 +21,17 @@ public class AutoCompiler {
 	interface Token {
 	}
 
-	// private Drive drive;
+	private Drive drive;
 	// private Arm arm;
 	// private Cargo cargo;
 	// private Hatch hatch;
 
-	// public AutoCompiler(Drive drive, Arm arm, Cargo cargo, Hatch hatch) {
-	// 	this.drive = drive;
+	public AutoCompiler(Drive drive/*, Arm arm, Cargo cargo, Hatch hatch*/) {
+		this.drive = drive;
 	// 	this.arm = arm;
 	// 	this.cargo = cargo;
 	// 	this.hatch = hatch;
-	// }
+	}
 
 	/**
 	 * A token that executes a given auto file
@@ -122,9 +122,9 @@ public class AutoCompiler {
 			}
 		}
 
-		// public DriveTask makeTask() {
-		// 	return new DriveTask(dist, drive, DriveMode.AUTO_DRIVE);
-		// }
+		public DriveTask makeTask() {
+			return new DriveTask(dist, drive, DriveMode.AUTO_DRIVE);
+		}
 	}
 
 	/**
@@ -146,9 +146,9 @@ public class AutoCompiler {
 			}
 		}
 
-		// public DriveTask makeTask() {
-		// 	return new DriveTask(turnAmount, drive, DriveMode.TURN);
-		// }
+		public DriveTask makeTask() {
+			return new DriveTask(turnAmount, drive, DriveMode.TURN);
+		}
 	}
 
 	/**
