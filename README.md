@@ -149,4 +149,4 @@ Next, open up a Git Bash terminal (CTRL + SHIFT + \`). Make sure your current di
 
 After committing, type `git remote add origin https://github.com/teamursamajor/2021_RobotCode_2849.git` to set the new remote repository where your local repository will be pushed. Finally, type `git push origin master` to push your commit to the remote repository.
 
-Note that all of your files will be stored in a folder nested inside of the original project folder. Trust me, I tried to get around this but couldn't. Just put up with it. If anything goes horribly wrong, close VS Code, delete the project folder entirely, open VS Code again, open a git terminal, and type `git clone https://github.com/teamursamajor/2021_RobotCode_2849` to add the repo back to your computer. Best of luck!
+If anything goes horribly wrong, close VS Code, delete the project folder entirely, open VS Code again, open a git terminal, and type `git clone https://github.com/teamursamajor/2021_RobotCode_2849` to add the repo back to your computer. Best of luck!
