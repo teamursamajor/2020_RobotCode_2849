@@ -1,0 +1,30 @@
+Game Points
+
+1) Initiation line - Auto:5
+
+2) Power cells in inner port - Auto:6 - Teleop:3
+
+3) Power cells in outer port - Auto:4 - Teleop:2
+
+4) Power cells in bottom port - Auto:2 - Teleop:1
+
+5) Rotation control - Teleop:10
+
+6) Position control - Teleop:20
+
+7) ENDGAME Hang - Teleop:25
+
+8) ENDGAME park - Teleop:5
+
+9) ENDGAME level with 1-3 robots - Teleop:15
+
+Ranking Points
+
+1) Shield Generator Operational - 1
+
+2) Shield Generator Energized - 1
+
+3) Tie - 1
+
+4) Win - 2
+
