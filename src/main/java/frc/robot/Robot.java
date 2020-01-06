@@ -30,7 +30,9 @@ public class Robot extends TimedRobot implements UrsaRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
+  // private Drive drive;
   // private Spinner spinner;
+  // private Shooter shooter;
 
   // Color Sensor
 	public static final I2C.Port i2cPort = I2C.Port.kOnboard;
@@ -70,8 +72,16 @@ public class Robot extends TimedRobot implements UrsaRobot {
     colorMatcher.addColorMatch(kRedTarget);
     colorMatcher.addColorMatch(kYellowTarget); 
 
+    // drive = new Drive();
+    // drive.initialize("DriveThread");
+
     // spinner = new Spinner();
     // spinner.initialize("SpinnerThread");
+
+    // shooter = new Shooter();
+    // spinner.initialize("SpinnerThread");
+
+    // climb = new Climb();
   }
 
   /**

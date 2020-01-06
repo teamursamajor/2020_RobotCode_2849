@@ -30,11 +30,12 @@ public class ControlMap {
         // map.put("arm_up", XboxController.AXIS_RIGHTTRIGGER);
         // map.put("arm_down", XboxController.AXIS_LEFTTRIGGER);
 
-        // Spinner
-        map.put("spinner", XboxController.BUTTON_LEFTBUMPER);
+        // Shooter
+        map.put("shooter_in", XboxController.BUTTON_LEFTBUMPER);
+        map.put("shooter_out", XboxController.BUTTON_RIGHTBUMPER);
 
-        // // Hatch
-        // map.put("hatch", XboxController.BUTTON_A);
+        // Spinner
+        map.put("spinner", XboxController.BUTTON_A);
 
         // // Auto Align
         // map.put("auto_align", XboxController.POV_UP);
