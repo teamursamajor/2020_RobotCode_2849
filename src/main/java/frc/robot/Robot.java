@@ -30,7 +30,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  private Spinner spinner;
+  // private Spinner spinner;
 
   // Color Sensor
 	public static final I2C.Port i2cPort = I2C.Port.kOnboard;
@@ -70,8 +70,8 @@ public class Robot extends TimedRobot implements UrsaRobot {
     colorMatcher.addColorMatch(kRedTarget);
     colorMatcher.addColorMatch(kYellowTarget); 
 
-    spinner = new Spinner();
-    spinner.initialize("SpinnerThread");
+    // spinner = new Spinner();
+    // spinner.initialize("SpinnerThread");
   }
 
   /**
