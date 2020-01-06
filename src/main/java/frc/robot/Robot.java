@@ -30,6 +30,8 @@ public class Robot extends TimedRobot implements UrsaRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
+  private Spinner spinner;
+
   // Color Sensor
 	public static final I2C.Port i2cPort = I2C.Port.kOnboard;
   public static final ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
@@ -46,6 +48,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
   /**
    * Note: Any example colors should be calibrated as the user needs, these
    * are here as a basic example.
+   * TODO calibrate targets
    */
   private final Color kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
   private final Color kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
@@ -66,6 +69,9 @@ public class Robot extends TimedRobot implements UrsaRobot {
     colorMatcher.addColorMatch(kGreenTarget);
     colorMatcher.addColorMatch(kRedTarget);
     colorMatcher.addColorMatch(kYellowTarget); 
+
+    spinner = new Spinner();
+    spinner.initialize("SpinnerThread");
   }
 
   /**

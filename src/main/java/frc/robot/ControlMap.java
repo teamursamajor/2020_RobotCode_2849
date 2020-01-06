@@ -21,26 +21,25 @@ public class ControlMap {
 
     // TODO update controls for 2020
     public ControlMap() {
-        // Arm automatic lifting
-        map.put("arm_ground", XboxController.BUTTON_X);
-        map.put("arm_bay", XboxController.BUTTON_Y);
-        map.put("arm_rocket", XboxController.BUTTON_B);
+        // // Arm automatic lifting
+        // map.put("arm_ground", XboxController.BUTTON_X);
+        // map.put("arm_bay", XboxController.BUTTON_Y);
+        // map.put("arm_rocket", XboxController.BUTTON_B);
 
-        // Arm manual lifting
-        map.put("arm_up", XboxController.AXIS_RIGHTTRIGGER);
-        map.put("arm_down", XboxController.AXIS_LEFTTRIGGER);
+        // // Arm manual lifting
+        // map.put("arm_up", XboxController.AXIS_RIGHTTRIGGER);
+        // map.put("arm_down", XboxController.AXIS_LEFTTRIGGER);
 
-        // Cargo wheels intake/outtake
-        map.put("cargo_intake", XboxController.BUTTON_LEFTBUMPER);
-        map.put("cargo_outtake", XboxController.BUTTON_RIGHTBUMPER);
+        // Spinner
+        map.put("spinner", XboxController.BUTTON_LEFTBUMPER);
 
-        // Hatch
-        map.put("hatch", XboxController.BUTTON_A);
+        // // Hatch
+        // map.put("hatch", XboxController.BUTTON_A);
 
-        // Auto Align
-        map.put("auto_align", XboxController.POV_UP);
-        map.put("cancel_auto_align", XboxController.POV_DOWN);
-        map.put("limelight_toggle", XboxController.POV_RIGHT);
+        // // Auto Align
+        // map.put("auto_align", XboxController.POV_UP);
+        // map.put("cancel_auto_align", XboxController.POV_DOWN);
+        // map.put("limelight_toggle", XboxController.POV_RIGHT);
 
         // Climb
         map.put("climb_leadscrew_up", XboxController.BUTTON_START);
