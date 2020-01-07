@@ -14,6 +14,7 @@ Long-Term:
     > Figure out how to use Limelight!
   - Use AutoScript/Pathmaker to design paths for shooting
     > REVISE PATHMAKER! Get Chris to come back ;-;
+    > Maybe use Pathfinder/Pathweaver instead
 * Decide whether to use a command-based robot
 
 Build-Specific:
