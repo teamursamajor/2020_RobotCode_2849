@@ -45,7 +45,7 @@ In the command line, type:
 
 This clones the 2020 Robot Code repository to your computer, so Git will now track any changes you make to existing files.
 
-*You may choose to contribute from your own account or from the team's account. If you wish to use your own, let Evan know what your account name is and you will be added as a collaborator.*
+*You may choose to contribute from your own GitHub account or from the team's account. If you wish to use your own, let Evan know what your account name is and you will be added as a collaborator.*
 
 #### Adding Files 
 If you created a new file or changed a file, such as "Drive.java", you will need to tell Git to track this change. For example, simply type:
