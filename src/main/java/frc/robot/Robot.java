@@ -31,7 +31,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   // private Drive drive;
-  // private Spinner spinner;
+  private Spinner spinner;
   // private Shooter shooter;
 
   // Color Sensor
@@ -75,8 +75,8 @@ public class Robot extends TimedRobot implements UrsaRobot {
     // drive = new Drive();
     // drive.initialize("DriveThread");
 
-    // spinner = new Spinner();
-    // spinner.initialize("SpinnerThread");
+    spinner = new Spinner();
+    spinner.initialize("SpinnerThread");
 
     // shooter = new Shooter();
     // spinner.initialize("SpinnerThread");

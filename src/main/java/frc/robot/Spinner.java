@@ -7,16 +7,26 @@ import frc.tasks.SpinnerTask.SpinnerMode;
 public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaRobot  {
 
     private Spark spinMotor;
+    private long startTime;
+    private boolean running;
 
     public Spinner() {
         spinMotor = new Spark(SPINNER);
+        running = false;
     }
 
     public void runSubsystem() throws InterruptedException {
         // TODO: In the future implement a system similar to drive with order/state
         // Use the color sensor in SpinnerTask to detect color and add control loop
 
-        if (xbox.getButton(controls.map.get("spinner"))) {
+        long currentTime = System.currentTimeMillis();
+        
+        if (xbox.getSingleButtonPress(controls.map.get("spinner"))) {
+            running = !running;
+            startTime = System.currentTimeMillis();
+        }
+
+        if (running) {
             subsystemMode = SpinnerMode.SPIN;
         } else {
             subsystemMode = SpinnerMode.WAIT;
@@ -24,7 +34,14 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
 
         switch (subsystemMode) {
             case SPIN:
-                spinMotor.set(0.55);
+                if (currentTime - startTime < 20000)
+                    spinMotor.set(1.0);
+                    // positive = CCW
+                    // negative = CW
+                else {
+                    subsystemMode = SpinnerMode.WAIT;
+                    running = false;
+                }
                 break;
             case WAIT:
                 spinMotor.set(0);
