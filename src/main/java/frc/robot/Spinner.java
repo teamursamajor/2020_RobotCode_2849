@@ -36,7 +36,7 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
             case SPIN:
                 if (currentTime - startTime < 20000)
                     spinMotor.set(1.0);
-                    // positive = CCW
+                    // positive = CCW 
                     // negative = CW
                 else {
                     subsystemMode = SpinnerMode.WAIT;
