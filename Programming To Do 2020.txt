@@ -3,22 +3,22 @@ PROGRAMMING TO DO 2020:
 Immediate:
 * Train new members in Java!!!
 * Get them acquainted with WPILib, GitHub, Driver Station, etc.
+* Decide whether to use a command-based robot
+* Make sure drive train still works
+  > Update inchesPerTick constant
 
 Long-Term:
 * Make a working spinner mechanism
   - Detect color with color sensor
-  - Measure revolutions of wheel
-  - Use control loop to stop at specific color
+  - Measure revolutions of wheel (consider velocity and arc length)
+  - Use PID control loop to stop at specific color
 * Make a low shooter auto
   - Use Limelight to detect reflective tape for shooting ports
     > Figure out how to use Limelight!
   - Use AutoScript/Pathmaker to design paths for shooting
     > REVISE PATHMAKER! Get Chris to come back ;-;
-* Decide whether to use a command-based robot
-
-Build-Specific:
+    > Maybe use Pathfinder/Pathweaver instead
 * Make a working climber mechanism
   > Use encoders and limit switches as backup to move the required distance
   > Rely on previous years' code
-* Make sure drive train still works
-  > Update inchesPerTick constant
+* Get LEDs working so we look cool

@@ -10,12 +10,13 @@ package frc.robot;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
+import edu.wpi.first.wpilibj.util.Color;
 
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
+// import edu.wpi.first.wpilibj.DriverStation;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -47,11 +48,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
    */
   private final ColorMatch colorMatcher = new ColorMatch();
 
-  /**
-   * Note: Any example colors should be calibrated as the user needs, these
-   * are here as a basic example.
-   * TODO calibrate targets
-   */
+  // TODO calibrate targets if needed
   private final Color kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
   private final Color kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
   private final Color kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
@@ -115,21 +112,28 @@ public class Robot extends TimedRobot implements UrsaRobot {
     /**
      * Run the color match algorithm on our detected color
      */
-    String colorString;
+    char color = 'B';
     ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
 
     if (match.color == kBlueTarget) {
-      colorString = "Blue";
+      color = 'B';
     } else if (match.color == kRedTarget) {
-      colorString = "Red";
+      color = 'R';
     } else if (match.color == kGreenTarget) {
-      colorString = "Green";
+      color = 'G';
     } else if (match.color == kYellowTarget) {
-      colorString = "Yellow";
+      color = 'Y';
     } else {
-      colorString = "Unknown";
+      color = ' ';
     }
 
+    // TODO this code would let us see the actual color we have to go for
+    // To test if our detected color is right, we can say: color == goal
+    // String gameData = DriverStation.getInstance().getGameSpecificMessage();
+    // char goal = ' ';
+    // if (gameData.length() > 0) {
+    //   goal = gameData.charAt(0);
+    // }
 
     /**
      * Open Smart Dashboard or Shuffleboard to see the color detected by the 
@@ -140,7 +144,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
     SmartDashboard.putNumber("Blue", detectedColor.blue);
     SmartDashboard.putNumber("IR", IR);
     SmartDashboard.putNumber("Confidence", match.confidence);
-    SmartDashboard.putString("Detected Color", colorString);
+    SmartDashboard.putString("Detected Color", color + "");
 
     /**
      * In addition to RGB IR values, the color sensor can also return an 

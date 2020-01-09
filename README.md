@@ -45,6 +45,8 @@ In the command line, type:
 
 This clones the 2020 Robot Code repository to your computer, so Git will now track any changes you make to existing files.
 
+*You may choose to contribute from your own GitHub account or from the team's account. If you wish to use your own, let Evan know what your account name is and you will be added as a collaborator.*
+
 #### Adding Files 
 If you created a new file or changed a file, such as "Drive.java", you will need to tell Git to track this change. For example, simply type:
 
@@ -114,7 +116,7 @@ After committing, you must push your code to the repository to save your changes
 
 `git push`
 
-and you will be prompted for your username and password. *Use teamursamajor's username and password.*
+and you will be prompted for your username and password. If you are a collaborator on the repository, you may use your own; otherwise, *use teamursamajor's username and password*.
 
 It's a good practice to commit often and push your commits at the end of the day. This is your responsibility. *Sign your commits with your name or your programming name at the end of each commit.*
 
