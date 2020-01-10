@@ -38,6 +38,7 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
                     spinMotor.set(1.0);
                     // positive = CCW 
                     // negative = CW
+                    // Tyler was here
                 else {
                     subsystemMode = SpinnerMode.WAIT;
                     running = false;
