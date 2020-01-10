@@ -17,23 +17,24 @@ public class Shooter extends Subsystem<ShooterTask.ShooterMode> implements UrsaR
         // Use the color sensor in SpinnerTask to detect color and add control loop
         
          // Cargo Intake
-         if (xbox.getButton(controls.map.get("shooter_in"))) {
-            subsystemMode = ShooterMode.IN;
-        } else if (xbox.getButton(controls.map.get("shooter_out"))) {
-            subsystemMode = ShooterMode.OUT;
-        } else {
+        
+        if (xbox.getButton(controls.map.get("shooter_fastout"))){
+            subsystemMode = ShooterMode.FASTOUT;
+        } else if (xbox.getButton(controls.map.get("shooter_slowout"))){
+            subsystemMode = ShooterMode.SLOWOUT;
+        } else { 
             subsystemMode = ShooterMode.WAIT;
         }
 
         switch (subsystemMode) {
-        case IN:
-            shooterMotor.set(0.55);
+        case SLOWOUT:
+            shooterMotor.set(0.50); //Shoots ball out slowly
             break;
-        case OUT:
-            shooterMotor.set(-1.0);
+        case FASTOUT:
+            shooterMotor.set(1.0); //Shoots ball out quickly
             break;
         case WAIT:
-            shooterMotor.set(0.0);
+            shooterMotor.set(0.0); //The robot waits
             break;
         }
     }
