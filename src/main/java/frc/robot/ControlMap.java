@@ -43,8 +43,8 @@ public class ControlMap {
         // map.put("limelight_toggle", XboxController.POV_RIGHT);
 
         // Climb
-        map.put("climb_leadscrew_up", XboxController.BUTTON_START);
-        map.put("climb_framewheel", XboxController.BUTTON_BACK);
+        map.put("climb_run", XboxController.BUTTON_START);
+        map.put("climb_stop", XboxController.BUTTON_BACK);
         // For reference: Pressing these two controls together cancels climb.
     }
 }
