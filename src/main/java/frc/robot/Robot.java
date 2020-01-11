@@ -28,9 +28,9 @@ public class Robot extends TimedRobot implements UrsaRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  // private Drive drive;
+  private Drive drive;
   private Spinner spinner;
-  private SpinnerTask spinnerTask;
+  // private SpinnerTask spinnerTask;
   // private Shooter shooter;
   private Climb climb;
 
@@ -44,12 +44,12 @@ public class Robot extends TimedRobot implements UrsaRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
-    // drive = new Drive();
-    // drive.initialize("DriveThread");
+    drive = new Drive();
+    drive.initialize("DriveThread");
 
     spinner = new Spinner();
     spinner.initialize("SpinnerThread");
-    spinnerTask = new SpinnerTask(SpinnerMode.WAIT, spinner);
+    // spinnerTask = new SpinnerTask(SpinnerMode.WAIT, spinner);
 
     // shooter = new Shooter();
     // spinner.initialize("SpinnerThread");
