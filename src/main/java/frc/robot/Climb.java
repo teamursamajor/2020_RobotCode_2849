@@ -17,8 +17,8 @@ public class Climb implements UrsaRobot, Runnable {
     // private boolean leadscrewsUp = false;
 
     public Climb() {
-        motor1 = new Spark(CLIMB_FRONT);
-        motor2 = new Spark(CLIMB_BACK);
+        motor1 = new Spark(5);
+        motor2 = new Spark(7);
     }
 
     public void initialize() {
@@ -28,13 +28,17 @@ public class Climb implements UrsaRobot, Runnable {
 
     public void run() {
         while (true) {
-            if (xbox.getButton(controls.map.get("climb_run"))) {
-                motor1.set(-0.15);
-                motor2.set(0.15);
+            if (xbox.getButton(XboxController.BUTTON_START)) {
+                motor1.set(-0.3);
+                motor2.set(0.3);
+            } else if (xbox.getButton(XboxController.BUTTON_BACK)) {
+                motor1.set(0.3);
+                motor2.set(-0.3);
             } else {
                 motor1.set(0.0);
                 motor2.set(0.0);
             }
+
             // if (xbox.getSingleButtonPress(controls.map.get("climb_leadscrew_up")) && !leadscrewsUp) { // start
             //                                                                                           // leadscrews
             //     long startTime = System.currentTimeMillis();

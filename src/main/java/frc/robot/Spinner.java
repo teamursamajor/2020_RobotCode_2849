@@ -32,7 +32,7 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
     private final Color kYellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
 
     public Spinner() {
-        spinMotor = new Spark(SPINNER);
+        spinMotor = new Spark(SPINNER);// Tyler was here
         running = false;
         colorMatcher.addColorMatch(kBlueTarget);
         colorMatcher.addColorMatch(kGreenTarget);
