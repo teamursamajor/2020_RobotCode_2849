@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.DriverStation;
+import frc.tasks.SpinnerTask;
+import frc.tasks.SpinnerTask.SpinnerMode;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -28,6 +30,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
 
   // private Drive drive;
   private Spinner spinner;
+  private SpinnerTask spinnerTask;
   // private Shooter shooter;
   private Climb climb;
 
@@ -46,6 +49,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
 
     spinner = new Spinner();
     spinner.initialize("SpinnerThread");
+    spinnerTask = new SpinnerTask(SpinnerMode.WAIT, spinner);
 
     // shooter = new Shooter();
     // spinner.initialize("SpinnerThread");
@@ -105,6 +109,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
    */
   @Override
   public void teleopPeriodic() {
+    
   }
 
   /**

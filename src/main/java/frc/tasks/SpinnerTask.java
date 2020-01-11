@@ -7,7 +7,7 @@ import frc.robot.*;
  */
 public class SpinnerTask extends Task implements UrsaRobot {
     public enum SpinnerMode {
-        SPIN, WAIT;
+        SPIN, DETECT, WAIT;
     }
 
     private long runTime = 1000;
@@ -26,6 +26,5 @@ public class SpinnerTask extends Task implements UrsaRobot {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        spinner.setMode(SpinnerMode.WAIT);
     }
 }
