@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.DriverStation;
-import frc.tasks.SpinnerTask;
-import frc.tasks.SpinnerTask.SpinnerMode;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -22,17 +22,10 @@ import frc.tasks.SpinnerTask.SpinnerMode;
  * creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends TimedRobot implements UrsaRobot {
-  private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
-  private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+public class Robot extends TimedRobot 
+{
 
-  // private Drive drive;
-  private Spinner spinner;
-  private SpinnerTask spinnerTask;
-  // private Shooter shooter;
-  private Climb climb;
+  private RobotContainer m_pContainer;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -40,22 +33,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
    */
   @Override
   public void robotInit() {
-    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
-
-    // drive = new Drive();
-    // drive.initialize("DriveThread");
-
-    spinner = new Spinner();
-    spinner.initialize("SpinnerThread");
-    spinnerTask = new SpinnerTask(SpinnerMode.WAIT, spinner);
-
-    // shooter = new Shooter();
-    // spinner.initialize("SpinnerThread");
-
-    climb = new Climb();
-    climb.initialize();
+    m_pContainer = new RobotContainer();
   }
 
   /**
@@ -68,6 +46,11 @@ public class Robot extends TimedRobot implements UrsaRobot {
    */
   @Override
   public void robotPeriodic() {
+    // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
+    // commands, running already-scheduled commands, removing finished or interrupted commands,
+    // and running subsystem periodic() methods.  This must be called from the robot's periodic
+    // block in order for anything in the Command-based framework to work.
+    CommandScheduler.getInstance().run();
   }
 
   /**
@@ -83,9 +66,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
+
   }
 
   /**
@@ -93,15 +74,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
-    }
+   
   }
 
   /**
@@ -110,7 +83,13 @@ public class Robot extends TimedRobot implements UrsaRobot {
   @Override
   public void teleopPeriodic() {
     
+  } @Override
+  public void testInit() {
+    // Cancels all running commands at the start of test mode.
+    CommandScheduler.getInstance().cancelAll();
   }
+
+
 
   /**
    * This function is called periodically during test mode.
