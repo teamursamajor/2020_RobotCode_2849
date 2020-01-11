@@ -118,4 +118,9 @@ public class Robot extends TimedRobot implements UrsaRobot {
   @Override
   public void testPeriodic() {
   }
+
+  @Override
+  public void disabledInit() {
+    // spinner.setMode(SpinnerMode.WAIT);
+  }
 }
