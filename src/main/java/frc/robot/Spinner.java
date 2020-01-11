@@ -87,7 +87,7 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
         switch (subsystemMode) {
         case SPIN:
             spinSlices(25, 6);
-
+            
             // if (currentTime - startTime < 20000)
             //     spinMotor.set(1.0);
             //     // positive = CCW
@@ -140,27 +140,20 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
      * @return The number of slices to spin
      */
     private int numSlices() {
-        if (goal == 'R') {
-            if (color == 'Y') return 1;
-            if (color == 'B') return 0;
-            if (color == 'R') return 2;
-            if (color == 'G') return -1;
-        } else if (goal == 'G') {
-            if (color == 'R') return 1;
-            if (color == 'Y') return 0;
-            if (color == 'G') return 2;
-            if (color == 'B') return -1;
-        } else if (goal == 'B') {
-            if (color == 'G') return 1;
-            if (color == 'R') return 0;
-            if (color == 'B') return 2;
-            if (color == 'Y') return -1;
-        } else if (goal == 'Y') {
-            if (color == 'B') return 1;
-            if (color == 'G') return 0;
-            if (color == 'Y') return 2;
-            if (color == 'R') return -1;
-        }
-        return 0;
+        int slices = ( colorToNumber(goal) - colorToNumber(color) + 2 ) % 4;
+        if (slices < 0) slices += 4;
+        return slices;
+    }
+
+    private int colorToNumber(char color) {
+        if (color == 'R')
+            return 0;
+        if (color == 'G')
+            return 1;
+        if (color == 'B')
+            return 2;
+        if (color == 'Y')
+            return 3;
+        return -1;
     }
 }
