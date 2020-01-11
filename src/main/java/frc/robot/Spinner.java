@@ -18,6 +18,10 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
     public Spark spinMotor;
     private long startTime;
     private boolean running;
+    private char goal, color, previousColor = ' ';
+
+    private int changeCounter = 0;
+    private int colorCounter = 0;
 
     private final ColorMatch colorMatcher = new ColorMatch();
 
@@ -41,45 +45,32 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
     }
 
     public void runSubsystem() throws InterruptedException {
-        // TODO: In the future implement a system similar to drive with order/state
-        // Use the color sensor in SpinnerTask to detect color and add control loop
-
-        long currentTime = System.currentTimeMillis();
+        
+        final long currentTime = System.currentTimeMillis();
 
         // TODO this code would let us see the actual color we have to go for
         // To test if our detected color is right, we can say: color == goal
         // String gameData = DriverStation.getInstance().getGameSpecificMessage();
-        // char goal = ' ';
+        goal = 'R'; // TODO change to ' ' for future
         // if (gameData.length() > 0) {
         //     goal = gameData.charAt(0);
         // }
 
-        /**
-         * Open Smart Dashboard or Shuffleboard to see the color detected by the sensor.
-         */
-        // SmartDashboard.putNumber("Red", detectedColor.red);
-        // SmartDashboard.putNumber("Green", detectedColor.green);
-        // SmartDashboard.putNumber("Blue", detectedColor.blue);
-        // // SmartDashboard.putNumber("IR", IR);
-        // SmartDashboard.putNumber("Confidence", match.confidence);
-
-        // int proximity = colorSensor.getProximity();
-
-        if (xbox.getSingleButtonPress(controls.map.get("spinner"))) {
-            running = !running;
+        if (xbox.getSingleButtonPress(XboxController.BUTTON_A)) {
+            // System.out.println("button");
+            running = true;
             startTime = System.currentTimeMillis();
         }
 
         if (running) {
-            subsystemMode = SpinnerMode.DETECT; // change to SPIN for testing revolutions
+            subsystemMode = SpinnerMode.SPIN; // change to SPIN for testing revolutions
         } else {
             subsystemMode = SpinnerMode.WAIT;
         }
 
-        Color detectedColor = colorSensor.getColor();
-        ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
+        final Color detectedColor = colorSensor.getColor();
+        final ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
 
-        char color = ' ';
         if (match.color == kBlueTarget) {
             color = 'B';
         } else if (match.color == kRedTarget) {
@@ -95,20 +86,20 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
 
         switch (subsystemMode) {
         case SPIN:
-            if (currentTime - startTime < 20000)
-                spinMotor.set(1.0);
-                // positive = CCW
-                // negative = CW
-            else {
-                subsystemMode = SpinnerMode.WAIT;
-                running = false;
-            }
+            spinSlices(25, 6);
+
+            // if (currentTime - startTime < 20000)
+            //     spinMotor.set(1.0);
+            //     // positive = CCW
+            //     // negative = CW
+            // else {
+            //     running = false;
+            // }
+
             break;
         case DETECT:
-            if (match.color == kBlueTarget)
-                spinMotor.set(0.0);
-            else
-                spinMotor.set(1.0);
+            if (numSlices() != 0)
+                spinSlices(numSlices(), 6);
             break;
         case WAIT:
             spinMotor.set(0.0);
@@ -116,5 +107,60 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
         }
 
     }
+    
+    /**
+     * Spins a number of slices based on how many times the color changes in between
+     * @param slices The number of color slices to count for a number of revolutions
+     * If slices is negative, goes in opposite direction
+     * @param threshold The number of times it must see the same color to count a color change
+     */
+    private void spinSlices(int slices, int threshold) {
+        if (changeCounter <= Math.abs(slices)) {
+            if (color != previousColor) {
+                colorCounter = 0;
+                spinMotor.set(Math.signum(slices) * 1.0);
+            } else {
+                colorCounter++;
+                if (colorCounter == threshold) {
+                    changeCounter++;
+                    System.out.println("color change at " + changeCounter);
+                }
+            }
+            previousColor = color;
+        } else {
+            changeCounter = colorCounter = 0;
+            running = false;
+        }
+    }
 
+    /**
+     * Determines the optimal number of slices to spin given current and goal color.
+     * Factors in offset -- detected color is two slices away from offset.
+     * Ex: if detected color is red, real color is blue. So if goal is blue, we're there already.
+     * @return The number of slices to spin
+     */
+    private int numSlices() {
+        if (goal == 'R') {
+            if (color == 'Y') return 1;
+            if (color == 'B') return 0;
+            if (color == 'R') return 2;
+            if (color == 'G') return -1;
+        } else if (goal == 'G') {
+            if (color == 'R') return 1;
+            if (color == 'Y') return 0;
+            if (color == 'G') return 2;
+            if (color == 'B') return -1;
+        } else if (goal == 'B') {
+            if (color == 'G') return 1;
+            if (color == 'R') return 0;
+            if (color == 'B') return 2;
+            if (color == 'Y') return -1;
+        } else if (goal == 'Y') {
+            if (color == 'B') return 1;
+            if (color == 'G') return 0;
+            if (color == 'Y') return 2;
+            if (color == 'R') return -1;
+        }
+        return 0;
+    }
 }
