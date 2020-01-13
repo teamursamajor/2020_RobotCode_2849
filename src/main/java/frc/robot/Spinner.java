@@ -63,7 +63,7 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
         }
 
         if (running) {
-            subsystemMode = SpinnerMode.SPIN; // change to SPIN for testing revolutions
+            subsystemMode = SpinnerMode.DETECT; // change to SPIN for testing revolutions
         } else {
             subsystemMode = SpinnerMode.WAIT;
         }
@@ -86,6 +86,7 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
 
         switch (subsystemMode) {
         case SPIN:
+            System.out.println(color);
             spinSlices(25, 6);
             
             // if (currentTime - startTime < 20000)
@@ -95,11 +96,13 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
             // else {
             //     running = false;
             // }
-
             break;
         case DETECT:
-            if (numSlices() != 0)
-                spinSlices(numSlices(), 6);
+            System.out.println(numSlices());
+            if (numSlices() != 0) {
+                spinSlices(numSlices(), 7);
+            } else
+                running = false;
             break;
         case WAIT:
             spinMotor.set(0.0);
@@ -115,7 +118,7 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
      * @param threshold The number of times it must see the same color to count a color change
      */
     private void spinSlices(int slices, int threshold) {
-        if (changeCounter <= Math.abs(slices)) {
+        if (changeCounter <= Math.abs(slices) + 1) {
             if (color != previousColor) {
                 colorCounter = 0;
                 spinMotor.set(Math.signum(slices) * 1.0);
@@ -123,7 +126,7 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
                 colorCounter++;
                 if (colorCounter == threshold) {
                     changeCounter++;
-                    System.out.println("color change at " + changeCounter);
+                    System.out.println(color + " color change at " + changeCounter);
                 }
             }
             previousColor = color;
@@ -140,9 +143,34 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
      * @return The number of slices to spin
      */
     private int numSlices() {
-        int slices = ( colorToNumber(goal) - colorToNumber(color) + 2 ) % 4;
-        if (slices < 0) slices += 4;
-        return slices;
+        // int current = (colorToNumber(color) + 2) % 4;
+        // int slices = (colorToNumber(goal) - current) % 4;
+        // if (slices < 0) slices += 4;
+        // if (slices == 3) slices = -1;
+        // return -1 * slices;
+
+        if (goal == 'R') {
+            if (color == 'Y') return 1;
+            if (color == 'B') return 0;
+            if (color == 'R') return 2;
+            if (color == 'G') return -1;
+        } else if (goal == 'G') {
+            if (color == 'R') return 1;
+            if (color == 'Y') return 0;
+            if (color == 'G') return 2;
+            if (color == 'B') return -1;
+        } else if (goal == 'B') {
+            if (color == 'G') return 1;
+            if (color == 'R') return 0;
+            if (color == 'B') return 2;
+            if (color == 'Y') return -1;
+        } else if (goal == 'Y') {
+            if (color == 'B') return 1;
+            if (color == 'G') return 0;
+            if (color == 'Y') return 2;
+            if (color == 'R') return -1;
+        }
+        return 0; //failsafe
     }
 
     private int colorToNumber(char color) {
