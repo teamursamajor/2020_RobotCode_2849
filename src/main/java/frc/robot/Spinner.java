@@ -59,7 +59,10 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
         if (xbox.getSingleButtonPress(XboxController.BUTTON_A)) {
             // System.out.println("button");
             running = true;
-            startTime = System.currentTimeMillis();
+            startTime = System.currentTimeMillis(); 
+        }
+        if (xbox.getSingleButtonPress(XboxController.BUTTON_B)){
+            running = false;
         }
 
         if (running) {
@@ -120,9 +123,10 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
         }
 
     }
-    
+
+    //Tyler was here :D
     // TODO rewrite method based on detecting a certain color 
-    /**
+    /** 
      * Spins a number of slices based on how many times the color changes in between
      * @param slices The number of color slices to count for a number of revolutions
      * If slices is negative, goes in opposite direction
