@@ -121,7 +121,7 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
 
     }
     
-    // TODO rewrite method based on detecting a certain color
+    // TODO rewrite method based on detecting a certain color 
     /**
      * Spins a number of slices based on how many times the color changes in between
      * @param slices The number of color slices to count for a number of revolutions
