@@ -1,6 +1,6 @@
 package frc.robot;
 
-// import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -50,11 +50,11 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
 
         // TODO this code would let us see the actual color we have to go for
         // To test if our detected color is right, we can say: color == goal
-        // String gameData = DriverStation.getInstance().getGameSpecificMessage();
+        String gameData = DriverStation.getInstance().getGameSpecificMessage();
         goal = 'R'; // TODO change to ' ' for future
-        // if (gameData.length() > 0) {
-        //     goal = gameData.charAt(0);
-        // }
+        if (gameData.length() > 0) {
+            goal = gameData.charAt(0);
+        }
 
         if (xbox.getSingleButtonPress(XboxController.BUTTON_A)) {
             // System.out.println("button");
@@ -86,8 +86,17 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
 
         switch (subsystemMode) {
         case SPIN:
+            //Rough idea:
+            //Pick starting color from color sensor
+            //Start spinning
+            //Wait for a change in color
+            //Start counting the number of time to first color passes
+            //Range is range 6-10, might pick 7 or early to account for drift
+
             System.out.println(color);
-            spinSlices(25, 6);
+            spinMotor.set(1.0);
+
+            // spinSlices(25, 6);
             
             // if (currentTime - startTime < 20000)
             //     spinMotor.set(1.0);
@@ -96,6 +105,7 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
             // else {
             //     running = false;
             // }
+
             break;
         case DETECT:
             System.out.println(numSlices());
@@ -111,6 +121,7 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
 
     }
     
+    // TODO rewrite method based on detecting a certain color
     /**
      * Spins a number of slices based on how many times the color changes in between
      * @param slices The number of color slices to count for a number of revolutions
@@ -118,6 +129,7 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
      * @param threshold The number of times it must see the same color to count a color change
      */
     private void spinSlices(int slices, int threshold) {
+
         if (changeCounter <= Math.abs(slices) + 1) {
             if (color != previousColor) {
                 colorCounter = 0;
@@ -135,6 +147,8 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
             running = false;
         }
     }
+
+
 
     /**
      * Determines the optimal number of slices to spin given current and goal color.
