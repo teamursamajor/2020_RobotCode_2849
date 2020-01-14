@@ -20,8 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 /**
  * Add your docs here.
  */
-public class RobotContainer 
-{
+public class RobotContainer {
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   private final ClimbSubsystem m_pClimb = new ClimbSubsystem();
   private final SpinnerSubsystem m_pSpin = new SpinnerSubsystem();

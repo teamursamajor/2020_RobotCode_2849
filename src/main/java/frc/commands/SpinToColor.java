@@ -1,10 +1,3 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package frc.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -13,16 +6,14 @@ import frc.subsystems.SpinnerSubsystem;
 /**
  * Add your docs here.
  */
-public class SpinToColor extends CommandBase
-{
+public class SpinToColor extends CommandBase {
     private final SpinnerSubsystem m_pSpinner;
 
     /**
      * constructor, initialize spintocolor command
      * @param pSpinner spinner subsystem
      */
-    public SpinToColor(SpinnerSubsystem pSpinner)
-    {
+    public SpinToColor(SpinnerSubsystem pSpinner) {
         m_pSpinner = pSpinner;
 
         addRequirements(m_pSpinner);
@@ -33,8 +24,7 @@ public class SpinToColor extends CommandBase
      * The initial subroutine of a command.  Called once when the command is initially scheduled.
      */
     @Override
-    public void initialize() 
-    {
+    public void initialize() {
         System.out.println("SpinToColor::initialize");
         //initialize color to not being found and reset the timer
         m_pSpinner.init();
@@ -44,8 +34,7 @@ public class SpinToColor extends CommandBase
      * The main body of a command.  Called repeatedly while the command is scheduled.
      */
     @Override
-    public void execute() 
-    {
+    public void execute() {
         System.out.println("SpinToColor::execute");
 
         //continue to spin and search for the color
@@ -58,8 +47,7 @@ public class SpinToColor extends CommandBase
      *
      * @param interrupted whether the command was interrupted/canceled
      */
-    public void end(boolean interrupted) 
-    {
+    public void end(boolean interrupted) {
         System.out.println("SpinToColor::end interrupted=" + interrupted);
         //stop everything
         m_pSpinner.stop();
@@ -77,8 +65,7 @@ public class SpinToColor extends CommandBase
      * @return whether the command has finished.
      */
     @Override
-    public boolean isFinished() 
-    {
+    public boolean isFinished() {
         System.out.println("SpinToColor::isFinished colorfound=" +
             m_pSpinner.isColorFound());
 

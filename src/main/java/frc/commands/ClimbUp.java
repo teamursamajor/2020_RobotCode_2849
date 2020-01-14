@@ -13,28 +13,24 @@ import frc.subsystems.ClimbSubsystem;
 /**
  * Add your docs here.
  */
-public class ClimbUp extends CommandBase
-{
+public class ClimbUp extends CommandBase {
     private final ClimbSubsystem m_pClimb;
 
     /**
      * constructor, initialize climbup command
      * @param pClimb climbing subsystem
      */
-    public ClimbUp(ClimbSubsystem pClimb)
-    {
+    public ClimbUp(ClimbSubsystem pClimb) {
         m_pClimb = pClimb;
 
         addRequirements(m_pClimb);
     }
 
-    
     /**
      * The initial subroutine of a command.  Called once when the command is initially scheduled.
      */
     @Override
-    public void initialize() 
-    {
+    public void initialize() {
         System.out.println("ClimbUp::initialize");
         //we don't need to do anything here, so technically
         //this function isn't needed
@@ -44,8 +40,7 @@ public class ClimbUp extends CommandBase
      * The main body of a command.  Called repeatedly while the command is scheduled.
      */
     @Override
-    public void execute() 
-    {
+    public void execute() {
         System.out.println("ClimbUp::execute");
 
         //make sure the subsystem is climbing down every time this is called
@@ -58,8 +53,7 @@ public class ClimbUp extends CommandBase
      *
      * @param interrupted whether the command was interrupted/canceled
      */
-    public void end(boolean interrupted) 
-    {
+    public void end(boolean interrupted) {
         System.out.println("ClimbUp::end interrupted=" + interrupted);
         //climbing has stopped (button released), tell the climber
         m_pClimb.climbStop();
@@ -72,8 +66,7 @@ public class ClimbUp extends CommandBase
      * @return whether the command has finished.
      */
     @Override
-    public boolean isFinished() 
-    {
+    public boolean isFinished() {
         System.out.println("ClimbUp::isFinished");
 
         //this is the default condition so this function technically
