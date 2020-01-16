@@ -17,12 +17,20 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
 
     private Spark spinMotor;
     private String gameData;
-    private char color;
+    private char color, previousColor;
     private boolean running;
     // private long startTime;
 
     private int sameColor = 0, colorCounter = 0;
     // private char previousColor;
+
+    
+    //control loop stuff
+    double KP = 1.0/6.0;
+    double controlPower = 0.26;
+    int sliceThreshold = 12;
+    double minPower = .15;
+    double maxPower = .4;
 
     // Color Sensor Utilities
     private static final I2C.Port i2cPort = I2C.Port.kOnboard;
@@ -86,9 +94,18 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
 
         switch (subsystemMode) {
         case SPIN:
-            spinMotor.set(0.26);
-            spinToColor(getColor(), 'B', 8);
             
+            spinMotor.set(0.26);
+
+            if (controlPower < maxPower && controlPower > minPower)
+                System.out.println("good job. The power is " + controlPower);
+            else
+                System.out.println("You Done Goofed. The power is " + controlPower);
+            // colorCounter is the number of unique colors we see
+
+            // System.out.println(color);
+            spinSlices(25);
+             
             // if (currentTime - startTime < 20000)
             //     spinMotor.set(1.0);
             //     // positive = CCW
@@ -100,7 +117,6 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
             break;
         case DETECT:
             spinMotor.set(0.2);
-            spinToColor(getColor(), goalColor(), 1);
             break;
         case WAIT:
             spinMotor.set(0.0);
@@ -111,21 +127,26 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
     }
 
     /**
-     * Spins to a goal color from a start color for a given amount of times.
-     * @param startColor the color the wheel is currently on
-     * @param goalColor the color the wheel wants to land on
-     * @param times the number of times to land on the goal color
+     * Spins a given amount of slices and counts color changes
+     * @param slices the number of slices to spin
      */
-    public void spinToColor(char startColor, char goalColor, int times) {
-        if (colorCounter < times) {
-            if (color == goalColor) { // if it sees the right color
+    public void spinSlices(int slices) {
+        if (colorCounter < slices) {
+            if (color != previousColor)
+                sameColor = 0;
+            else {
                 sameColor++;
                 if (sameColor == 4) { // threshold for a correct color
                     colorCounter++;
                     System.out.println(color + " color change at " + colorCounter);
-                }
-            } else // if it no longer sees the right color
-                sameColor = 0;
+                    
+                    if(colorCounter == sliceThreshold){
+                        controlPower = (KP*(slices - colorCounter));
+                        System.out.println(controlPower);
+                    }
+                }    
+            }
+            previousColor = color;
         } else // if it's seen the right color enough times
             running = false;
     }
@@ -142,7 +163,7 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
      * Factors in an offset of 2.
      */
     public char getColor() {
-        return offsetColor(color, 2);
+        return color;
     }
 
     /**
