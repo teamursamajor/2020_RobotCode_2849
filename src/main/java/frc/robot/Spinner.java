@@ -17,9 +17,12 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
 
     private Spark spinMotor;
     private String gameData;
+    private char color;
     private boolean running;
     // private long startTime;
-    // private int changeCounter = 0, colorCounter = 0;
+
+    private int sameColor = 0, colorCounter = 0;
+    // private char previousColor;
 
     // Color Sensor Utilities
     private static final I2C.Port i2cPort = I2C.Port.kOnboard;
@@ -48,7 +51,25 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
         
         // final long currentTime = System.currentTimeMillis();
 
+        Color detectedColor = colorSensor.getColor();
+        ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
+
+        // SmartDashboard.putNumber("Red", detectedColor.red);
+        // SmartDashboard.putNumber("Green", detectedColor.green);
+        // SmartDashboard.putNumber("Blue", detectedColor.blue);
+
+        if (match.color == kBlueTarget)
+            color = 'B';
+        if (match.color == kRedTarget)
+            color = 'R';
+        if (match.color == kGreenTarget)
+            color = 'G';
+        if (match.color == kYellowTarget)
+            color = 'Y';
+
         gameData = DriverStation.getInstance().getGameSpecificMessage();
+
+        // System.out.println(getColor());
 
         if (xbox.getSingleButtonPress(XboxController.BUTTON_A))
             running = true;
@@ -58,16 +79,15 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
 
         if (running)
             // TODO this code would theoretically choose SPIN unless there is a game specific message
-            // subsystemMode = gameData.length > 0 ? SpinnerMode.DETECT : SpinnerMode.SPIN;
-            subsystemMode = SpinnerMode.DETECT;
+            subsystemMode = gameData.length() > 0 ? SpinnerMode.DETECT : SpinnerMode.SPIN;
+            // subsystemMode = SpinnerMode.SPIN;
         else
             subsystemMode = SpinnerMode.WAIT;
 
         switch (subsystemMode) {
         case SPIN:
-            spinMotor.set(1.0);
-            // spinToColor(offsetColor(currentColor()), goalColor(), 8);
-            // spinSlices(25, 6);
+            spinMotor.set(0.26);
+            spinToColor(getColor(), 'B', 8);
             
             // if (currentTime - startTime < 20000)
             //     spinMotor.set(1.0);
@@ -79,79 +99,50 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
 
             break;
         case DETECT:
-            // if (numSlices() != 0) {
-            //     spinSlices(numSlices(), 7);
-            // } else
-            //     running = false;
-            spinToColor(currentColor(), goalColor(), 1);
+            spinMotor.set(0.2);
+            spinToColor(getColor(), goalColor(), 1);
             break;
         case WAIT:
             spinMotor.set(0.0);
+            colorCounter = sameColor = 0;
             break;
         }
 
     }
-     
-    // /** 
-    //  * Spins a number of slices based on how many times the color changes in between
-    //  * @param slices The number of color slices to count for a number of revolutions
-    //  * If slices is negative, goes in opposite direction
-    //  * @param threshold The number of times it must see the same color to count a color change
-    //  */
-    // public void spinSlices(int slices, int threshold) {
-    //     if (changeCounter <= Math.abs(slices) + 1) {
-    //         if (color != previousColor) {
-    //             colorCounter = 0;
-    //             spinMotor.set(Math.signum(slices) * 1.0);
-    //         } else {
-    //             colorCounter++;
-    //             if (colorCounter == threshold) {
-    //                 changeCounter++;
-    //                 System.out.println(color + " color change at " + changeCounter);
-    //             }
-    //         }
-    //         previousColor = color;
-    //     } else {
-    //         changeCounter = colorCounter = 0;
-    //         running = false;
-    //     }
-    // }
 
-    /*
-     * TODO write this method:
-     * Pick starting color
-     * Start spinning wheel
-     * Wait for a change in color (could start on the intended color)
-     * Start counting the number of time that the end color passes
-     * Range is range 6-10, might pick 7 or early to account for drift
+    /**
+     * Spins to a goal color from a start color for a given amount of times.
+     * @param startColor the color the wheel is currently on
+     * @param goalColor the color the wheel wants to land on
+     * @param times the number of times to land on the goal color
      */
-    public void spinToColor(char startColor, char endColor, int times) {
-        
+    public void spinToColor(char startColor, char goalColor, int times) {
+        if (colorCounter < times) {
+            if (color == goalColor) { // if it sees the right color
+                sameColor++;
+                if (sameColor == 4) { // threshold for a correct color
+                    colorCounter++;
+                    System.out.println(color + " color change at " + colorCounter);
+                }
+            } else // if it no longer sees the right color
+                sameColor = 0;
+        } else // if it's seen the right color enough times
+            running = false;
     }
 
     /**
      * Returns true if the current color matches with the goal color
      */
     public boolean correctColor() {
-        return goalColor() == currentColor();
+        return goalColor() == getColor();
     }
 
     /**
      * Returns the current color the color sensor is seeing.
+     * Factors in an offset of 2.
      */
-    public char currentColor() {
-        Color detectedColor = colorSensor.getColor();
-        ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
-
-        if (match.color == kBlueTarget)
-            return 'B';
-        if (match.color == kRedTarget)
-            return 'R';
-        if (match.color == kGreenTarget)
-            return 'G';
-        if (match.color == kYellowTarget)
-            return 'Y';
-        return ' ';
+    public char getColor() {
+        return offsetColor(color, 2);
     }
 
     /**
@@ -169,8 +160,8 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
      * Returns the goal color the spinner should get to.
      */
     public char goalColor() {
-        // if (gameData.length() > 0) // If we've gotten a color to check for
-        //    return gameData.charAt(0);
+        if (gameData.length() > 0) // If we've gotten a color to check for
+           return gameData.charAt(0);
         return 'B'; // TODO change for testing, revert to ' ' for actual code
     }
 
