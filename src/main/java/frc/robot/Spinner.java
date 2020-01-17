@@ -26,9 +26,9 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
 
     
     //control loop stuff
-    double KP = 1.0/6.0;
+    double KP = 1.0/20.0;
     double controlPower = 0.26;
-    int sliceThreshold = 12;
+    int sliceThreshold = 19;
     double minPower = .15;
     double maxPower = .4;
 
@@ -95,12 +95,17 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
         switch (subsystemMode) {
         case SPIN:
             
-            spinMotor.set(0.26);
+            // spinMotor.set(0.26);
 
-            if (controlPower < maxPower && controlPower > minPower)
+            if (controlPower < maxPower && controlPower > minPower){
                 System.out.println("good job. The power is " + controlPower);
-            else
+                spinMotor.set(controlPower);
+        }
+            else {
                 System.out.println("You Done Goofed. The power is " + controlPower);
+                spinMotor.set(0.26);
+            }
+
             // colorCounter is the number of unique colors we see
 
             // System.out.println(color);
@@ -120,6 +125,7 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
             break;
         case WAIT:
             spinMotor.set(0.0);
+            controlPower = 0.26;
             colorCounter = sameColor = 0;
             break;
         }
@@ -140,14 +146,15 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
                     colorCounter++;
                     System.out.println(color + " color change at " + colorCounter);
                     
-                    if(colorCounter == sliceThreshold){
+                    if(colorCounter >= sliceThreshold){
                         controlPower = (KP*(slices - colorCounter));
                         System.out.println(controlPower);
                     }
-                }    
+                }
             }
             previousColor = color;
         } else // if it's seen the right color enough times
+            System.out.println("done");
             running = false;
     }
 
