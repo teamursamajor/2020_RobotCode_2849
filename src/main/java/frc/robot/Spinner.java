@@ -17,19 +17,19 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
 
     private Spark spinMotor;
     private String gameData;
-    private char color, previousColor;
+    private char color, goal, previousColor;
     private boolean running;
     // private long startTime;
 
     private int sameColor = 0, colorCounter = 0;
     // private char previousColor;
 
-    
-    //control loop stuff
-    double KP = 1.0/20.0;
+    // control loop stuff
+    final double goodKP = 0.02;
+    double KP = 0.02;
     double controlPower = 0.26;
     int sliceThreshold = 19;
-    double minPower = .15;
+    double minPower = .19;
     double maxPower = .4;
 
     // Color Sensor Utilities
@@ -38,10 +38,10 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
     private final ColorMatch colorMatcher = new ColorMatch();
 
     // TODO calibrate targets if needed
-    private final Color kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
-    private final Color kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
-    private final Color kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
-    private final Color kYellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
+    private final Color kBlueTarget = ColorMatch.makeColor(0.117, 0.435, 0.450);
+    private final Color kGreenTarget = ColorMatch.makeColor(0.135, 0.614, 0.251);
+    private final Color kRedTarget = ColorMatch.makeColor(0.588, 0.300, 0.111);
+    private final Color kYellowTarget = ColorMatch.makeColor(0.311, 0.569, 0.120);
 
     /**
      * Constructor for Spinner objects.
@@ -56,15 +56,15 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
     }
 
     public void runSubsystem() throws InterruptedException {
-        
+
         // final long currentTime = System.currentTimeMillis();
 
         Color detectedColor = colorSensor.getColor();
         ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
 
-        // SmartDashboard.putNumber("Red", detectedColor.red);
-        // SmartDashboard.putNumber("Green", detectedColor.green);
-        // SmartDashboard.putNumber("Blue", detectedColor.blue);
+        SmartDashboard.putNumber("Red", detectedColor.red);
+        SmartDashboard.putNumber("Green", detectedColor.green);
+        SmartDashboard.putNumber("Blue", detectedColor.blue);
 
         if (match.color == kBlueTarget)
             color = 'B';
@@ -77,46 +77,41 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
 
         gameData = DriverStation.getInstance().getGameSpecificMessage();
 
-        // System.out.println(getColor());
+        if (gameData.length() > 0) // If we've gotten a color to check for
+            goal = gameData.charAt(0); // Store in goal
+        else
+            goal = ' ';
 
         if (xbox.getSingleButtonPress(XboxController.BUTTON_A))
             running = true;
-            // startTime = System.currentTimeMillis();
+        // startTime = System.currentTimeMillis();
         if (xbox.getSingleButtonPress(XboxController.BUTTON_B))
             running = false;
 
         if (running)
-            // TODO this code would theoretically choose SPIN unless there is a game specific message
-            subsystemMode = gameData.length() > 0 ? SpinnerMode.DETECT : SpinnerMode.SPIN;
-            // subsystemMode = SpinnerMode.SPIN;
+            // chooses SPIN unless there is a color to detect
+            subsystemMode = goal == ' ' ? SpinnerMode.SPIN : SpinnerMode.DETECT;
         else
             subsystemMode = SpinnerMode.WAIT;
 
         switch (subsystemMode) {
         case SPIN:
-            
+
             // spinMotor.set(0.26);
-
-            if (controlPower < maxPower && controlPower > minPower){
-                System.out.println("good job. The power is " + controlPower);
-                spinMotor.set(controlPower);
-        }
-            else {
-                System.out.println("You Done Goofed. The power is " + controlPower);
-                spinMotor.set(0.26);
-            }
-
-            // colorCounter is the number of unique colors we see
-
-            // System.out.println(color);
             spinSlices(25);
-             
+            if (controlPower < maxPower && controlPower > minPower) {
+                // System.out.println("good job. The power is " + controlPower);
+                spinMotor.set(controlPower);
+            } else {
+                // System.out.println("You Done Goofed. The power is " + controlPower);
+                spinMotor.set(minPower);
+            }
             // if (currentTime - startTime < 20000)
-            //     spinMotor.set(1.0);
-            //     // positive = CCW
-            //     // negative = CW
+            // spinMotor.set(1.0);
+            // // positive = CCW
+            // // negative = CW
             // else {
-            //     running = false;
+            // running = false;
             // }
 
             break;
@@ -134,6 +129,7 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
 
     /**
      * Spins a given amount of slices and counts color changes
+     * 
      * @param slices the number of slices to spin
      */
     public void spinSlices(int slices) {
@@ -142,97 +138,99 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
                 sameColor = 0;
             else {
                 sameColor++;
-                if (sameColor == 4) { // threshold for a correct color
+                if (sameColor == 5) { // threshold for a correct color
                     colorCounter++;
                     System.out.println(color + " color change at " + colorCounter);
-                    
+
                     if (colorCounter >= sliceThreshold) {
-                        controlPower = (KP*(slices - colorCounter));
-                        System.out.println(controlPower);
+                        controlPower = (KP * (slices - colorCounter) + .12);
+                        // System.out.println(controlPower);
                     }
                 }
             }
             previousColor = color;
-        } else // if it's seen the right color enough times
+        } else { // if it's seen the right color enough times
             System.out.println("done");
             running = false;
+        }
     }
 
     /**
      * Returns true if the current color matches with the goal color
      */
     public boolean correctColor() {
-        return goalColor() == getColor();
+        return goal == color;
     }
 
     /**
-     * Returns the current color the color sensor is seeing.
-     * Factors in an offset of 2.
+     * Returns the current color the color sensor is seeing. Factors in an offset of
+     * 2.
      */
     public char getColor() {
         return color;
     }
 
     /**
-     * Takes a color and offsets it by a given number of slices on the wheel.
-     * Used to account for the color sensor being off-center on the actual robot.
-     * Takes a color, converts it to a number, adds an offset, and converts it back to a color.
-     * @param color The color to offset.
+     * Takes a color and offsets it by a given number of slices on the wheel. Used
+     * to account for the color sensor being off-center on the actual robot. Takes a
+     * color, converts it to a number, adds an offset, and converts it back to a
+     * color.
+     * 
+     * @param color  The color to offset.
      * @param offset The number of slices to offset by.
      */
     public char offsetColor(char color, int offset) {
-        return numberToColor((colorToNumber(color)+offset)%4);
+        return numberToColor((colorToNumber(color) + offset) % 4);
     }
 
     /**
      * Returns the goal color the spinner should get to.
      */
-    public char goalColor() {
-        if (gameData.length() > 0) // If we've gotten a color to check for
-           return gameData.charAt(0);
-        return 'B'; // TODO change for testing, revert to ' ' for actual code
+    public char getGoal() {
+        return goal;
     }
 
     /**
      * Determines the optimal number of slices to spin given current and goal color.
-     * Factors in offset -- detected color is two slices away from offset.
-     * Ex: if detected color is red, real color is blue. So if goal is blue, we're there already.
+     * Factors in offset -- detected color is two slices away from offset. Ex: if
+     * detected color is red, real color is blue. So if goal is blue, we're there
+     * already.
+     * 
      * @return The number of slices to spin
      */
-    // private int numSlices() {
+    private int numSlices() {
         // int current = (colorToNumber(color) + 2) % 4;
         // int slices = (colorToNumber(goal) - current) % 4;
         // if (slices < 0) slices += 4;
         // if (slices == 3) slices = -1;
         // return -1 * slices;
 
-    //     if (goal == 'R') {
-    //         if (color == 'Y') return 1;
-    //         if (color == 'B') return 0;
-    //         if (color == 'R') return 2;
-    //         if (color == 'G') return -1;
-    //     } else if (goal == 'G') {
-    //         if (color == 'R') return 1;
-    //         if (color == 'Y') return 0;
-    //         if (color == 'G') return 2;
-    //         if (color == 'B') return -1;
-    //     } else if (goal == 'B') {
-    //         if (color == 'G') return 1;
-    //         if (color == 'R') return 0;
-    //         if (color == 'B') return 2;
-    //         if (color == 'Y') return -1;
-    //     } else if (goal == 'Y') {
-    //         if (color == 'B') return 1;
-    //         if (color == 'G') return 0;
-    //         if (color == 'Y') return 2;
-    //         if (color == 'R') return -1;
-    //     }
-    //     return 0; //failsafe
-    // }
+        if (goal == 'R') {
+            if (color == 'Y') return 1;
+            if (color == 'B') return 0;
+            if (color == 'R') return 2;
+            if (color == 'G') return -1;
+        } else if (goal == 'G') {
+            if (color == 'R') return 1;
+            if (color == 'Y') return 0;
+            if (color == 'G') return 2;
+            if (color == 'B') return -1;
+        } else if (goal == 'B') {
+            if (color == 'G') return 1;
+            if (color == 'R') return 0;
+            if (color == 'B') return 2;
+            if (color == 'Y') return -1;
+        } else if (goal == 'Y') {
+            if (color == 'B') return 1;
+            if (color == 'G') return 0;
+            if (color == 'Y') return 2;
+            if (color == 'R') return -1;
+        }
+        return 0; //failsafe
+    }
 
     /**
-     * Converts the color to a number.
-     * R = 0, G = 1, B = 2, Y = 3
+     * Converts the color to a number. R = 0, G = 1, B = 2, Y = 3
      */
     private int colorToNumber(char color) {
         if (color == 'R')
@@ -247,8 +245,7 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
     }
 
     /**
-     * Converts the number to a color.
-     * 0 = R, 1 = G, 2 = B, 3 = Y
+     * Converts the number to a color. 0 = R, 1 = G, 2 = B, 3 = Y
      */
     private char numberToColor(int number) {
         if (number == 0)
