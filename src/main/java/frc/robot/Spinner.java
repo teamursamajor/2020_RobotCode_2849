@@ -146,7 +146,7 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
                     colorCounter++;
                     System.out.println(color + " color change at " + colorCounter);
                     
-                    if(colorCounter >= sliceThreshold){
+                    if (colorCounter >= sliceThreshold) {
                         controlPower = (KP*(slices - colorCounter));
                         System.out.println(controlPower);
                     }
