@@ -28,9 +28,10 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 
 		mRearLeft = new Spark(DRIVE_BACK_LEFT);
 		mRearRight = new Spark(DRIVE_BACK_RIGHT);
-
-		leftEncoder.setDistancePerPulse(INCHES_PER_TICK);
-		rightEncoder.setDistancePerPulse(INCHES_PER_TICK);
+		
+		// TODO change this based on distance testing
+		leftEncoder.setDistancePerPulse(7.2 * Math.PI / 2048.0);
+		rightEncoder.setDistancePerPulse(7.2 * Math.PI / 2048.0);
 		rightEncoder.setReverseDirection(true);
 
 		leftEncoder.reset();
@@ -46,6 +47,8 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 		updateStateInfo();
 		DriveTask.DriveOrder driveOrder = subsystemMode.callLoop();
 
+		//System.out.println("Left encoder: " + leftEncoder.getDistance());
+		//System.out.println("Right encoder: " + rightEncoder.getDistance());
 		mFrontLeft.set(-driveOrder.leftPower);
 		mFrontRight.set(driveOrder.rightPower);
 		mRearLeft.set(-driveOrder.leftPower);

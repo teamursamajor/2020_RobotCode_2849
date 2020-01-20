@@ -33,7 +33,7 @@ public interface UrsaRobot {
 	
 	public static final int CARGO_POT_CHANNEL = 0;
 
-	public static final int LEFT_ENCODER_CHANNEL_A = 4, LEFT_ENCODER_CHANNEL_B = 5;
+	public static final int LEFT_ENCODER_CHANNEL_A = 0, LEFT_ENCODER_CHANNEL_B = 1;
 	public static final int RIGHT_ENCODER_CHANNEL_A = 2, RIGHT_ENCODER_CHANNEL_B = 3;
 
 	public static Encoder leftEncoder = new Encoder(LEFT_ENCODER_CHANNEL_A, LEFT_ENCODER_CHANNEL_B);
