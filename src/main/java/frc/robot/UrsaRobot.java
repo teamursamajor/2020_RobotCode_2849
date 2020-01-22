@@ -41,7 +41,7 @@ public interface UrsaRobot {
 
 	// Tells encoder the value of each tick. Must be set in the corresponding file
 	// TODO Double check!
-	public static final double INCHES_PER_TICK = 0.011505d;
+	public static final double INCHES_PER_TICK = 7.2d * Math.PI / 2048.0d;
 
 	public static final double ROBOT_WIDTH_INCHES = 28d;
 	public static final double ROBOT_DEPTH_INCHES = 31.5d;
