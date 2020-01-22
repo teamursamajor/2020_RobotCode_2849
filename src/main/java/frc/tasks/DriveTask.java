@@ -49,14 +49,16 @@ public class DriveTask extends Task implements UrsaRobot {
          */
         private DriveOrder autoCalculator() {
             double leftOutputPower = 0.0, rightOutputPower = 0.0;
-            double currentDistance = DriveState.averagePos;
+            double currentDistance = DriveState.averagePos; // TODO check this calculation!!!
             double driveTolerance = 5.0;
 
             double kdDrive = 0; // Derivative coefficient for PID controller
             double kpDrive = 1.0 / 33.0; // Proportional coefficient for PID controller
             double minimumPower = 0.25;
 
-            // If we are within the driveTolerance, stop
+            System.out.println(Math.abs(currentDistance-desiredLocation));
+
+            // If we are within the driveTolerance of the desiredLocation, stop
             if (Math.abs(currentDistance - desiredLocation) <= driveTolerance) {
                 driving = false;
                 return new DriveOrder(0.0, 0.0);
