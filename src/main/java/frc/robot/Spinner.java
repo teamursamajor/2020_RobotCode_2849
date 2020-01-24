@@ -26,7 +26,6 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
 
     // control loop stuff
     final double goodKP = 0.02;
-    double KP = 0.02;
     double controlPower = 0.26;
     int sliceThreshold = 19;
     double minPower = .19;
@@ -116,7 +115,48 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
 
             break;
         case DETECT:
-            spinMotor.set(0.2);
+        /* r=0,g=1,b=2,y=3, or r=4
+        1 or 3 color changes
+        CCW Goal - Current:
+        red to yellow --- 3-0 = 3 or 3-4 = -1
+        yellow to blue --- 2-3 = -1
+        blue to green --- 1-2 = -1
+        green to red --- 0-1 = -1 or 4-1 = 3
+
+        CW Goal - Current:
+        yellow to red --- 0-3 = -3
+        red to green --- 1-0 = 1
+        green to blue --- 2-1 = 1
+        blue to yellow --- 3-2 = 1
+        
+        * CW is all positive 1 except for looping 0 to 3
+        * CCW is all negative 1 except for looping 3 to 0
+        *
+
+        2 color changes
+        CCW Goal - Current
+        red to blue --- 2-0 = 2
+        yellow to green --- 1-3 = -2
+        blue to red --- 0-2 = -2
+        green to yellow --- 3-1 = 2
+
+        CW Goal - Current
+        blue to red --- 0-2 = -2
+        green to yellow --- 3-1 = 2
+        red to blue --- 2-0 = 2
+        yellow to green --- 1-3 = -2
+         *
+         * 2 color changes is always even with 2 negatives and 2 positives
+         * if (Math.abs(colToNum(goal)-colToNum(color) % 2) == 0), spin either direction 
+         * else if (Math.abs(colToNum(goal)-colToNum(color) % 2) == 1), spin 1 or three directions {
+         *      if ()
+         * }
+         */
+            int distance = colToNum(goal)-colToNum(color);
+            int dir = -1* (int) Math.signum(Math.min(Math.abs(distance), Math.abs((distance-4)%4)));
+            spinMotor.set(dir * 0.26);
+            if (color == goal)
+                running = false;
             break;
         case WAIT:
             spinMotor.set(0.0);
@@ -129,7 +169,7 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
 
     /**
      * Spins a given amount of slices and counts color changes
-     * 
+     * TODO make this return the desired power and calculate threshold/KP stuff here
      * @param slices the number of slices to spin
      */
     public void spinSlices(int slices) {
@@ -143,7 +183,7 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
                     System.out.println(color + " color change at " + colorCounter);
 
                     if (colorCounter >= sliceThreshold) {
-                        controlPower = (KP * (slices - colorCounter) + .12);
+                        controlPower = (goodKP * (slices - colorCounter) + .12);
                         // System.out.println(controlPower);
                     }
                 }
@@ -163,8 +203,7 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
     }
 
     /**
-     * Returns the current color the color sensor is seeing. Factors in an offset of
-     * 2.
+     * Returns the current color the color sensor is seeing.
      */
     public char getColor() {
         return color;
@@ -180,7 +219,7 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
      * @param offset The number of slices to offset by.
      */
     public char offsetColor(char color, int offset) {
-        return numberToColor((colorToNumber(color) + offset) % 4);
+        return numToCol((colToNum(color) + offset) % 4);
     }
 
     /**
@@ -191,48 +230,9 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
     }
 
     /**
-     * Determines the optimal number of slices to spin given current and goal color.
-     * Factors in offset -- detected color is two slices away from offset. Ex: if
-     * detected color is red, real color is blue. So if goal is blue, we're there
-     * already.
-     * 
-     * @return The number of slices to spin
-     */
-    private int numSlices() {
-        // int current = (colorToNumber(color) + 2) % 4;
-        // int slices = (colorToNumber(goal) - current) % 4;
-        // if (slices < 0) slices += 4;
-        // if (slices == 3) slices = -1;
-        // return -1 * slices;
-
-        if (goal == 'R') {
-            if (color == 'Y') return 1;
-            if (color == 'B') return 0;
-            if (color == 'R') return 2;
-            if (color == 'G') return -1;
-        } else if (goal == 'G') {
-            if (color == 'R') return 1;
-            if (color == 'Y') return 0;
-            if (color == 'G') return 2;
-            if (color == 'B') return -1;
-        } else if (goal == 'B') {
-            if (color == 'G') return 1;
-            if (color == 'R') return 0;
-            if (color == 'B') return 2;
-            if (color == 'Y') return -1;
-        } else if (goal == 'Y') {
-            if (color == 'B') return 1;
-            if (color == 'G') return 0;
-            if (color == 'Y') return 2;
-            if (color == 'R') return -1;
-        }
-        return 0; //failsafe
-    }
-
-    /**
      * Converts the color to a number. R = 0, G = 1, B = 2, Y = 3
      */
-    private int colorToNumber(char color) {
+    private int colToNum(char color) {
         if (color == 'R')
             return 0;
         if (color == 'G')
@@ -247,7 +247,7 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
     /**
      * Converts the number to a color. 0 = R, 1 = G, 2 = B, 3 = Y
      */
-    private char numberToColor(int number) {
+    private char numToCol(int number) {
         if (number == 0)
             return 'R';
         if (number == 1)
