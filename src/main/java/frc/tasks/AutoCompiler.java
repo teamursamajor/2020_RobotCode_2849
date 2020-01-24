@@ -86,7 +86,7 @@ public class AutoCompiler {
 	 * @param scriptName
 	 *            Name of the Auto Script file to execute.
 	 */
-	static class ExecuteToken implements Token {
+	class ExecuteToken implements Token {
 //		private String scriptName;
 
 		public ExecuteToken(/*String scriptName*/) {
@@ -105,7 +105,7 @@ public class AutoCompiler {
 	 * @param filename
 	 *            Path file to run.
 	 */
-	static class FollowToken implements Token {
+	 class FollowToken implements Token {
 		public FollowToken(/*String filename*/) { // TODO replace with StringLiteralToken
 //			filename = filename.replace(" ", "") + ".path"; // Assuming path files still end in path
 		}
@@ -123,7 +123,9 @@ public class AutoCompiler {
 	 * A token for running a set of tasks within it in sequence.
 	 * Identified by the phrase "serial {".
 	 */
-	static class SerialToken implements Token {
+	 class SerialToken implements Token {
+		public SerialToken() {}
+
 		public String toString() {
 			return "SerialToken";
 		}
@@ -133,7 +135,9 @@ public class AutoCompiler {
 	 * A token for running a set of tasks within it all at once.
 	 * Identified by the phrase "parallel {".
 	 */
-	static class ParallelToken implements Token {
+	 class ParallelToken implements Token {
+		public ParallelToken() {}
+
 		public String toString() {
 			return "ParallelToken";
 		}
@@ -146,7 +150,7 @@ public class AutoCompiler {
 	 * @param str
 	 *            String to print.
 	 */
-	static class PrintToken implements Token {
+	 class PrintToken implements Token {
 //		private String str;
 
 		public PrintToken(/*String str*/) { // TODO replace with StringLiteralToken
@@ -168,7 +172,7 @@ public class AutoCompiler {
 	 * @param time
 	 *            Time to wait.
 	 */
-	static class WaitToken implements Token {
+	 class WaitToken implements Token {
 //		private double wait;
 
 		public WaitToken(/*String time*/) {
@@ -197,7 +201,7 @@ public class AutoCompiler {
 	 * @param dist
 	 *            The distance to drive
 	 */
-	static class DriveToken implements Token {
+	 class DriveToken implements Token {
 //		private double dist;
 
 		public DriveToken(/*String distance*/) { // TODO replace with NumberToken
@@ -226,7 +230,7 @@ public class AutoCompiler {
 	 * @param angle
 	 *            Angle to turn to
 	 */
-	static class TurnToken implements Token {
+	 class TurnToken implements Token {
 //		private double turnAmount;
 
 		public TurnToken(/*String angle*/) { // TODO replace with NumberToken
@@ -252,7 +256,9 @@ public class AutoCompiler {
 	/**
 	 * A token for dumping balls from the shooter mechanism.
 	 */
-	static class DumpToken implements Token {
+	 class DumpToken implements Token {
+		public DumpToken() {}
+
 		// TODO add parameters if necessary
 		public String toString() {
 			return "DumpToken";
@@ -262,7 +268,10 @@ public class AutoCompiler {
 	/**
 	 * A token for any positive/negative real numbers.
 	 */
-	static class NumberToken implements Token {
+	 class NumberToken implements Token {
+
+		public NumberToken() {}
+
 		public String toString() {
 			return "NumberToken";
 		}
@@ -272,7 +281,9 @@ public class AutoCompiler {
 	 * A token for adding two numbers.
 	 * Identified by "+".
 	 */
-	static class AddToken implements Token {
+	 class AddToken implements Token {
+		public AddToken() {}
+
 		public String toString() {
 			return "AddToken";
 		}
@@ -282,7 +293,9 @@ public class AutoCompiler {
 	 * A token for subtracting two numbers.
 	 * Identified by "-".
 	 */
-	static class SubtractToken implements Token {
+	 class SubtractToken implements Token {
+		public SubtractToken() {}
+
 		public String toString() {
 			return "SubtractToken";
 		}
@@ -293,7 +306,9 @@ public class AutoCompiler {
 	 * A token for multiplying two numbers.
 	 * Identified by "*".
 	 */
-	static class MultiplyToken implements Token {
+	 class MultiplyToken implements Token {
+		public MultiplyToken() {}
+
 		public String toString() {
 			return "MultiplyToken";
 		}
@@ -303,7 +318,9 @@ public class AutoCompiler {
 	 * A token for dividing two numbers.
 	 * Identified by "/".
 	 */
-	static class DivideToken implements Token {
+	 class DivideToken implements Token {
+		public DivideToken() {}
+
 		public String toString() {
 			return "DivideToken";
 		}
@@ -313,7 +330,9 @@ public class AutoCompiler {
 	 * A token for separating parameters.
 	 * Identified by ",".
 	 */
-	static class CommaToken implements Token {
+	 class CommaToken implements Token {
+		public CommaToken() {}
+
 		public String toString() {
 			return "CommaToken";
 		}
@@ -323,7 +342,9 @@ public class AutoCompiler {
 	 * A token for any String phrases.
 	 * Identified by quotes surrounding text.
 	 */
-	static class StringLiteralToken implements Token {
+	 class StringLiteralToken implements Token {
+		public StringLiteralToken() {}
+
 		public String toString() {
 			return "StringLiteralToken";
 		}
@@ -333,7 +354,9 @@ public class AutoCompiler {
 	 * A token for ending the most recent group task (parallel/serial).
 	 * Identified by "}".
 	 */
-	static class RightBraceToken implements Token {
+	 class RightBraceToken implements Token {
+		public RightBraceToken() {}
+
 		public String toString() {
 			return "RightBraceToken";
 		}
@@ -343,7 +366,9 @@ public class AutoCompiler {
 	 * A token for starting a parameter set.
 	 * Identified by "(".
 	 */
-	static class LeftParenToken implements Token {
+	 class LeftParenToken implements Token {
+		public LeftParenToken() {}
+
 		public String toString() {
 			return "LeftParenToken";
 		}
@@ -353,7 +378,9 @@ public class AutoCompiler {
 	 * A token for ending a parameter set.
 	 * Identified by ")".
 	 */
-	static class RightParenToken implements Token {
+	 class RightParenToken implements Token {
+		public RightParenToken() {}
+		
 		public String toString() {
 			return "RightParenToken";
 		}
@@ -392,7 +419,7 @@ public class AutoCompiler {
 					Matcher match = entry.getValue().matcher(line);
 					if (match.find()) {
 						try {
-							tokenList.add(entry.getKey().newInstance()); // Records the corresponding token in the list
+							tokenList.add(entry.getKey().getConstructor(this.getClass()).newInstance(this)); // Records the corresponding token in the list
 							matchedToken = true;
 							matchedAny = true;
 							line = line.substring(match.end()); // Takes out matched characters from line
