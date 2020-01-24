@@ -122,9 +122,9 @@ public class Robot extends TimedRobot implements UrsaRobot {
    
    
     // System.out.println("test periodic running");
-    if (xbox.getSingleButtonPress(XboxController.BUTTON_B)){
-      DriveTask task = new DriveTask(12, drive, DriveTask.DriveMode.AUTO_DRIVE);
-      System.out.println("auto run working");
+    if (!DriveTask.driving && xbox.getSingleButtonPress(XboxController.BUTTON_B)){
+      DriveTask task = new DriveTask(-24, drive, DriveTask.DriveMode.AUTO_DRIVE);
+      // System.out.println("auto run working");
     }
 
   }
