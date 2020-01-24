@@ -152,9 +152,13 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
          *      if ()
          * }
          */
-            int distance = colToNum(goal)-colToNum(color);
-            int dir = -1* (int) Math.signum(Math.min(Math.abs(distance), Math.abs((distance-4)%4)));
-            spinMotor.set(dir * 0.26);
+            int dir = colToNum(goal)-colToNum(color);
+            if (Math.abs(dir % 2) == 0) dir = 1;
+            else if (dir == -3 || dir == 3) dir = colToNum(color)-colToNum(goal) / 3;
+        
+            // int distance = colToNum(goal)-colToNum(color);
+            // int dir = -1* (int) Math.signum(Math.min(Math.abs(distance), Math.abs((distance-4)%4)));
+            spinMotor.set( dir* 0.26);
             if (color == goal)
                 running = false;
             break;
