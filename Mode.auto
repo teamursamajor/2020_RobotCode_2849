@@ -1,0 +1,22 @@
+turn 90
+drive 10.2
+turn 90
+dump
+execute "ddd"
+follow "dd"
+#test comment
+serial {
+	drive 5
+	dump
+}
+parallel {
+	drive 5
+	dump
+}
+print "Hello"
+wait 60.3
+drive (444,2,5)
+(4+5)
+(4-5)
+(4/5)
+(4*5)

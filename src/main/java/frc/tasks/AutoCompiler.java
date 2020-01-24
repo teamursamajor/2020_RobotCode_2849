@@ -4,174 +4,358 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 
-import frc.tasks.DriveTask.DriveMode;
-import frc.robot.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
+//import frc.tasks.DriveTask.DriveMode;
+//import frc.robot.*;
 
 /**
- * @author Sheldon and ForwardSlash
+ * @author AlphaMale and Sheldon
  * 
- * This is a class for compiling Auto Modes. It takes an Auto Mode file and interprets
- * tokens and arguments on each line as a set of tasks to be executed in sequence.
+ * This is a compiler for Auto Scripts. It takes an Auto Script file
+ * and interprets tokens and arguments on each line as a set of tasks to
+ * be executed in a given sequence.
  * 
- * Auto Mode syntax is located on the team Google Drive.
+ * Auto Script syntax is located on the team Google Drive.
  */
 public class AutoCompiler {
+
+	/**
+	 * For grouping all tokens.
+	 */
 	interface Token {
 	}
 
-	private Drive drive;
-	// private Arm arm;
-	// private Cargo cargo;
-	// private Hatch hatch;
+	/**
+	 * A map of all regex matches corresponding to each token.
+	 */
+	public HashMap<Class<? extends Token>, Pattern> regexMap = new HashMap<Class<? extends Token>, Pattern>();
 
-	public AutoCompiler(Drive drive/*, Arm arm, Cargo cargo, Hatch hatch*/) {
-		this.drive = drive;
-	// 	this.arm = arm;
-	// 	this.cargo = cargo;
-	// 	this.hatch = hatch;
+	// private Drive drive;
+	// private Shooter shooter;
+
+	/**
+	 * Constructor for the Auto Compiler. Takes in a Drive and Shooter object and
+	 * creates regex mappings for each possible token in an Auto Script.
+	 */
+	public AutoCompiler(/* Drive drive, Shooter shooter */) {
+		// this.drive = drive;
+		// this.shooter = shooter;
+
+		/*
+		 * Regex mappings for each token. Considers the relevant string and any
+		 * whitespace preceding it.
+		 */
+		regexMap.put(ExecuteToken.class, Pattern.compile("^\\s*execute\\s*"));
+		regexMap.put(FollowToken.class, Pattern.compile("^\\s*follow\\s*"));
+
+		regexMap.put(SerialToken.class, Pattern.compile("^\\s*serial\\s*\\{"));
+		regexMap.put(ParallelToken.class, Pattern.compile("^\\s*parallel\\s*\\{"));
+
+		regexMap.put(PrintToken.class, Pattern.compile("^\\s*print\\s*"));
+		regexMap.put(WaitToken.class, Pattern.compile("^\\s*wait\\s*"));
+
+		regexMap.put(DriveToken.class, Pattern.compile("^\\s*drive\\s*"));
+		regexMap.put(TurnToken.class, Pattern.compile("^\\s*turn\\s*"));
+		regexMap.put(DumpToken.class, Pattern.compile("^\\s*dump\\s*"));
+
+		regexMap.put(NumberToken.class, Pattern.compile("^\\s*\\d+(\\.\\d+)?"));
+		regexMap.put(AddToken.class, Pattern.compile("^\\s*\\+\\s*"));
+		regexMap.put(SubtractToken.class, Pattern.compile("^\\s*\\-\\s*"));
+		regexMap.put(MultiplyToken.class, Pattern.compile("^\\s*\\*\\s*"));
+		regexMap.put(DivideToken.class, Pattern.compile("^\\s*\\/\\s*"));
+
+		regexMap.put(CommaToken.class, Pattern.compile("^\\s*,"));
+		regexMap.put(StringLiteralToken.class, Pattern.compile("^\\s*(\"[^\"]*\")"));
+		regexMap.put(RightBraceToken.class, Pattern.compile("^\\s*}"));
+		regexMap.put(LeftParenToken.class, Pattern.compile("^\\s*\\("));
+		regexMap.put(RightParenToken.class, Pattern.compile("^\\s*\\)"));
+
 	}
 
 	/**
-	 * A token that executes a given auto file
+	 * A token for executing a given Auto Script.
+	 * Idenfied by the phrase "execute".
 	 * 
-	 * @param scriptName Name of the file to execute
+	 * @param scriptName
+	 *            Name of the Auto Script file to execute.
 	 */
-	class ExecuteToken implements Token {
-		private String scriptName;
+	static class ExecuteToken implements Token {
+//		private String scriptName;
 
-		public ExecuteToken(String scriptName) {
-			this.scriptName = "/home/lvuser/automodes/" + scriptName.trim() + ".auto";
+		public ExecuteToken(/*String scriptName*/) {
+//			this.scriptName = "/home/lvuser/automodes/" + scriptName.trim() + ".auto";
+		}
+		
+		public String toString() {
+			return "ExecuteToken";
 		}
 	}
 
-	// TODO Update for PathWeaver
-	// /**
-	//  * A token that runs a given path file
-	//  * 
-	//  * @param filename Path file to run
-	//  */
-	// class FollowToken implements Token {
-	// 	public FollowToken(String filename) {
-	// 		filename = filename.replace(" ", "") + ".path"; // Assuming path files still end in path
-	// 	}
+	/**
+	 * A token for following a given Path. TODO update for PathWeaver
+	 * Identified by the phrase "follow".
+	 * 
+	 * @param filename
+	 *            Path file to run.
+	 */
+	static class FollowToken implements Token {
+		public FollowToken(/*String filename*/) { // TODO replace with StringLiteralToken
+//			filename = filename.replace(" ", "") + ".path"; // Assuming path files still end in path
+		}
 
-	// 	public PathTask makeTask() {
-	// 		return null;
-	// 	}
-	// }
+//		public PathTask makeTask() {
+//			return null;
+//		}
+		
+		public String toString() {
+			return "FollowToken";
+		}
+	}
+
+	/**
+	 * A token for running a set of tasks within it in sequence.
+	 * Identified by the phrase "serial {".
+	 */
+	static class SerialToken implements Token {
+		public String toString() {
+			return "SerialToken";
+		}
+	}
+	
+	/**
+	 * A token for running a set of tasks within it all at once.
+	 * Identified by the phrase "parallel {".
+	 */
+	static class ParallelToken implements Token {
+		public String toString() {
+			return "ParallelToken";
+		}
+	}
 
 	/**
 	 * A token that prints any string passed to it to the console
+	 * Identified by the phrase "print".
 	 * 
-	 * @param str String to print
+	 * @param str
+	 *            String to print.
 	 */
-	class PrintToken implements Token {
-		private String str;
+	static class PrintToken implements Token {
+//		private String str;
 
-		public PrintToken(String str) {
-			this.str = str;
+		public PrintToken(/*String str*/) { // TODO replace with StringLiteralToken
+//			this.str = str;
 		}
 
-		public PrintTask makeTask() {
-			return new PrintTask(str);
+//		public PrintTask makeTask() {
+//			return new PrintTask(str);
+//		}
+		
+		public String toString() {
+			return "PrintToken";
 		}
 	}
 
 	/**
 	 * A token that delays the auto mode for a duration passed to it
 	 * 
-	 * @param time Time to wait
+	 * @param time
+	 *            Time to wait.
 	 */
-	class WaitToken implements Token {
-		private double wait;
+	static class WaitToken implements Token {
+//		private double wait;
 
-		public WaitToken(String time) {
-			time = time.replace(" ", "");
-			try {
-				if (Double.parseDouble(time) >= 0) {
-					wait = Double.parseDouble(time);
-				}
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-			}
+		public WaitToken(/*String time*/) {
+//			time = time.replace(" ", "");
+//			try {
+//				if (Double.parseDouble(time) >= 0) {
+//					wait = Double.parseDouble(time);
+//				}
+//			} catch (NumberFormatException e) {
+//				e.printStackTrace();
+//			}
 		}
 
-		public WaitTask makeTask() {
-			return new WaitTask((long) (wait * 1000.0d));
+//		public WaitTask makeTask() {
+//			return new WaitTask((long) (wait * 1000.0d));
+//		}
+		
+		public String toString() {
+			return "WaitToken";
 		}
 	}
 
 	/**
 	 * A token that drives the robot a given distance
 	 * 
-	 * @param dist The distance to drive
+	 * @param dist
+	 *            The distance to drive
 	 */
-	class DriveToken implements Token {
-		private double dist;
+	static class DriveToken implements Token {
+//		private double dist;
 
-		public DriveToken(String distance) {
-			distance = distance.replace(" ", "");
-			try {
-				if (Math.abs(Double.parseDouble(distance)) >= 0) {
-					dist = Double.parseDouble(distance);
-				}
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-			}
+		public DriveToken(/*String distance*/) { // TODO replace with NumberToken
+//			distance = distance.replace(" ", "");
+//			try {
+//				if (Math.abs(Double.parseDouble(distance)) >= 0) {
+//					dist = Double.parseDouble(distance);
+//				}
+//			} catch (NumberFormatException e) {
+//				e.printStackTrace();
+//			}
 		}
 
-		public DriveTask makeTask() {
-			return new DriveTask(dist, drive, DriveMode.AUTO_DRIVE);
+//		public DriveTask makeTask() {
+//			return new DriveTask(dist, drive, DriveMode.AUTO_DRIVE);
+//		}
+		
+		public String toString() {
+			return "DriveToken";
 		}
 	}
 
 	/**
 	 * A token that turns the robot to face a given angle
 	 * 
-	 * @param angle Angle to turn to
+	 * @param angle
+	 *            Angle to turn to
 	 */
-	class TurnToken implements Token {
-		private double turnAmount;
+	static class TurnToken implements Token {
+//		private double turnAmount;
 
-		public TurnToken(String angle) {
-			angle = angle.replace(" ", "");
-			try {
-				if (Math.abs(Double.parseDouble(angle)) >= 0) {
-					turnAmount = Double.parseDouble(angle);
-				}
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-			}
+		public TurnToken(/*String angle*/) { // TODO replace with NumberToken
+//			angle = angle.replace(" ", "");
+//			try {
+//				if (Math.abs(Double.parseDouble(angle)) >= 0) {
+//					turnAmount = Double.parseDouble(angle);
+//				}
+//			} catch (NumberFormatException e) {
+//				e.printStackTrace();
+//			}
 		}
 
-		public DriveTask makeTask() {
-			return new DriveTask(turnAmount, drive, DriveMode.TURN);
-		}
-	}
-
-	/**
-	 * A token that runs a set of tasks within it at once
-	 */
-	class BundleToken implements Token {
-		public BundleToken() {
+//		public DriveTask makeTask() {
+//			return new DriveTask(turnAmount, drive, DriveMode.TURN);
+//		}
+		
+		public String toString() {
+			return "TurnToken";
 		}
 	}
 
 	/**
-	 * A token that runs a set of tasks within it in order
+	 * A token for dumping balls from the shooter mechanism.
 	 */
-	class SerialToken implements Token {
-		public SerialToken() {
+	static class DumpToken implements Token {
+		// TODO add parameters if necessary
+		public String toString() {
+			return "DumpToken";
 		}
 	}
 
 	/**
-	 * A token that ends the most recent group task (bundle/serial)
+	 * A token for any positive/negative real numbers.
 	 */
-	class RightBraceToken implements Token {
-		public RightBraceToken() {
+	static class NumberToken implements Token {
+		public String toString() {
+			return "NumberToken";
+		}
+	}
+
+	/**
+	 * A token for adding two numbers.
+	 * Identified by "+".
+	 */
+	static class AddToken implements Token {
+		public String toString() {
+			return "AddToken";
+		}
+	}
+
+	/**
+	 * A token for subtracting two numbers.
+	 * Identified by "-".
+	 */
+	static class SubtractToken implements Token {
+		public String toString() {
+			return "SubtractToken";
+		}
+		// TODO figure out how to recognize if there's only one number in front, and if so, make that number negative
+	}
+
+	/**
+	 * A token for multiplying two numbers.
+	 * Identified by "*".
+	 */
+	static class MultiplyToken implements Token {
+		public String toString() {
+			return "MultiplyToken";
+		}
+	}
+
+	/**
+	 * A token for dividing two numbers.
+	 * Identified by "/".
+	 */
+	static class DivideToken implements Token {
+		public String toString() {
+			return "DivideToken";
+		}
+	}
+
+	/**
+	 * A token for separating parameters.
+	 * Identified by ",".
+	 */
+	static class CommaToken implements Token {
+		public String toString() {
+			return "CommaToken";
+		}
+	}
+
+	/**
+	 * A token for any String phrases.
+	 * Identified by quotes surrounding text.
+	 */
+	static class StringLiteralToken implements Token {
+		public String toString() {
+			return "StringLiteralToken";
+		}
+	}
+
+	/**
+	 * A token for ending the most recent group task (parallel/serial).
+	 * Identified by "}".
+	 */
+	static class RightBraceToken implements Token {
+		public String toString() {
+			return "RightBraceToken";
+		}
+	}
+
+	/**
+	 * A token for starting a parameter set.
+	 * Identified by "(".
+	 */
+	static class LeftParenToken implements Token {
+		public String toString() {
+			return "LeftParenToken";
+		}
+	}
+
+	/**
+	 * A token for ending a parameter set.
+	 * Identified by ")".
+	 */
+	static class RightParenToken implements Token {
+		public String toString() {
+			return "RightParenToken";
 		}
 	}
 
@@ -179,43 +363,53 @@ public class AutoCompiler {
 	 * Interprets specified file to identify keywords as tokens to add to a
 	 * collective ArrayList
 	 * 
-	 * @param filename Name of file to tokenize
+	 * @param filename
+	 *            Name of file to tokenize
 	 * @return ArrayList of all tokens in ranking order
 	 * @throws IOException
 	 */
-	private ArrayList<Token> tokenize(String filename) throws IOException {
-		ArrayList<Token> tokenList = new ArrayList<Token>();
-		BufferedReader buff;
-		buff = new BufferedReader(new FileReader(filename));
+	private ArrayList<Token> tokenize(String filename) throws IOException, Exception {
+		ArrayList<Token> tokenList = new ArrayList<Token>(); // List of all tokens identified
+		BufferedReader buff = new BufferedReader(new FileReader(filename));
 		String line = null;
+		boolean matchedAny, matchedToken; // true once a token has been matched on a given line
+		
+		// Buffers through each line in the file
 		while ((line = buff.readLine()) != null) {
-			if (line.contains("#")) { // # means a comment, so the tokenizer ignores lines beginning with it
-				continue;
-			} else if (line.contains("execute")) {
-				String current = line.substring(line.indexOf("execute") + "execute".length()); // Auto Mode to execute
-				tokenList.add(new ExecuteToken(current));
-			// } else if (line.contains("follow")) {
-			// 	String current = line.substring(line.indexOf("follow") + "follow".length()); // Path to follow
-			// 	tokenList.add(new FollowToken(current));
-			} else if (line.contains("print")) {
-				String current = line.substring(line.indexOf("print") + "print".length()); // Text to print
-				tokenList.add(new PrintToken(current));
-			} else if (line.contains("wait")) {
-				String current = line.substring(line.indexOf("wait") + "wait".length()); // Wait length (seconds)
-				tokenList.add(new WaitToken(current));
-			} else if (line.contains("drive")) {
-				String current = line.substring(line.indexOf("drive") + "drive".length()); // Drive length (feet)
-				tokenList.add(new DriveToken(current));
-			} else if (line.contains("turn")) {
-				String current = line.substring(line.indexOf("turn") + "turn".length()); // Turn angle
-				tokenList.add(new TurnToken(current));
-			} else if (line.contains("bundle")) {
-				tokenList.add(new BundleToken());
-			} else if (line.contains("serial")) {
-				tokenList.add(new SerialToken());
-			} else if (line.contains("}")) {
-				tokenList.add(new RightBraceToken());
+			matchedAny = false;
+			
+			// Iterates through the current line, as long as it is not a comment and still has characters
+			while (line.trim().length() > 0) {
+				matchedToken = false;
+				
+				if (line.trim().charAt(0) == '#') { // If the line is a comment, disregard the line
+					matchedAny = true;
+					break;
+				}
+				
+				// Iterates through each possible token and tries to identify a match with the corresponding regex
+				for (Map.Entry<Class<? extends Token>, Pattern> entry : regexMap.entrySet()) {
+					Matcher match = entry.getValue().matcher(line);
+					if (match.find()) {
+						try {
+							tokenList.add(entry.getKey().newInstance()); // Records the corresponding token in the list
+							matchedToken = true;
+							matchedAny = true;
+							line = line.substring(match.end()); // Takes out matched characters from line
+							break;
+						} catch (InstantiationException e) {
+							e.printStackTrace();
+						} catch (IllegalAccessException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+				
+				if (!matchedToken) // If there are more tokens to match
+					break;
 			}
+			if (!matchedAny) // If the line failed to match a single token
+				throw new Exception();
 		}
 		buff.close();
 		return tokenList;
@@ -224,58 +418,62 @@ public class AutoCompiler {
 	/**
 	 * Interprets an ArrayList of tokens as an ordered set of tasks
 	 * 
-	 * @param tokenList An ArrayList of tokens (returned from tokenize())
-	 * @param taskSet   A set of tasks to add tasks to
+	 * @param tokenList
+	 *            An ArrayList of tokens (returned from {@link #tokenize()})
+	 * @param taskSet
+	 *            A set of tasks to add tasks to
 	 * @return A complete set of tasks
 	 */
-	private Task parseAuto(ArrayList<Token> tokenList, GroupTask taskSet) {
-		if (tokenList.size() == 0) {
-			return new WaitTask(0);
-		}
-		while (tokenList.size() > 0) {
-			Token t = tokenList.remove(0);
-			if (t instanceof ExecuteToken) {
-				Task otherMode = buildAutoMode(((ExecuteToken) t).scriptName);
-				taskSet.addTask(otherMode);
-			// } else if (t instanceof FollowToken) {
-			// 	taskSet.addTask(((FollowToken) t).makeTask());
-			} else if (t instanceof WaitToken) {
-				taskSet.addTask(((WaitToken) t).makeTask());
-			} else if (t instanceof PrintToken) {
-				taskSet.addTask(((PrintToken) t).makeTask());
-			} else if (t instanceof DriveToken) {
-				// taskSet.addTask(((DriveToken) t).makeTask());
-			} else if (t instanceof TurnToken) {
-				// taskSet.addTask(((TurnToken) t).makeTask());
-			} else if (t instanceof BundleToken) {
-				BundleTask bundleSet = new BundleTask();
-				parseAuto(tokenList, bundleSet);
-				taskSet.addTask(bundleSet);
-			} else if (t instanceof SerialToken) {
-				SerialTask serialSet = new SerialTask();
-				parseAuto(tokenList, serialSet);
-				taskSet.addTask(serialSet);
-			} else if (t instanceof RightBraceToken) {
-				return taskSet;
-			}
-		}
-		return taskSet;
-	}
+//	private Task parseAuto(ArrayList<Token> tokenList, GroupTask taskSet) {
+//		// TODO add instanceof conditions for other tokens and processing for each
+//		if (tokenList.size() == 0) {
+////			return new WaitTask(0);
+//		}
+//		while (tokenList.size() > 0) {
+//			Token t = tokenList.remove(0);
+//			if (t instanceof ExecuteToken) {
+////				Task otherMode = buildAutoMode(((ExecuteToken) t).scriptName);
+////				taskSet.addTask(otherMode);
+//				// } else if (t instanceof FollowToken) {
+//				// taskSet.addTask(((FollowToken) t).makeTask());
+//			} else if (t instanceof WaitToken) {
+////				taskSet.addTask(((WaitToken) t).makeTask());
+//			} else if (t instanceof PrintToken) {
+////				taskSet.addTask(((PrintToken) t).makeTask());
+//			} else if (t instanceof DriveToken) {
+//				// taskSet.addTask(((DriveToken) t).makeTask());
+//			} else if (t instanceof TurnToken) {
+//				// taskSet.addTask(((TurnToken) t).makeTask());
+//			} else if (t instanceof ParallelToken) {
+////				ParallelTask bundleSet = new ParallelTask();
+////				parseAuto(tokenList, bundleSet);
+////				taskSet.addTask(bundleSet);
+//			} else if (t instanceof SerialToken) {
+////				SerialTask serialSet = new SerialTask();
+////				parseAuto(tokenList, serialSet);
+////				taskSet.addTask(serialSet);
+//			} else if (t instanceof RightBraceToken) {
+//				return taskSet;
+//			}
+//		}
+//		return taskSet;
+//	}
 
 	/**
 	 * Builds a set of tasks based on the contents of an auto script
 	 * 
-	 * @param filename The name of the auto script to reference
+	 * @param filename
+	 *            The name of the auto script to reference
 	 * @return A set of tasks
 	 */
-	public Task buildAutoMode(String filename) {
-		try {
-			return parseAuto(tokenize(filename), new SerialTask());
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
+	// public Task buildAutoMode(String filename) {
+	// try {
+	// return parseAuto(tokenize(filename), new SerialTask());
+	// } catch (IOException e) {
+	// e.printStackTrace();
+	// return null;
+	// }
+	// }
 
 	// TODO Adapt this when we need it
 	/**
@@ -284,11 +482,16 @@ public class AutoCompiler {
 	 * task in the ranked list of tasks from the SmartDashboard that matches the
 	 * current setup.
 	 * 
-	 * @param robotPos		The hab platform our robot starts on. L1/2, M1, R1/2.
-	 * @param piece     	The game piece our robot is holding. Cargo or Hatch.
-	 * @param piecePos		The bay side we want to go to. L1/2/3/4 or R1/2/3/4.
-	 * @param autoPrefs     String array of ranked Auto Modes
-	 * @param autoFiles     File array of all files in the AutoModes folder
+	 * @param robotPos
+	 *            The hab platform our robot starts on. L1/2, M1, R1/2.
+	 * @param piece
+	 *            The game piece our robot is holding. Cargo or Hatch.
+	 * @param piecePos
+	 *            The bay side we want to go to. L1/2/3/4 or R1/2/3/4.
+	 * @param autoPrefs
+	 *            String array of ranked Auto Modes
+	 * @param autoFiles
+	 *            File array of all files in the AutoModes folder
 	 * @return String name of the auto file to run
 	 */
 	public String pickAutoMode(String robotPos, String piece, String piecePos, String[] autoPrefs, File[] autoFiles) {
@@ -329,5 +532,22 @@ public class AutoCompiler {
 		}
 		// TODO make a default auto mode
 		return "/home/lvuser/automodes/ .auto";
+	}
+	
+	public static void main(String[] args) {
+		AutoCompiler autocomp = new AutoCompiler();
+		try {
+			ArrayList<Token> toks = autocomp.tokenize("Mode.auto");
+			
+			for (Token t : toks) {
+				System.out.println(t);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
