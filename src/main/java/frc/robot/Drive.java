@@ -28,7 +28,8 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 
 		mRearLeft = new Spark(DRIVE_BACK_LEFT);
 		mRearRight = new Spark(DRIVE_BACK_RIGHT);
-
+		
+		// TODO change this based on distance testing
 		leftEncoder.setDistancePerPulse(INCHES_PER_TICK);
 		rightEncoder.setDistancePerPulse(INCHES_PER_TICK);
 		rightEncoder.setReverseDirection(true);
@@ -46,10 +47,12 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 		updateStateInfo();
 		DriveTask.DriveOrder driveOrder = subsystemMode.callLoop();
 
-		mFrontLeft.set(-driveOrder.leftPower);
-		mFrontRight.set(driveOrder.rightPower);
-		mRearLeft.set(-driveOrder.leftPower);
-		mRearRight.set(driveOrder.rightPower);
+		//System.out.println("Left encoder: " + leftEncoder.getDistance());
+		//System.out.println("Right encoder: " + rightEncoder.getDistance());
+		mFrontLeft.set(driveOrder.leftPower);
+		mFrontRight.set(-driveOrder.rightPower);
+		mRearLeft.set(driveOrder.leftPower);
+		mRearRight.set(-driveOrder.rightPower);
 
 	}
 
@@ -65,6 +68,8 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 		double leftDistance = getLeftEncoder();
 		double rightDistance = getRightEncoder();
 
+		System.out.println(leftDistance + " " + rightDistance);
+
 		// Calculate robot velocity
 		// For underclassmen, delta means "change in"
 		double deltaTime = System.currentTimeMillis() - DriveTask.DriveState.stateTime;
@@ -75,9 +80,9 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 		double rightDeltaPos = rightDistance - DriveTask.DriveState.rightPos;
 		double rightVelocity = (rightDeltaPos / deltaTime);
 
-		double averageDeltaPos = (leftDeltaPos + rightDeltaPos) / 2.0;
-		if (Math.abs(averageDeltaPos) <= 5 || deltaTime <= 5)
-			return;
+		// double averageDeltaPos = (leftDeltaPos + rightDeltaPos) / 2.0;
+		// if (Math.abs(averageDeltaPos) <= 1 || deltaTime <= 5) // TODO change 1
+		// 	return;
 
 		DriveTask.DriveState.updateState(leftVelocity, rightVelocity, leftDistance, rightDistance, getHeading());
 	}

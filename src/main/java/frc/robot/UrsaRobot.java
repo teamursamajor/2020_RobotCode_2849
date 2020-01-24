@@ -33,7 +33,7 @@ public interface UrsaRobot {
 	
 	public static final int CARGO_POT_CHANNEL = 0;
 
-	public static final int LEFT_ENCODER_CHANNEL_A = 4, LEFT_ENCODER_CHANNEL_B = 5;
+	public static final int LEFT_ENCODER_CHANNEL_A = 0, LEFT_ENCODER_CHANNEL_B = 1;
 	public static final int RIGHT_ENCODER_CHANNEL_A = 2, RIGHT_ENCODER_CHANNEL_B = 3;
 
 	public static Encoder leftEncoder = new Encoder(LEFT_ENCODER_CHANNEL_A, LEFT_ENCODER_CHANNEL_B);
@@ -41,7 +41,7 @@ public interface UrsaRobot {
 
 	// Tells encoder the value of each tick. Must be set in the corresponding file
 	// TODO Double check!
-	public static final double INCHES_PER_TICK = 0.011505d;
+	public static final double INCHES_PER_TICK = 7.2d * Math.PI / 2048.0d;
 
 	public static final double ROBOT_WIDTH_INCHES = 28d;
 	public static final double ROBOT_DEPTH_INCHES = 31.5d;

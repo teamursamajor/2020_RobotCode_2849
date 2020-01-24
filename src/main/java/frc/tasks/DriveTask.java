@@ -50,14 +50,17 @@ public class DriveTask extends Task implements UrsaRobot {
         private DriveOrder autoCalculator() {
             double leftOutputPower = 0.0, rightOutputPower = 0.0;
             double currentDistance = DriveState.averagePos;
-            double driveTolerance = 5.0;
+            double driveTolerance = 3.0;
 
             double kdDrive = 0; // Derivative coefficient for PID controller
-            double kpDrive = 1.0 / 33.0; // Proportional coefficient for PID controller
+            double kpDrive = 1.0 / 25.0; // Proportional coefficient for PID controller
             double minimumPower = 0.25;
 
-            // If we are within the driveTolerance, stop
-            if (Math.abs(currentDistance - desiredLocation) <= driveTolerance) {
+            // if (driving)
+                // System.out.println("distance left: " + Math.abs(desiredLocation - currentDistance));
+
+            // If we are within the driveTolerance of the desiredLocation, stop
+            if (Math.abs(desiredLocation - currentDistance) <= driveTolerance) {
                 driving = false;
                 return new DriveOrder(0.0, 0.0);
             }
@@ -96,7 +99,7 @@ public class DriveTask extends Task implements UrsaRobot {
             if (Math.abs(rightOutputPower) < minimumPower) {
                 rightOutputPower = Math.signum(rightOutputPower) * minimumPower;
             }
-
+            // System.out.println(driving + " " + leftOutputPower + " " + rightOutputPower);
             return new DriveOrder(leftOutputPower, rightOutputPower);
         }
 
@@ -198,7 +201,7 @@ public class DriveTask extends Task implements UrsaRobot {
     }
 
     private static double desiredLocation = 0.0, startDistance = 0.0, direction = 1.0, desiredAngle = 0.0;
-    private static boolean driving = true;
+    public static boolean driving = false;
 
     /**
      * Used to set the DriveMode and run drive autonomously with AUTO_DRIVE, TURN,

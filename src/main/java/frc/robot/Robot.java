@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.DriverStation;
 import frc.tasks.SpinnerTask;
 import frc.tasks.SpinnerTask.SpinnerMode;
+import frc.tasks.DriveTask;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -117,10 +119,21 @@ public class Robot extends TimedRobot implements UrsaRobot {
    */
   @Override
   public void testPeriodic() {
+   
+   
+    // System.out.println("test periodic running");
+    if (!DriveTask.driving && xbox.getSingleButtonPress(XboxController.BUTTON_B)){
+      DriveTask task = new DriveTask(-24, drive, DriveTask.DriveMode.AUTO_DRIVE);
+      // System.out.println("auto run working");
+    }
+
   }
 
   @Override
   public void disabledInit() {
     // spinner.setMode(SpinnerMode.WAIT);
   }
+
+  
+
 }
