@@ -68,7 +68,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 		double leftDistance = getLeftEncoder();
 		double rightDistance = getRightEncoder();
 
-		System.out.println(leftDistance + " " + rightDistance);
+		// System.out.println(leftDistance + " " + rightDistance);
 
 		// Calculate robot velocity
 		// For underclassmen, delta means "change in"
