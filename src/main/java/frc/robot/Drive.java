@@ -70,14 +70,11 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	public void updateStateInfo() {
 		final double leftDistance = getLeftEncoder();
 		final double rightDistance = getRightEncoder();
-		//System.out.println("left encoder: " + leftDistance);
-		//System.out.println("right encoder: " + rightDistance);
+		System.out.println("left encoder: " + leftDistance);
+		System.out.println("right encoder: " + rightDistance);
 		//System.out.println("avg pos: " + (leftDistance + rightDistance) / 2);
 
 		// System.out.println(leftDistance + " " + rightDistance);
-
-		//Offset right side of drive train
-		final double rightSideMultiplier;
 
 		// Calculate robot velocity
 		// For underclassmen, delta means "change in"
@@ -213,8 +210,8 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	 * @param power - the power the motor is set to.
 	 */
 	public static void setRightPower(final double power) {
-		mFrontRight.set(power * rightSideMultiplier);
-		mRearRight.set(power * rightSideMultiplier);
+		mFrontRight.set(power);
+		mRearRight.set(power);
 	}
 	
 	//System.out.println(mRearRight);

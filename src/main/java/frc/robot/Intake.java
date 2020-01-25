@@ -7,14 +7,6 @@ import frc.tasks.IntakeTask.IntakeMode;
 
 public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobot {
 
-<<<<<<< HEAD
-    private Spark intakeMotor1, intakeMotor2, outtakeMotor;
-
-    public Intake() {
-        intakeMotor1 = new Spark(SHOOTER1);
-        intakeMotor2 = new Spark(SHOOTER2);
-        outtakeMotor = new Spark(SHOOTER3);
-=======
     private Spark intakeMotor;
     private Spark beltMotor;
     private int numOfCells; 
@@ -27,7 +19,6 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
         numOfCells = 0;
         lineSensor = new DigitalInput(SENSORPORT);
         deltaLineSensor = false;
->>>>>>> e055587bc9b1c0ee988e78351273639bb6b0aeb4
     }
 
     public void runSubsystem() throws InterruptedException {
@@ -53,20 +44,6 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
 
         switch (subsystemMode) {
         case IN:
-<<<<<<< HEAD
-            intakeMotor1.set(0.25);
-            intakeMotor2.set(0.25);
-            break;
-        case OUT:
-            intakeMotor1.set(0.0);
-            intakeMotor2.set(0.0);
-            outtakeMotor.set(-0.25);
-            break;
-        case WAIT:
-            intakeMotor1.set(0.0);
-            intakeMotor2.set(0.0);
-            outtakeMotor.set(0.0);
-=======
             intakeMotor.set(0.55);
             beltMotor.set(0.55);
             break;
@@ -77,7 +54,6 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
         case WAIT:
             intakeMotor.set(0.0);
             beltMotor.set(0.0);
->>>>>>> e055587bc9b1c0ee988e78351273639bb6b0aeb4
             break;
         }
     }

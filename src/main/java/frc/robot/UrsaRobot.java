@@ -22,11 +22,7 @@ public interface UrsaRobot {
 	public static final int DRIVE_FRONT_LEFT = 0, DRIVE_BACK_LEFT = 1;
 	public static final int DRIVE_FRONT_RIGHT = 2, DRIVE_BACK_RIGHT = 3;
 
-<<<<<<< HEAD
-	public static final int SPINNER = 9, SHOOTER1 = 4, SHOOTER2 = 5, SHOOTER3 = 6;
-=======
 	public static final int SPINNER = 9, SHOOTER = 4, BELT = 6;
->>>>>>> e055587bc9b1c0ee988e78351273639bb6b0aeb4
 	
 	public static final int CLIMB_FRONT = 5, CLIMB_BACK = 7;
 	public static final int SENSORPORT = 0;
