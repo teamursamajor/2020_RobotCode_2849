@@ -17,9 +17,9 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
         // Use the color sensor in SpinnerTask to detect color and add control loop
         
          // Cargo Intake
-         if (xbox.getButton(controls.map.get("intake_in"))) {
+         if (xbox.getButton(XboxController.BUTTON_X)) {
             subsystemMode = IntakeMode.IN;
-        } else if (xbox.getButton(controls.map.get("intake_out"))) {
+        } else if (xbox.getButton(XboxController.BUTTON_Y)) {
             subsystemMode = IntakeMode.OUT;
         } else {
             subsystemMode = IntakeMode.WAIT;
@@ -27,10 +27,10 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
 
         switch (subsystemMode) {
         case IN:
-            intakeMotor.set(0.55);
+            intakeMotor.set(0.25);
             break;
         case OUT:
-            intakeMotor.set(-1.0);
+            intakeMotor.set(-0.25);
             break;
         case WAIT:
             intakeMotor.set(0.0);

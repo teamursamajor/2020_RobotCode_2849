@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.DriverStation;
 import frc.tasks.SpinnerTask;
+import frc.tasks.DriveTask.DriveMode;
 import frc.tasks.SpinnerTask.SpinnerMode;
 import frc.tasks.DriveTask;
 
@@ -35,6 +36,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
   // private SpinnerTask spinnerTask;
   // private Shooter shooter;
   private Climb climb;
+  private int testCounter;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -58,6 +60,8 @@ public class Robot extends TimedRobot implements UrsaRobot {
 
     climb = new Climb();
     climb.initialize();
+
+    testCounter = 0;
   }
 
   /**
@@ -123,9 +127,20 @@ public class Robot extends TimedRobot implements UrsaRobot {
    
     // System.out.println("test periodic running");
     if (!DriveTask.driving && xbox.getSingleButtonPress(XboxController.BUTTON_B)){
-      DriveTask task = new DriveTask(-36, drive, DriveTask.DriveMode.AUTO_DRIVE);
-      // System.out.println("auto run working");
+      testCounter++;
     }
+
+    if (testCounter == 1) {
+      DriveTask task1 = new DriveTask(24, drive, DriveMode.AUTO_DRIVE);
+    }
+    if (testCounter == 2) {
+      DriveTask task2 = new DriveTask(90, drive, DriveMode.TURN);
+    }
+    if (testCounter == 3) {
+      DriveTask task3 = new DriveTask(12, drive, DriveMode.AUTO_DRIVE);
+      DriveTask task4 = new DriveTask(30, drive, DriveMode.TURN);
+    }
+
 
   }
 

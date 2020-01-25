@@ -1,5 +1,5 @@
 turn 90
-drive 10.2
+drive 10
 turn 90
 dump
 execute "ddd"

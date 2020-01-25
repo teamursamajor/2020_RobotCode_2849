@@ -2,8 +2,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Spark;
 
-// import edu.wpi.first.wpilibj.Spark;
-
 /**
  * This class operates the screw climb/buddy lift mechanism. TODO: Update code
  * for 2020. This is all 2019 stuff
