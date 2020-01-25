@@ -51,15 +51,15 @@ public class Robot extends TimedRobot implements UrsaRobot {
     drive = new Drive();
     drive.initialize("DriveThread");
 
-    spinner = new Spinner();
-    spinner.initialize("SpinnerThread");
+   // spinner = new Spinner();
+    //spinner.initialize("SpinnerThread");
     // spinnerTask = new SpinnerTask(SpinnerMode.WAIT, spinner);
 
     // shooter = new Shooter();
     // spinner.initialize("SpinnerThread");
 
-    climb = new Climb();
-    climb.initialize();
+   // climb = new Climb();
+    //climb.initialize();
 
     testCounter = 0;
   }
@@ -117,7 +117,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
   public void teleopPeriodic() {
     
   }
-
+private boolean test1 = false, test2 = false, test3 = false;
   /**
    * This function is called periodically during test mode.
    */
@@ -130,15 +130,18 @@ public class Robot extends TimedRobot implements UrsaRobot {
       testCounter++;
     }
 
-    if (testCounter == 1) {
-      DriveTask task1 = new DriveTask(24, drive, DriveMode.AUTO_DRIVE);
+    if (!test1 && testCounter == 1) {
+      DriveTask task1 = new DriveTask(14, drive, DriveMode.AUTO_DRIVE);
+      test1 = true;
     }
-    if (testCounter == 2) {
+    if (!test2 && testCounter == 2) {
       DriveTask task2 = new DriveTask(90, drive, DriveMode.TURN);
+      test2 = true;
     }
-    if (testCounter == 3) {
+    if (!test3 && testCounter == 3) {
       DriveTask task3 = new DriveTask(12, drive, DriveMode.AUTO_DRIVE);
       DriveTask task4 = new DriveTask(30, drive, DriveMode.TURN);
+      test3 = true;
     }
 
 

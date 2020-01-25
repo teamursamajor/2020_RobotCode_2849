@@ -22,7 +22,7 @@ public interface UrsaRobot {
 	public static final int DRIVE_FRONT_LEFT = 0, DRIVE_BACK_LEFT = 1;
 	public static final int DRIVE_FRONT_RIGHT = 2, DRIVE_BACK_RIGHT = 3;
 
-	public static final int SPINNER = 9, SHOOTER = 4;
+	public static final int SPINNER = 9, SHOOTER1 = 4, SHOOTER2 = 5, SHOOTER3 = 6;
 	
 	public static final int CLIMB_FRONT = 5, CLIMB_BACK = 7;
 	
@@ -60,6 +60,9 @@ public interface UrsaRobot {
 	
 	// Limelight
 	NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
+
+	//right side multiplier
+	double rightSideMultiplier = 1.62;
 
 	// Xbox Controller
 	XboxController xbox = new XboxController(0);

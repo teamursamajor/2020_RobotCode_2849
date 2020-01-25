@@ -45,7 +45,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	 */
 	public void runSubsystem() {
 		updateStateInfo();
-		DriveTask.DriveOrder driveOrder = subsystemMode.callLoop();
+		final DriveTask.DriveOrder driveOrder = subsystemMode.callLoop();
 
 		//System.out.println("Left encoder: " + leftEncoder.getDistance());
 		//System.out.println("Right encoder: " + rightEncoder.getDistance());
@@ -53,6 +53,9 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 		mFrontRight.set(-driveOrder.rightPower);
 		mRearLeft.set(driveOrder.leftPower);
 		mRearRight.set(-driveOrder.rightPower);
+
+		System.out.println("left power: " +driveOrder.leftPower);
+		System.out.println("right power: " +driveOrder.rightPower);
 
 	}
 
@@ -65,20 +68,26 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	 * <ul>
 	 */
 	public void updateStateInfo() {
-		double leftDistance = getLeftEncoder();
-		double rightDistance = getRightEncoder();
+		final double leftDistance = getLeftEncoder();
+		final double rightDistance = getRightEncoder();
+		//System.out.println("left encoder: " + leftDistance);
+		//System.out.println("right encoder: " + rightDistance);
+		//System.out.println("avg pos: " + (leftDistance + rightDistance) / 2);
 
 		// System.out.println(leftDistance + " " + rightDistance);
 
+		//Offset right side of drive train
+		final double rightSideMultiplier;
+
 		// Calculate robot velocity
 		// For underclassmen, delta means "change in"
-		double deltaTime = System.currentTimeMillis() - DriveTask.DriveState.stateTime;
+		final double deltaTime = System.currentTimeMillis() - DriveTask.DriveState.stateTime;
 
-		double leftDeltaPos = leftDistance - DriveTask.DriveState.leftPos;
-		double leftVelocity = (leftDeltaPos / deltaTime);
+		final double leftDeltaPos = leftDistance - DriveTask.DriveState.leftPos;
+		final double leftVelocity = (leftDeltaPos / deltaTime);
 
-		double rightDeltaPos = rightDistance - DriveTask.DriveState.rightPos;
-		double rightVelocity = (rightDeltaPos / deltaTime);
+		final double rightDeltaPos = rightDistance - DriveTask.DriveState.rightPos;
+		final double rightVelocity = (rightDeltaPos / deltaTime);
 
 		// double averageDeltaPos = (leftDeltaPos + rightDeltaPos) / 2.0;
 		// if (Math.abs(averageDeltaPos) <= 1 || deltaTime <= 5) // TODO change 1
@@ -183,7 +192,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	 * 
 	 * @param power - the power the motors get set to
 	 */
-	public static void setPower(double power) {
+	public static void setPower(final double power) {
 		setRightPower(power);
 		setLeftPower(power);
 	}
@@ -193,7 +202,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	 *
 	 * @param power - the power the motor is set to
 	 */
-	public static void setLeftPower(double power) {
+	public static void setLeftPower(final double power) {
 		mFrontLeft.set(-power);
 		mRearLeft.set(-power);
 	}
@@ -203,11 +212,12 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	 *
 	 * @param power - the power the motor is set to.
 	 */
-	public static void setRightPower(double power) {
-		mFrontRight.set(power);
-		mRearRight.set(power);
+	public static void setRightPower(final double power) {
+		mFrontRight.set(power * rightSideMultiplier);
+		mRearRight.set(power * rightSideMultiplier);
 	}
-
+	
+	//System.out.println(mRearRight);
 	/**
 	 * Will print out DEBUGGING followed by a message. Used for testing code.
 	 */
