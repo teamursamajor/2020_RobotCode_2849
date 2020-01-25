@@ -12,8 +12,8 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-//import frc.tasks.DriveTask.DriveMode;
-//import frc.robot.*;
+// import frc.tasks.DriveTask.DriveMode;
+// import frc.robot.*;
 
 /**
  * @author AlphaMale and Sheldon
@@ -30,6 +30,7 @@ public class AutoCompiler {
 	 * For grouping all tokens.
 	 */
 	interface Token {
+		public Task buildSubtree(ArrayList<Token> tokList);
 	}
 
 	/**
@@ -39,14 +40,16 @@ public class AutoCompiler {
 
 	// private Drive drive;
 	// private Shooter shooter;
+	// private Intake intake;
 
 	/**
 	 * Constructor for the Auto Compiler. Takes in a Drive and Shooter object and
 	 * creates regex mappings for each possible token in an Auto Script.
 	 */
-	public AutoCompiler(/* Drive drive, Shooter shooter */) {
+	public AutoCompiler(/*Drive drive, Shooter shooter, Intake intake*/) {
 		// this.drive = drive;
 		// this.shooter = shooter;
+		// this.intake = intake;
 
 		/*
 		 * Regex mappings for each token. Considers the relevant string and any
@@ -83,40 +86,40 @@ public class AutoCompiler {
 	/**
 	 * A token for executing a given Auto Script.
 	 * Idenfied by the phrase "execute".
-	 * 
-	 * @param scriptName
-	 *            Name of the Auto Script file to execute.
 	 */
 	class ExecuteToken implements Token {
-//		private String scriptName;
+		// private String scriptName;
 
 		public ExecuteToken(/*String scriptName*/) {
-//			this.scriptName = "/home/lvuser/automodes/" + scriptName.trim() + ".auto";
+			// this.scriptName = "/home/lvuser/automodes/" + scriptName.trim() + ".auto";
 		}
-		
+
 		public String toString() {
 			return "ExecuteToken";
+		}
+
+		@Override
+		public Task buildSubtree(ArrayList<Token> tokList) {
+			return null;
 		}
 	}
 
 	/**
 	 * A token for following a given Path. TODO update for PathWeaver
 	 * Identified by the phrase "follow".
-	 * 
-	 * @param filename
-	 *            Path file to run.
 	 */
-	 class FollowToken implements Token {
+	class FollowToken implements Token {
 		public FollowToken(/*String filename*/) { // TODO replace with StringLiteralToken
 //			filename = filename.replace(" ", "") + ".path"; // Assuming path files still end in path
 		}
 
-//		public PathTask makeTask() {
-//			return null;
-//		}
-		
 		public String toString() {
 			return "FollowToken";
+		}
+
+		@Override
+		public Task buildSubtree(ArrayList<Token> tokList) {
+			return null;
 		}
 	}
 
@@ -124,11 +127,15 @@ public class AutoCompiler {
 	 * A token for running a set of tasks within it in sequence.
 	 * Identified by the phrase "serial {".
 	 */
-	 class SerialToken implements Token {
+	class SerialToken implements Token {
 		public SerialToken() {}
 
 		public String toString() {
 			return "SerialToken";
+		}
+
+		public Task buildSubtree(ArrayList<Token> tokList) {
+			return null;
 		}
 	}
 	
@@ -142,38 +149,40 @@ public class AutoCompiler {
 		public String toString() {
 			return "ParallelToken";
 		}
+
+		@Override
+		public Task buildSubtree(ArrayList<Token> tokList) {
+			return null;
+		}
 	}
 
 	/**
 	 * A token that prints any string passed to it to the console
 	 * Identified by the phrase "print".
-	 * 
-	 * @param str
-	 *            String to print.
 	 */
-	 class PrintToken implements Token {
+	class PrintToken implements Token {
 //		private String str;
 
 		public PrintToken(/*String str*/) { // TODO replace with StringLiteralToken
 //			this.str = str;
 		}
 
-//		public PrintTask makeTask() {
-//			return new PrintTask(str);
-//		}
-		
 		public String toString() {
 			return "PrintToken";
 		}
+
+		@Override
+		public Task buildSubtree(ArrayList<Token> tokList) {
+			return null;
+		}
+
 	}
 
 	/**
-	 * A token that delays the auto mode for a duration passed to it
-	 * 
-	 * @param time
-	 *            Time to wait.
+	 * A token that delays the auto mode for a given duration.
+	 * Identified by the phrase "wait".
 	 */
-	 class WaitToken implements Token {
+	class WaitToken implements Token {
 //		private double wait;
 
 		public WaitToken(/*String time*/) {
@@ -190,19 +199,23 @@ public class AutoCompiler {
 //		public WaitTask makeTask() {
 //			return new WaitTask((long) (wait * 1000.0d));
 //		}
-		
+
 		public String toString() {
 			return "WaitToken";
+		}
+
+		@Override
+		public Task buildSubtree(ArrayList<Token> tokList) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	}
 
 	/**
-	 * A token that drives the robot a given distance
-	 * 
-	 * @param dist
-	 *            The distance to drive
+	 * A token that drives the robot a given distance (in inches).
+	 * Identified by the phrase "drive".
 	 */
-	 class DriveToken implements Token {
+	class DriveToken implements Token {
 //		private double dist;
 
 		public DriveToken(/*String distance*/) { // TODO replace with NumberToken
@@ -219,19 +232,22 @@ public class AutoCompiler {
 //		public DriveTask makeTask() {
 //			return new DriveTask(dist, drive, DriveMode.AUTO_DRIVE);
 //		}
-		
+
 		public String toString() {
 			return "DriveToken";
+		}
+
+		@Override
+		public Task buildSubtree(ArrayList<Token> tokList) {
+			return null;
 		}
 	}
 
 	/**
-	 * A token that turns the robot to face a given angle
-	 * 
-	 * @param angle
-	 *            Angle to turn to
+	 * A token that turns the robot to face a given angle.
+	 * Identified by the phrase "turn".
 	 */
-	 class TurnToken implements Token {
+	class TurnToken implements Token {
 //		private double turnAmount;
 
 		public TurnToken(/*String angle*/) { // TODO replace with NumberToken
@@ -252,41 +268,60 @@ public class AutoCompiler {
 		public String toString() {
 			return "TurnToken";
 		}
-	}
 
-	/**
-	 * A token for dumping balls from the shooter mechanism.
-	 */
-	 class DumpToken implements Token {
-		public DumpToken() {}
-
-		// TODO add parameters if necessary
-		public String toString() {
-			return "DumpToken";
+		@Override
+		public Task buildSubtree(ArrayList<Token> tokList) {
+			return null;
 		}
 	}
 
 	/**
 	 * A token for dumping balls from the shooter mechanism.
+	 * Identified by the phrase "dump".
+	 */
+	class DumpToken implements Token {
+		public DumpToken() {}
+
+		public String toString() {
+			return "DumpToken";
+		}
+
+		@Override
+		public Task buildSubtree(ArrayList<Token> tokList) {
+			return null;
+		}
+	}
+
+	/**
+	 * A token for dumping balls from the shooter mechanism.
+	 * Identified by the phrase "intake".
 	 */
 	class IntakeToken implements Token {
 		public IntakeToken() {}
 
-		// TODO add parameters if necessary
 		public String toString() {
 			return "IntakeToken";
+		}
+
+		@Override
+		public Task buildSubtree(ArrayList<Token> tokList) {
+			return null;
 		}
 	}
 
 	/**
 	 * A token for any positive/negative real numbers.
 	 */
-	 class NumberToken implements Token {
-
+	class NumberToken implements Token {
 		public NumberToken() {}
 
 		public String toString() {
 			return "NumberToken";
+		}
+
+		@Override
+		public Task buildSubtree(ArrayList<Token> tokList) {
+			return null;
 		}
 	}
 
@@ -294,11 +329,16 @@ public class AutoCompiler {
 	 * A token for adding two numbers.
 	 * Identified by "+".
 	 */
-	 class AddToken implements Token {
+	class AddToken implements Token {
 		public AddToken() {}
 
 		public String toString() {
 			return "AddToken";
+		}
+
+		@Override
+		public Task buildSubtree(ArrayList<Token> tokList) {
+			return null;
 		}
 	}
 
@@ -306,24 +346,35 @@ public class AutoCompiler {
 	 * A token for subtracting two numbers.
 	 * Identified by "-".
 	 */
-	 class SubtractToken implements Token {
+	class SubtractToken implements Token {
 		public SubtractToken() {}
 
 		public String toString() {
 			return "SubtractToken";
 		}
-		// TODO figure out how to recognize if there's only one number in front, and if so, make that number negative
+		// TODO recognize if there's only one number in front, and if so, make that number negative
+
+		@Override
+		public Task buildSubtree(ArrayList<Token> tokList) {
+			return null;
+		}
 	}
 
 	/**
 	 * A token for multiplying two numbers.
 	 * Identified by "*".
 	 */
-	 class MultiplyToken implements Token {
+	class MultiplyToken implements Token {
 		public MultiplyToken() {}
 
 		public String toString() {
 			return "MultiplyToken";
+		}
+
+		@Override
+		public Task buildSubtree(ArrayList<Token> tokList) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	}
 
@@ -331,11 +382,17 @@ public class AutoCompiler {
 	 * A token for dividing two numbers.
 	 * Identified by "/".
 	 */
-	 class DivideToken implements Token {
+	class DivideToken implements Token {
 		public DivideToken() {}
 
 		public String toString() {
 			return "DivideToken";
+		}
+
+		@Override
+		public Task buildSubtree(ArrayList<Token> tokList) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	}
 
@@ -343,11 +400,17 @@ public class AutoCompiler {
 	 * A token for separating parameters.
 	 * Identified by ",".
 	 */
-	 class CommaToken implements Token {
+	class CommaToken implements Token {
 		public CommaToken() {}
 
 		public String toString() {
 			return "CommaToken";
+		}
+
+		@Override
+		public Task buildSubtree(ArrayList<Token> tokList) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	}
 
@@ -355,11 +418,22 @@ public class AutoCompiler {
 	 * A token for any String phrases.
 	 * Identified by quotes surrounding text.
 	 */
-	 class StringLiteralToken implements Token {
+	class StringLiteralToken implements Token {
+		private String string;
+
 		public StringLiteralToken() {}
+
+		public void setString(String str) {
+			string = str;
+		}
 
 		public String toString() {
 			return "StringLiteralToken";
+		}
+
+		@Override
+		public Task buildSubtree(ArrayList<Token> tokList) {
+			return null;
 		}
 	}
 
@@ -367,11 +441,16 @@ public class AutoCompiler {
 	 * A token for ending the most recent group task (parallel/serial).
 	 * Identified by "}".
 	 */
-	 class RightBraceToken implements Token {
+	class RightBraceToken implements Token {
 		public RightBraceToken() {}
 
 		public String toString() {
 			return "RightBraceToken";
+		}
+
+		@Override
+		public Task buildSubtree(ArrayList<Token> tokList) {
+			return null;
 		}
 	}
 
@@ -385,6 +464,11 @@ public class AutoCompiler {
 		public String toString() {
 			return "LeftParenToken";
 		}
+
+		@Override
+		public Task buildSubtree(ArrayList<Token> tokList) {
+			return null;
+		}
 	}
 
 	/**
@@ -397,6 +481,11 @@ public class AutoCompiler {
 		public String toString() {
 			return "RightParenToken";
 		}
+
+		@Override
+		public Task buildSubtree(ArrayList<Token> tokList) {
+			return null;
+		}
 	}
 
 	/**
@@ -406,8 +495,10 @@ public class AutoCompiler {
 	 * @param filename
 	 *            Name of file to tokenize
 	 * @return ArrayList of all tokens in ranking order
-	 * @throws IOException
+	 * @throws IOException 
+	 * @throws Exception
 	 */
+	@SuppressWarnings("resource")
 	private ArrayList<Token> tokenize(String filename) throws IOException, Exception {
 		ArrayList<Token> tokenList = new ArrayList<Token>(); // List of all tokens identified
 		BufferedReader buff = new BufferedReader(new FileReader(filename));
@@ -463,7 +554,7 @@ public class AutoCompiler {
 
 	/**
 	 * Interprets an ArrayList of tokens as an ordered set of tasks
-	 * TODO have this go through and form subtrees from the given tokens!
+	 * 
 	 * @param tokenList
 	 *            An ArrayList of tokens (returned from {@link #tokenize()})
 	 * @param taskSet
@@ -471,25 +562,28 @@ public class AutoCompiler {
 	 * @return A complete set of tasks
 	 */
 	private Task parseAuto(ArrayList<Token> tokenList, GroupTask taskSet) {
-		// TODO add instanceof conditions for other tokens and processing for each!
 		if (tokenList.size() == 0) {
-//			return new WaitTask(0);
+			return new WaitTask(0);
 		}
-		while (tokenList.size() > 0) {
+		while (tokenList.size() > 0) { // While there are still tokens to go through
 			Token t = tokenList.remove(0);
 			if (t instanceof ExecuteToken) {
 				// Task otherMode = buildAutoMode(((ExecuteToken) t).scriptName);
 				// taskSet.addTask(otherMode);
-			// } else if (t instanceof FollowToken) {
-				// taskSet.addTask(((FollowToken) t).makeTask());
+			} else if (t instanceof FollowToken) {
+				taskSet.addTask(((FollowToken) t).buildSubtree(tokenList));
 			} else if (t instanceof WaitToken) {
-//				taskSet.addTask(((WaitToken) t).makeTask());
+				taskSet.addTask(((WaitToken) t).buildSubtree(tokenList));
 			} else if (t instanceof PrintToken) {
-//				taskSet.addTask(((PrintToken) t).makeTask());
+				taskSet.addTask(((PrintToken) t).buildSubtree(tokenList));
 			} else if (t instanceof DriveToken) {
-				// taskSet.addTask(((DriveToken) t).makeTask());
+				taskSet.addTask(((DriveToken) t).buildSubtree(tokenList));
 			} else if (t instanceof TurnToken) {
-				// taskSet.addTask(((TurnToken) t).makeTask());
+				taskSet.addTask(((TurnToken) t).buildSubtree(tokenList));
+			} else if (t instanceof DumpToken) {
+				taskSet.addTask(((TurnToken) t).buildSubtree(tokenList));
+			} else if (t instanceof IntakeToken) {
+				taskSet.addTask(((IntakeToken) t).buildSubtree(tokenList));
 			} else if (t instanceof ParallelToken) {
 				ParallelTask parallelSet = new ParallelTask();
 				parseAuto(tokenList, parallelSet);

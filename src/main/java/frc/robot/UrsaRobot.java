@@ -66,5 +66,6 @@ public interface UrsaRobot {
 
 	// Control Map
 	ControlMap controls = new ControlMap();
+	
 	// RIP summonSatan() and SickoMode Time of Death: 6:57 PM on April 2nd, 2019
 }
