@@ -1,7 +1,8 @@
 turn 90
-drive 10.2
+drive 10
 turn 90
 dump
+intake
 execute "ddd"
 follow "dd"
 #test comment
@@ -11,7 +12,7 @@ serial {
 }
 parallel {
 	drive 5
-	dump
+	turn 30
 }
 print "Hello"
 wait 60.3

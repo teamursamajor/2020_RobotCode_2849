@@ -64,6 +64,7 @@ public class AutoCompiler {
 		regexMap.put(DriveToken.class, Pattern.compile("^\\s*drive\\s*"));
 		regexMap.put(TurnToken.class, Pattern.compile("^\\s*turn\\s*"));
 		regexMap.put(DumpToken.class, Pattern.compile("^\\s*dump\\s*"));
+		regexMap.put(IntakeToken.class, Pattern.compile("^\\s*intake\\s*"));
 
 		regexMap.put(NumberToken.class, Pattern.compile("^\\s*\\d+(\\.\\d+)?"));
 		regexMap.put(AddToken.class, Pattern.compile("^\\s*\\+\\s*"));
@@ -135,7 +136,7 @@ public class AutoCompiler {
 	 * A token for running a set of tasks within it all at once.
 	 * Identified by the phrase "parallel {".
 	 */
-	 class ParallelToken implements Token {
+	class ParallelToken implements Token {
 		public ParallelToken() {}
 
 		public String toString() {
@@ -266,6 +267,18 @@ public class AutoCompiler {
 	}
 
 	/**
+	 * A token for dumping balls from the shooter mechanism.
+	 */
+	class IntakeToken implements Token {
+		public IntakeToken() {}
+
+		// TODO add parameters if necessary
+		public String toString() {
+			return "IntakeToken";
+		}
+	}
+
+	/**
 	 * A token for any positive/negative real numbers.
 	 */
 	 class NumberToken implements Token {
@@ -388,7 +401,7 @@ public class AutoCompiler {
 
 	/**
 	 * Interprets specified file to identify keywords as tokens to add to a
-	 * collective ArrayList
+	 * collective ArrayList.
 	 * 
 	 * @param filename
 	 *            Name of file to tokenize
@@ -409,20 +422,26 @@ public class AutoCompiler {
 			while (line.trim().length() > 0) {
 				matchedToken = false;
 				
-				if (line.trim().charAt(0) == '#') { // If the line is a comment, disregard the line
+				// If the line is a comment, disregard the line
+				if (line.trim().charAt(0) == '#') {
 					matchedAny = true;
 					break;
 				}
 				
-				// Iterates through each possible token and tries to identify a match with the corresponding regex
+				// Iterates through each possible token and tries to identify a match with the corresponding regex pattern
 				for (Map.Entry<Class<? extends Token>, Pattern> entry : regexMap.entrySet()) {
 					Matcher match = entry.getValue().matcher(line);
-					if (match.find()) {
+					if (match.find()) { // If a matching regex pattern has been found
 						try {
-							tokenList.add(entry.getKey().getConstructor(this.getClass()).newInstance(this)); // Records the corresponding token in the list
+							/* 
+							 * Tries to create a new instance of the corresponding token and add it to the list of tokens.
+							 * Note: all of this "getConstructor", "newIntance" stuff is necessary because
+							 * each token is its own class, and the HashMap stores the whole class as a data type.
+							 */
+							tokenList.add(entry.getKey().getConstructor(this.getClass()).newInstance(this));
 							matchedToken = true;
 							matchedAny = true;
-							line = line.substring(match.end()); // Takes out matched characters from line
+							line = line.substring(match.end()); // Updates the current line to remove matched characters
 							break;
 						} catch (InstantiationException e) {
 							e.printStackTrace();
@@ -432,7 +451,7 @@ public class AutoCompiler {
 					}
 				}
 				
-				if (!matchedToken) // If there are more tokens to match
+				if (!matchedToken) // If there are more tokens to match, move to a new line.
 					break;
 			}
 			if (!matchedAny) // If the line failed to match a single token
@@ -444,63 +463,63 @@ public class AutoCompiler {
 
 	/**
 	 * Interprets an ArrayList of tokens as an ordered set of tasks
-	 * 
+	 * TODO have this go through and form subtrees from the given tokens!
 	 * @param tokenList
 	 *            An ArrayList of tokens (returned from {@link #tokenize()})
 	 * @param taskSet
 	 *            A set of tasks to add tasks to
 	 * @return A complete set of tasks
 	 */
-//	private Task parseAuto(ArrayList<Token> tokenList, GroupTask taskSet) {
-//		// TODO add instanceof conditions for other tokens and processing for each
-//		if (tokenList.size() == 0) {
-////			return new WaitTask(0);
-//		}
-//		while (tokenList.size() > 0) {
-//			Token t = tokenList.remove(0);
-//			if (t instanceof ExecuteToken) {
-////				Task otherMode = buildAutoMode(((ExecuteToken) t).scriptName);
-////				taskSet.addTask(otherMode);
-//				// } else if (t instanceof FollowToken) {
-//				// taskSet.addTask(((FollowToken) t).makeTask());
-//			} else if (t instanceof WaitToken) {
-////				taskSet.addTask(((WaitToken) t).makeTask());
-//			} else if (t instanceof PrintToken) {
-////				taskSet.addTask(((PrintToken) t).makeTask());
-//			} else if (t instanceof DriveToken) {
-//				// taskSet.addTask(((DriveToken) t).makeTask());
-//			} else if (t instanceof TurnToken) {
-//				// taskSet.addTask(((TurnToken) t).makeTask());
-//			} else if (t instanceof ParallelToken) {
-////				ParallelTask bundleSet = new ParallelTask();
-////				parseAuto(tokenList, bundleSet);
-////				taskSet.addTask(bundleSet);
-//			} else if (t instanceof SerialToken) {
-////				SerialTask serialSet = new SerialTask();
-////				parseAuto(tokenList, serialSet);
-////				taskSet.addTask(serialSet);
-//			} else if (t instanceof RightBraceToken) {
-//				return taskSet;
-//			}
-//		}
-//		return taskSet;
-//	}
+	private Task parseAuto(ArrayList<Token> tokenList, GroupTask taskSet) {
+		// TODO add instanceof conditions for other tokens and processing for each!
+		if (tokenList.size() == 0) {
+//			return new WaitTask(0);
+		}
+		while (tokenList.size() > 0) {
+			Token t = tokenList.remove(0);
+			if (t instanceof ExecuteToken) {
+				// Task otherMode = buildAutoMode(((ExecuteToken) t).scriptName);
+				// taskSet.addTask(otherMode);
+			// } else if (t instanceof FollowToken) {
+				// taskSet.addTask(((FollowToken) t).makeTask());
+			} else if (t instanceof WaitToken) {
+//				taskSet.addTask(((WaitToken) t).makeTask());
+			} else if (t instanceof PrintToken) {
+//				taskSet.addTask(((PrintToken) t).makeTask());
+			} else if (t instanceof DriveToken) {
+				// taskSet.addTask(((DriveToken) t).makeTask());
+			} else if (t instanceof TurnToken) {
+				// taskSet.addTask(((TurnToken) t).makeTask());
+			} else if (t instanceof ParallelToken) {
+				ParallelTask parallelSet = new ParallelTask();
+				parseAuto(tokenList, parallelSet);
+				taskSet.addTask(parallelSet);
+			} else if (t instanceof SerialToken) {
+				SerialTask serialSet = new SerialTask();
+				parseAuto(tokenList, serialSet);
+				taskSet.addTask(serialSet);
+			} else if (t instanceof RightBraceToken) {
+				return taskSet;
+			}
+		}
+		return taskSet;
+	}
 
 	/**
 	 * Builds a set of tasks based on the contents of an auto script
 	 * 
-	 * @param filename
-	 *            The name of the auto script to reference
+	 * @param filename The name of the auto script to reference
 	 * @return A set of tasks
+	 * @throws Exception
 	 */
-	// public Task buildAutoMode(String filename) {
-	// try {
-	// return parseAuto(tokenize(filename), new SerialTask());
-	// } catch (IOException e) {
-	// e.printStackTrace();
-	// return null;
-	// }
-	// }
+	public Task buildAutoMode(String filename) throws Exception {
+		try {
+			return parseAuto(tokenize(filename), new SerialTask());
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	// TODO Adapt this when we need it
 	/**

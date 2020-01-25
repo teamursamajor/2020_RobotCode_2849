@@ -13,6 +13,9 @@ import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.util.Color;
 
+/**
+ * 
+ */
 public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaRobot {
 
     private Spark spinMotor;
@@ -115,50 +118,12 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
 
             break;
         case DETECT:
-        /* r=0,g=1,b=2,y=3, or r=4
-        1 or 3 color changes
-        CCW Goal - Current:
-        red to yellow --- 3-0 = 3 or 3-4 = -1
-        yellow to blue --- 2-3 = -1
-        blue to green --- 1-2 = -1
-        green to red --- 0-1 = -1 or 4-1 = 3
-
-        CW Goal - Current:
-        yellow to red --- 0-3 = -3
-        red to green --- 1-0 = 1
-        green to blue --- 2-1 = 1
-        blue to yellow --- 3-2 = 1
-        
-        * CW is all positive 1 except for looping 0 to 3
-        * CCW is all negative 1 except for looping 3 to 0
-        *
-
-        2 color changes
-        CCW Goal - Current
-        red to blue --- 2-0 = 2
-        yellow to green --- 1-3 = -2
-        blue to red --- 0-2 = -2
-        green to yellow --- 3-1 = 2
-
-        CW Goal - Current
-        blue to red --- 0-2 = -2
-        green to yellow --- 3-1 = 2
-        red to blue --- 2-0 = 2
-        yellow to green --- 1-3 = -2
-         *
-         * 2 color changes is always even with 2 negatives and 2 positives
-         * if (Math.abs(colToNum(goal)-colToNum(color) % 2) == 0), spin either direction 
-         * else if (Math.abs(colToNum(goal)-colToNum(color) % 2) == 1), spin 1 or three directions {
-         *      if ()
-         * }
-         */
+            //Logic for which direction to spin, 1 = CW, -1 = CCW
             int dir = colToNum(goal)-colToNum(color);
             if (Math.abs(dir % 2) == 0) dir = 1;
-            else if (dir == -3 || dir == 3) dir = colToNum(color)-colToNum(goal) / 3;
-        
-            // int distance = colToNum(goal)-colToNum(color);
-            // int dir = -1* (int) Math.signum(Math.min(Math.abs(distance), Math.abs((distance-4)%4)));
-            spinMotor.set( dir* 0.26);
+            else if (dir == -3 || dir == 3) dir /= -3; //Normalize edge case
+
+            spinMotor.set(dir * 0.26);
             if (color == goal)
                 running = false;
             break;
