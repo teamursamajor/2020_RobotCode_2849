@@ -27,7 +27,6 @@ import frc.robot.*;
  * Auto Script syntax is located on the team Google Drive.
  */
 public class AutoCompiler {
-
 	/**
 	 * For grouping all tokens.
 	 */

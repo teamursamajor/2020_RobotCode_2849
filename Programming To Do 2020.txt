@@ -1,24 +1,39 @@
-PROGRAMMING TO DO 2020:
+### PROGRAMMING TO DO 2020 ###
 
-Immediate:
-* Train new members in Java!!!
-* Get them acquainted with WPILib, GitHub, Driver Station, etc.
-* Decide whether to use a command-based robot
-* Make sure drive train still works
-  > Update inchesPerTick constant
+META:
+* Give members opportunities to code/learn/work independently
+* Make sure people understand Java, how to debug stuff, working with WPILib
 
-Long-Term:
-* Make a working spinner mechanism
-  - Detect color with color sensor
-  - Measure revolutions of wheel (consider velocity and arc length)
-  - Use PID control loop to stop at specific color
-* Make a low shooter auto
-  - Use Limelight to detect reflective tape for shooting ports
-    > Figure out how to use Limelight!
-  - Use AutoScript/Pathmaker to design paths for shooting
-    > REVISE PATHMAKER! Get Chris to come back ;-;
-    > Maybe use Pathfinder/Pathweaver instead
-* Make a working climber mechanism
-  > Use encoders and limit switches as backup to move the required distance
-  > Rely on previous years' code
+SPINNER:
+* Make PID control for spinner detecting colors
+* Figure out color offset situation (measurable impact?)
+* Comment/reorganize class
+
+AUTOCOMPILER:
+* Add arguments to Intake/Outtake tokens
+* Add math operation/paretheses/comma support
+* Use AutoCompiler/Pathmaker to design auto modes
+  - Get Chris to come back for Pathmaker ;-;
+  - Maybe use Pathfinder/Pathweaver instead
+* Make script syntax and class documentation when all's said and done
+
+DRIVETRAIN:
+* Test automatic turn tasks
+* Figure out why the drivetrain swerves (left/right power difference?)
+
+CLIMBER:
+* Use encoders to move the required distance
+* Work out design details with motors
+* PID control?
+
+INTAKE/OUTTAKE:
+* Use limit switches/line break sensors to count the number of cells
+* Synchronize intake/outtake so that outtaking resets number of cells
+* Work out design details with motors
+* PID control?
+
+EXTRA:
+* Document code so we know what stuff does
+* Figure out if we need Limelight, and if so, how to use it
+* Figure out if we should use Pixy instead, and if so, how to use it
 * Get LEDs working so we look cool
