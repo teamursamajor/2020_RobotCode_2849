@@ -2,6 +2,8 @@ package frc.tasks;
 
 import frc.robot.*;
 
+// TODO do we even need this for more than the enum honestly
+
 /**
  * This is a task class for controlling the Spinner mechanism automatically.
  */

@@ -7,8 +7,7 @@ import frc.tasks.IntakeTask.IntakeMode;
 
 public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobot  {
 
-    private Spark intakeMotor;
-    private Spark beltMotor;
+    private Spark intakeMotor, beltMotor;
     private int numOfCells; 
     private DigitalInput lineSensor;
     private boolean deltaLineSensor;
@@ -17,15 +16,11 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
         intakeMotor = new Spark(SHOOTER);
         beltMotor = new Spark(BELT);
         numOfCells = 0;
-        lineSensor = new DigitalInput(SENSORPORT);
+        lineSensor = new DigitalInput(LINE_SENSOR_PORT);
         deltaLineSensor = false;
     }
 
     public void runSubsystem() throws InterruptedException {
-        // TODO: In the future implement a system similar to drive with order/state
-        // Use the color sensor in SpinnerTask to detect color and add control loop
-        
-         // Cargo Intake
          if (xbox.getButton(controls.map.get("intake_in"))) {
             subsystemMode = IntakeMode.IN;
         } else if (xbox.getButton(controls.map.get("intake_out"))) {
@@ -33,13 +28,15 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
         } else {
             subsystemMode = IntakeMode.WAIT;
         }
-        if (lineSensor.get()&& !deltaLineSensor){
+
+        if (lineSensor.get() && !deltaLineSensor) {
             deltaLineSensor = true;
             numOfCells++;
         }
-        else if(!lineSensor.get()){
+        else if (!lineSensor.get()) {
             deltaLineSensor = false;
         }
+
         System.out.println(lineSensor.get()+" "+ deltaLineSensor+" "+ numOfCells);
 
         switch (subsystemMode) {
@@ -57,8 +54,8 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
             break;
         }
     }
-public void ResetCount()
-{
-    numOfCells = 0;
-}
+
+    public void resetCount() {
+        numOfCells = 0;
+    }
 }
