@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Spark;
 import frc.tasks.IntakeTask;
 import frc.tasks.IntakeTask.IntakeMode;
-
+/**This class will control the intake */
 public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobot {
 
     private Spark intakeMotor, beltMotor;
@@ -19,8 +19,11 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
         lineSensor = new DigitalInput(LINE_SENSOR_PORT);
         deltaLineSensor = false;
     }
-
+/**Runs the subsystem
+ * 
+ */
     public void runSubsystem() throws InterruptedException {
+        //Sets subsystem mode based on controller input
          if (xbox.getButton(controls.map.get("intake_in"))) {
             subsystemMode = IntakeMode.IN;
         } else if (xbox.getButton(controls.map.get("intake_out"))) {
@@ -28,7 +31,7 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
         } else {
             subsystemMode = IntakeMode.WAIT;
         }
-
+//Adds a ball to the counter if the ball trips the line sensor
         if (lineSensor.get() && !deltaLineSensor) {
             deltaLineSensor = true;
             numOfCells++;
@@ -38,7 +41,7 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
         }
 
         System.out.println(lineSensor.get()+" "+ deltaLineSensor+" "+ numOfCells);
-
+// Controlling the power of the motors based on the subsystem mode
         switch (subsystemMode) {
         case IN:
             intakeMotor.set(0.55);
@@ -54,7 +57,7 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
             break;
         }
     }
-
+/**Resets ball count */
     public void resetCount() {
         numOfCells = 0;
     }
