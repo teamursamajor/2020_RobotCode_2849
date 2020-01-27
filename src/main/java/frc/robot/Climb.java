@@ -1,98 +1,55 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Spark;
+import frc.tasks.ClimbTask;
+import frc.tasks.ClimbTask.ClimbMode;
 
 /**
- * This class operates the screw climb/buddy lift mechanism. TODO: Update code
- * for 2020. This is all 2019 stuff
+ * This class operates the climb mechanism.
  */
-public class Climb implements UrsaRobot, Runnable {
+public class Climb extends Subsystem<ClimbTask.ClimbMode> implements UrsaRobot {
 
     private Spark motor1, motor2;
-    // private double distanceTolerance = 2.0; // max distance before the sensor
-    // // tells the leadscrews to stop
-    // private double leadscrewSpeed = 0.5, frameWheelSpeed = 0.5, climbTimeout = 100000000; // TODO change this
-    // private boolean leadscrewsUp = false;
+    private Servo servo1, servo2;
 
     public Climb() {
         motor1 = new Spark(5);
         motor2 = new Spark(7);
+        servo1 = new Servo(SERVO_PORT_1);
+        servo2 = new Servo(SERVO_PORT_2);
     }
 
-    public void initialize() {
-        Thread t = new Thread(this, "Climb Thread");
-        t.start();
-    }
+    @Override
+    public void runSubsystem() throws InterruptedException {
+        if (xbox.getButton(controls.map.get("climb_run"))) {
+            subsystemMode = ClimbMode.UP;
+        } else if (xbox.getButton(controls.map.get("climb_stop"))) {
+            subsystemMode = ClimbMode.DOWN;
+        } else {
+            subsystemMode = ClimbMode.WAIT;
+        }
 
-    public void run() {
-        while (true) {
-            if (xbox.getButton(XboxController.BUTTON_START)) {
-                motor1.set(-0.3);
-                motor2.set(0.3);
-            } else if (xbox.getButton(XboxController.BUTTON_BACK)) {
-                motor1.set(0.3);
-                motor2.set(-0.3);
-            } else {
-                motor1.set(0.0);
-                motor2.set(0.0);
-            }
+        System.out.println(servo1.get() + " " + servo2.get());
 
-            // if (xbox.getSingleButtonPress(controls.map.get("climb_leadscrew_up")) && !leadscrewsUp) { // start
-            //                                                                                           // leadscrews
-            //     long startTime = System.currentTimeMillis();
-            //     leadscrewsUp = true;
-            //     leadscrew.set(leadscrewSpeed);
-            //     // runs leadscrew while the distance sensor has not reached or while we are
-            //     // within timeout
-            //     while (
-            //     // ultra.getRangeInches() <= distanceTolerance
-            //     // &&
-            //     (System.currentTimeMillis() - startTime) < climbTimeout) {
-            //         try {
-            //             Thread.sleep(20);
-            //         } catch (Exception e) {
-            //             e.printStackTrace();
-            //         }
-            //     }
-
-            //     // the driver could either wait to see this print or use the camera
-            //     System.out.println("Leadscrews are up! Drive the frame wheel!");
-
-            //     // If need be add a thread.sleep
-
-            //     leadscrew.set(0.0);
-            // }
-
-            // // bottom wheel code
-            // // back button
-            // if (xbox.getButton(controls.map.get("climb_framewheel"))
-            //         && !xbox.getButton(controls.map.get("climb_leadscrew_up")) && leadscrewsUp) {
-            //     // run frame wheel
-            //     frameWheel.set(frameWheelSpeed);
-            // }
-
-            // // buddy lift code
-            // // hold start again to bring the lift back up
-            // if (xbox.getButton(controls.map.get("climb_leadscrew_up"))
-            //         && !xbox.getButton(controls.map.get("climb_framewheel")) && leadscrewsUp) {
-            //     leadscrew.set(-leadscrewSpeed);
-            // } else {
-            //     leadscrew.set(0.0);
-            // }
-
-            // // In case something happens to the ultra sonic sensor during a competition
-            // // use this for an emergency stop
-            // if (xbox.getButton(controls.map.get("climb_leadscrew_up"))
-            //         && xbox.getButton(controls.map.get("climb_framewheel"))) {
-            //     leadscrew.set(0.0);
-            //     leadscrewsUp = true;
-            // }
-
-            try {
-                Thread.sleep(20);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        switch (subsystemMode) {
+        case UP:
+            servo1.set(0);
+            servo2.set(0);
+            // motor1.set(-0.3);
+            // motor2.set(0.3);
+            break;
+        case DOWN:
+            System.out.println("down");
+            servo1.set(1);
+            servo2.set(1);
+            // motor1.set(0.3);
+            // motor2.set(-0.3);
+            break;
+        case WAIT:
+            // motor1.set(0.0);
+            // motor2.set(0.0);
+            break;
         }
     }
 }

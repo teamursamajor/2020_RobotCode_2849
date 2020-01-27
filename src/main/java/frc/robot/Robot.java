@@ -30,7 +30,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
 
   private Drive drive;
   // private Spinner spinner;
-  private Intake intake;
+  // private Intake intake;
   // private SpinnerTask spinnerTask;
   private Climb climb;
   private int testCounter;
@@ -55,10 +55,10 @@ public class Robot extends TimedRobot implements UrsaRobot {
     // spinner.initialize("SpinnerThread");
 
     climb = new Climb();
-    climb.initialize();
+    climb.initialize("ClimbThread");
 
-    intake = new Intake();
-    intake.initialize("IntakeThread");
+    // intake = new Intake();
+    // intake.initialize("IntakeThread");
   }
 
   /**
