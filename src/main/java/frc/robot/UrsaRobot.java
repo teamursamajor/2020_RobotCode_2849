@@ -22,13 +22,15 @@ public interface UrsaRobot {
 	public static final int DRIVE_FRONT_LEFT = 0, DRIVE_BACK_LEFT = 1;
 	public static final int DRIVE_FRONT_RIGHT = 2, DRIVE_BACK_RIGHT = 3;
 
-	public static final int SPINNER = 9, SHOOTER = 4;
+	public static final int SPINNER = 9, SHOOTER = 4, BELT = 6;
 	
 	public static final int CLIMB_FRONT = 5, CLIMB_BACK = 7;
 	
 	// public static final int HATCH_SERVO = 8;
 
 	// Encoders and Sensors Ports
+	public static final int LINE_SENSOR_PORT = 0;
+
 	public static final int CONTROLLER_PORT = 0;
 	
 	public static final int CARGO_POT_CHANNEL = 0;
