@@ -15,6 +15,8 @@ import java.util.regex.Matcher;
 // import frc.tasks.DriveTask.DriveMode;
 // import frc.robot.*;
 
+// TODO add align task/token
+
 /**
  * @author AlphaMale and Sheldon
  * 
@@ -80,7 +82,6 @@ public class AutoCompiler {
 		regexMap.put(RightBraceToken.class, Pattern.compile("^\\s*}"));
 		regexMap.put(LeftParenToken.class, Pattern.compile("^\\s*\\("));
 		regexMap.put(RightParenToken.class, Pattern.compile("^\\s*\\)"));
-
 	}
 
 	/**
