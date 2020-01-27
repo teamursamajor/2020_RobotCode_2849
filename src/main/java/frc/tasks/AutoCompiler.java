@@ -20,11 +20,11 @@ import frc.robot.*;
 /**
  * @author AlphaMale and Sheldon
  * 
- * This is a compiler for Auto Scripts. It takes an Auto Script file and
- * interprets tokens and arguments on each line as a set of tasks to be
- * executed in a given sequence.
+ *         This is a compiler for Auto Scripts. It takes an Auto Script file and
+ *         interprets tokens and arguments on each line as a set of tasks to be
+ *         executed in a given sequence.
  * 
- * Auto Script syntax will be located on the team Google Drive.
+ *         Auto Script syntax will be located on the team Google Drive.
  */
 public class AutoCompiler {
 
@@ -34,6 +34,7 @@ public class AutoCompiler {
 	interface Token {
 		/**
 		 * Generates a task based on the current and consecutive token(s).
+		 * 
 		 * @param tokenList The list of consecutive tokens.
 		 * @return A new task corresponding to the current token.
 		 * @throws Exception if the next token is invalid or if parsing arguments fails
@@ -51,8 +52,8 @@ public class AutoCompiler {
 	private Outtake outtake;
 
 	/**
-	 * Constructor for the Auto Compiler. Takes in a Drive, Intake, and Outtake
-	 * and creates regex mappings for each possible token in an Auto Script.
+	 * Constructor for the Auto Compiler. Takes in a Drive, Intake, and Outtake and
+	 * creates regex mappings for each possible token in an Auto Script.
 	 */
 	public AutoCompiler(Drive drive, Intake intake, Outtake outtake) {
 		this.drive = drive;
@@ -60,8 +61,8 @@ public class AutoCompiler {
 		this.outtake = outtake;
 
 		/*
-		 * Regex mappings for each token. Considers relevant character sequence
-		 * and any whitespace preceding it.
+		 * Regex mappings for each token. Considers relevant character sequence and any
+		 * whitespace preceding it.
 		 */
 		regexMap.put(ExecuteToken.class, Pattern.compile("^\\s*execute"));
 		regexMap.put(FollowToken.class, Pattern.compile("^\\s*follow"));
@@ -96,7 +97,8 @@ public class AutoCompiler {
 	 * A token for executing a given Auto Script. Idenfied by the phrase "execute".
 	 */
 	class ExecuteToken implements Token {
-		public ExecuteToken() {}
+		public ExecuteToken() {
+		}
 
 		public String toString() {
 			return "ExecuteToken";
@@ -109,7 +111,8 @@ public class AutoCompiler {
 			if (tokenList.get(0) instanceof StringToken) {
 				StringTask stringTask = (StringTask) tokenList.get(0).buildSubtree(tokenList);
 				String scriptName = stringTask.getData();
-				Task otherMode = buildAutoMode("/home/lvuser/automodes/" + scriptName.trim().replace(" ", "") + ".auto");
+				Task otherMode = buildAutoMode(
+						"/home/lvuser/automodes/" + scriptName.trim().replace(" ", "") + ".auto");
 				return otherMode;
 			} else { // expected string token
 				throw new Exception();
@@ -118,11 +121,12 @@ public class AutoCompiler {
 	}
 
 	/**
-	 * A token for following a given Path. TODO update for PathWeaver?
-	 * Identified by the phrase "follow".
+	 * A token for following a given Path. TODO update for PathWeaver? Identified by
+	 * the phrase "follow".
 	 */
 	class FollowToken implements Token {
-		public FollowToken() {}
+		public FollowToken() {
+		}
 
 		public String toString() {
 			return "FollowToken";
@@ -142,11 +146,12 @@ public class AutoCompiler {
 	}
 
 	/**
-	 * A token for running a set of tasks within it in sequence.
-	 * Identified by the phrase "serial {".
+	 * A token for running a set of tasks within it in sequence. Identified by the
+	 * phrase "serial {".
 	 */
 	class SerialToken implements Token {
-		public SerialToken() {}
+		public SerialToken() {
+		}
 
 		public String toString() {
 			return "SerialToken";
@@ -157,13 +162,14 @@ public class AutoCompiler {
 			return null;
 		}
 	}
-	
+
 	/**
-	 * A token for running a set of tasks within it all at once.
-	 * Identified by the phrase "parallel {".
+	 * A token for running a set of tasks within it all at once. Identified by the
+	 * phrase "parallel {".
 	 */
 	class ParallelToken implements Token {
-		public ParallelToken() {}
+		public ParallelToken() {
+		}
 
 		public String toString() {
 			return "ParallelToken";
@@ -176,11 +182,12 @@ public class AutoCompiler {
 	}
 
 	/**
-	 * A token that prints any string passed to it to the console
-	 * Identified by the phrase "print".
+	 * A token that prints any string passed to it to the console Identified by the
+	 * phrase "print".
 	 */
 	class PrintToken implements Token {
-		public PrintToken() {}
+		public PrintToken() {
+		}
 
 		public String toString() {
 			return "PrintToken";
@@ -199,11 +206,12 @@ public class AutoCompiler {
 	}
 
 	/**
-	 * A token that delays the auto mode for a given duration.
-	 * Identified by the phrase "wait".
+	 * A token that delays the auto mode for a given duration. Identified by the
+	 * phrase "wait".
 	 */
 	class WaitToken implements Token {
-		public WaitToken() {}
+		public WaitToken() {
+		}
 
 		public String toString() {
 			return "WaitToken";
@@ -223,11 +231,12 @@ public class AutoCompiler {
 	}
 
 	/**
-	 * A token that drives the robot a given distance (in inches).
-	 * Identified by the phrase "drive".
+	 * A token that drives the robot a given distance (in inches). Identified by the
+	 * phrase "drive".
 	 */
 	class DriveToken implements Token {
-		public DriveToken() {}
+		public DriveToken() {
+		}
 
 		public String toString() {
 			return "DriveToken";
@@ -246,12 +255,13 @@ public class AutoCompiler {
 	}
 
 	/**
-	 * A token that turns the robot to face a given angle.
-	 * Identified by the phrase "turn".
+	 * A token that turns the robot to face a given angle. Identified by the phrase
+	 * "turn".
 	 */
 	class TurnToken implements Token {
-		public TurnToken() {}
-		
+		public TurnToken() {
+		}
+
 		public String toString() {
 			return "TurnToken";
 		}
@@ -269,11 +279,12 @@ public class AutoCompiler {
 	}
 
 	/**
-	 * A token for outtaking balls from the shooter mechanism.
-	 * Identified by the phrase "outtake".
+	 * A token for outtaking balls from the shooter mechanism. Identified by the
+	 * phrase "outtake".
 	 */
 	class OuttakeToken implements Token {
-		public OuttakeToken() {}
+		public OuttakeToken() {
+		}
 
 		public String toString() {
 			return "OuttakeToken";
@@ -301,11 +312,12 @@ public class AutoCompiler {
 	}
 
 	/**
-	 * A token for dumping balls from the shooter mechanism.
-	 * Identified by the phrase "intake".
+	 * A token for dumping balls from the shooter mechanism. Identified by the
+	 * phrase "intake".
 	 */
 	class IntakeToken implements Token {
-		public IntakeToken() {}
+		public IntakeToken() {
+		}
 
 		public String toString() {
 			return "IntakeToken";
@@ -333,11 +345,12 @@ public class AutoCompiler {
 	}
 
 	/**
-	 * A token for any arguments.
-	 * Identified by any extra alphanumeric/underscore characters
+	 * A token for any arguments. Identified by any extra alphanumeric/underscore
+	 * characters
 	 */
 	class ArgumentToken implements Token {
-		public ArgumentToken() {}
+		public ArgumentToken() {
+		}
 
 		private String stored;
 
@@ -360,7 +373,8 @@ public class AutoCompiler {
 	 * A token for any positive/negative real numbers.
 	 */
 	class NumberToken implements Token {
-		public NumberToken() {}
+		public NumberToken() {
+		}
 
 		private double stored;
 
@@ -384,17 +398,17 @@ public class AutoCompiler {
 	}
 
 	/**
-	 * A token for any String phrases.
-	 * Identified by quotes surrounding text.
+	 * A token for any String phrases. Identified by quotes surrounding text.
 	 */
 	class StringToken implements Token {
-		public StringToken() {}
+		public StringToken() {
+		}
 
 		private String stored;
 
 		public void storeData(String string) {
 			// substring section removes the quotes
-			stored = string.substring(1,string.length()-1);
+			stored = string.substring(1, string.length() - 1);
 		}
 
 		public String toString() {
@@ -409,11 +423,11 @@ public class AutoCompiler {
 	}
 
 	/**
-	 * A token for adding two numbers.
-	 * Identified by "+".
+	 * A token for adding two numbers. Identified by "+".
 	 */
 	class AddToken implements Token {
-		public AddToken() {}
+		public AddToken() {
+		}
 
 		public String toString() {
 			return "AddToken";
@@ -426,17 +440,19 @@ public class AutoCompiler {
 	}
 
 	/**
-	 * A token for subtracting two numbers.
-	 * Identified by "-".
+	 * A token for subtracting two numbers. Identified by "-".
 	 */
 	class SubtractToken implements Token {
-		public SubtractToken() {}
+		public SubtractToken() {
+		}
 
 		public String toString() {
 			return "SubtractToken";
 		}
-		// TODO recognize if there's only one number in front, and if so, make that number negative
-		// TODO better yet recognize two numbers next to each other and then if the second is negative insert a subtracttoken
+		// TODO recognize if there's only one number in front, and if so, make that
+		// number negative
+		// TODO better yet recognize two numbers next to each other and then if the
+		// second is negative insert a subtracttoken
 
 		@Override
 		public Task buildSubtree(ArrayList<Token> tokenList) {
@@ -445,11 +461,11 @@ public class AutoCompiler {
 	}
 
 	/**
-	 * A token for multiplying two numbers.
-	 * Identified by "*".
+	 * A token for multiplying two numbers. Identified by "*".
 	 */
 	class MultiplyToken implements Token {
-		public MultiplyToken() {}
+		public MultiplyToken() {
+		}
 
 		public String toString() {
 			return "MultiplyToken";
@@ -462,11 +478,11 @@ public class AutoCompiler {
 	}
 
 	/**
-	 * A token for dividing two numbers.
-	 * Identified by "/".
+	 * A token for dividing two numbers. Identified by "/".
 	 */
 	class DivideToken implements Token {
-		public DivideToken() {}
+		public DivideToken() {
+		}
 
 		public String toString() {
 			return "DivideToken";
@@ -480,11 +496,11 @@ public class AutoCompiler {
 	}
 
 	/**
-	 * A token for separating parameters.
-	 * Identified by ",".
+	 * A token for separating parameters. Identified by ",".
 	 */
 	class CommaToken implements Token {
-		public CommaToken() {}
+		public CommaToken() {
+		}
 
 		public String toString() {
 			return "CommaToken";
@@ -497,11 +513,12 @@ public class AutoCompiler {
 	}
 
 	/**
-	 * A token for ending the most recent group task (parallel/serial).
-	 * Identified by "}".
+	 * A token for ending the most recent group task (parallel/serial). Identified
+	 * by "}".
 	 */
 	class RightBraceToken implements Token {
-		public RightBraceToken() {}
+		public RightBraceToken() {
+		}
 
 		public String toString() {
 			return "RightBraceToken";
@@ -514,11 +531,11 @@ public class AutoCompiler {
 	}
 
 	/**
-	 * A token for starting a parameter set.
-	 * Identified by "(".
+	 * A token for starting a parameter set. Identified by "(".
 	 */
-	 class LeftParenToken implements Token {
-		public LeftParenToken() {}
+	class LeftParenToken implements Token {
+		public LeftParenToken() {
+		}
 
 		public String toString() {
 			return "LeftParenToken";
@@ -531,12 +548,12 @@ public class AutoCompiler {
 	}
 
 	/**
-	 * A token for ending a parameter set.
-	 * Identified by ")".
+	 * A token for ending a parameter set. Identified by ")".
 	 */
-	 class RightParenToken implements Token {
-		public RightParenToken() {}
-		
+	class RightParenToken implements Token {
+		public RightParenToken() {
+		}
+
 		public String toString() {
 			return "RightParenToken";
 		}
@@ -551,10 +568,9 @@ public class AutoCompiler {
 	 * Interprets specified file to identify keywords as tokens to add to a
 	 * collective ArrayList.
 	 * 
-	 * @param filename
-	 *            Name of file to tokenize
+	 * @param filename Name of file to tokenize
 	 * @return ArrayList of all tokens in ranking order
-	 * @throws IOException 
+	 * @throws IOException
 	 * @throws Exception
 	 */
 	@SuppressWarnings("resource")
@@ -563,30 +579,33 @@ public class AutoCompiler {
 		BufferedReader buff = new BufferedReader(new FileReader(filename));
 		String line = null;
 		boolean matchedAny, matchedToken; // true once a token has been matched on a given line
-		
+
 		// Buffers through each line in the file
 		while ((line = buff.readLine()) != null) {
 			matchedAny = false;
-			
-			// Iterates through the current line, as long as it is not a comment and still has characters
+
+			// Iterates through the current line, as long as it is not a comment and still
+			// has characters
 			while (line.trim().length() > 0) {
 				matchedToken = false;
-				
+
 				// If the line is a comment, disregard the line
 				if (line.trim().charAt(0) == '#') {
 					matchedAny = true;
 					break;
 				}
-				
-				// Iterates through each possible token and tries to identify a match with the corresponding regex pattern
+
+				// Iterates through each possible token and tries to identify a match with the
+				// corresponding regex pattern
 				for (Map.Entry<Class<? extends Token>, Pattern> entry : regexMap.entrySet()) {
 					Matcher match = entry.getValue().matcher(line);
 					if (match.find()) { // If a matching regex pattern has been found
 						try {
-							/* 
-							 * Tries to create a new instance of the corresponding token and add it to the list of tokens.
-							 * Note: all of this "getConstructor", "newIntance" stuff is necessary because
-							 * each token is its own class, and the HashMap stores the whole class as a data type.
+							/*
+							 * Tries to create a new instance of the corresponding token and add it to the
+							 * list of tokens. Note: all of this "getConstructor", "newIntance" stuff is
+							 * necessary because each token is its own class, and the HashMap stores the
+							 * whole class as a data type.
 							 */
 							Token newToken = entry.getKey().getConstructor(this.getClass()).newInstance(this);
 							tokenList.add(newToken);
@@ -606,7 +625,7 @@ public class AutoCompiler {
 						}
 					}
 				}
-				
+
 				if (!matchedToken) // If there are more tokens to match, move to a new line.
 					break;
 			}
@@ -620,10 +639,8 @@ public class AutoCompiler {
 	/**
 	 * Interprets an ArrayList of tokens as an ordered set of tasks
 	 * 
-	 * @param tokenList
-	 *            An ArrayList of tokens (returned from {@link #tokenize()})
-	 * @param taskSet
-	 *            A set of tasks to add tasks to
+	 * @param tokenList An ArrayList of tokens (returned from {@link #tokenize()})
+	 * @param taskSet   A set of tasks to add tasks to
 	 * @return A complete set of tasks
 	 */
 	private Task parseAuto(ArrayList<Token> tokenList, GroupTask taskSet) {
@@ -668,6 +685,7 @@ public class AutoCompiler {
 				e.printStackTrace();
 			}
 		}
+		System.out.println(taskSet);
 		return taskSet;
 	}
 
@@ -694,16 +712,11 @@ public class AutoCompiler {
 	 * task in the ranked list of tasks from the SmartDashboard that matches the
 	 * current setup.
 	 * 
-	 * @param robotPos
-	 *            The hab platform our robot starts on. L1/2, M1, R1/2.
-	 * @param piece
-	 *            The game piece our robot is holding. Cargo or Hatch.
-	 * @param piecePos
-	 *            The bay side we want to go to. L1/2/3/4 or R1/2/3/4.
-	 * @param autoPrefs
-	 *            String array of ranked Auto Modes
-	 * @param autoFiles
-	 *            File array of all files in the AutoModes folder
+	 * @param robotPos  The hab platform our robot starts on. L1/2, M1, R1/2.
+	 * @param piece     The game piece our robot is holding. Cargo or Hatch.
+	 * @param piecePos  The bay side we want to go to. L1/2/3/4 or R1/2/3/4.
+	 * @param autoPrefs String array of ranked Auto Modes
+	 * @param autoFiles File array of all files in the AutoModes folder
 	 * @return String name of the auto file to run
 	 */
 	public String pickAutoMode(String robotPos, String piece, String piecePos, String[] autoPrefs, File[] autoFiles) {
@@ -743,6 +756,6 @@ public class AutoCompiler {
 			}
 		}
 		// TODO make a default auto mode
-		return "/home/lvuser/automodes/ .auto";
+		return "/home/lvuser/automodes/default.auto";
 	}
 }

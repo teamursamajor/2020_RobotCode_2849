@@ -1,23 +1,6 @@
-turn 90
+print "hello"
 drive 10
 turn 90
-dump
-intake
-execute "ddd"
-follow "dd"
-#test comment
-serial {
-	drive 5
-	dump
-}
-parallel {
-	drive 5
-	turn 30
-}
-print "Hello"
-wait 60.3
-drive (444,2,5)
-(4+5)
-(4-5)
-(4/5)
-(4*5)
+intake IN
+outtake FASTOUT
+wait 3

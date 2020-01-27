@@ -8,12 +8,12 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.DriverStation;
 // import frc.tasks.DriveTask.DriveMode;
 // import frc.tasks.DriveTask;
-
+import frc.tasks.AutoCompiler;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,51 +23,56 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends TimedRobot implements UrsaRobot {
-  private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
-  private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  // private static final String kDefaultAuto = "Default";
+  // private static final String kCustomAuto = "My Auto";
+  // private String m_autoSelected;
+  // private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   private Drive drive;
-  // private Spinner spinner;
-  // private Intake intake;
-  // private SpinnerTask spinnerTask;
+  private Spinner spinner;
+  private Intake intake;
+  private Outtake outtake;
   private Climb climb;
+  private AutoCompiler autoCompiler;
+
   // private int testCounter;
 
   /**
-   * This function is run when the robot is first started up and should be
-   * used for any initialization code.
+   * This function is run when the robot is first started up and should be used
+   * for any initialization code.
    */
   @Override
   public void robotInit() {
-    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
+    // m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
+    // m_chooser.addOption("My Auto", kCustomAuto);
+    // SmartDashboard.putData("Auto choices", m_chooser);
 
     drive = new Drive();
     drive.initialize("DriveThread");
 
-    // spinner = new Spinner();
-    // spinner.initialize("SpinnerThread");
-    // spinnerTask = new SpinnerTask(SpinnerMode.WAIT, spinner);
-
-    // spinner.initialize("SpinnerThread");
+    spinner = new Spinner();
+    spinner.initialize("SpinnerThread");
 
     climb = new Climb();
     climb.initialize("ClimbThread");
 
-    // intake = new Intake();
-    // intake.initialize("IntakeThread");
+    intake = new Intake();
+    intake.initialize("IntakeThread");
+
+    outtake = new Outtake();
+    outtake.initialize("OuttakeThread");
+
+    autoCompiler = new AutoCompiler(drive, intake, outtake);
   }
 
   /**
-   * This function is called every robot packet, no matter the mode. Use
-   * this for items like diagnostics that you want ran during disabled,
-   * autonomous, teleoperated and test.
+   * This function is called every robot packet, no matter the mode. Use this for
+   * items like diagnostics that you want ran during disabled, autonomous,
+   * teleoperated and test.
    *
-   * <p>This runs after the mode specific periodic functions, but before
-   * LiveWindow and SmartDashboard integrated updating.
+   * <p>
+   * This runs after the mode specific periodic functions, but before LiveWindow
+   * and SmartDashboard integrated updating.
    */
   @Override
   public void robotPeriodic() {
@@ -75,20 +80,26 @@ public class Robot extends TimedRobot implements UrsaRobot {
 
   /**
    * This autonomous (along with the chooser code above) shows how to select
-   * between different autonomous modes using the dashboard. The sendable
-   * chooser code works with the Java SmartDashboard. If you prefer the
-   * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-   * getString line to get the auto name from the text box below the Gyro
+   * between different autonomous modes using the dashboard. The sendable chooser
+   * code works with the Java SmartDashboard. If you prefer the LabVIEW Dashboard,
+   * remove all of the chooser code and uncomment the getString line to get the
+   * auto name from the text box below the Gyro
    *
-   * <p>You can add additional auto modes by adding additional comparisons to
-   * the switch structure below with additional strings. If using the
-   * SendableChooser make sure to add them to the chooser code above as well.
+   * <p>
+   * You can add additional auto modes by adding additional comparisons to the
+   * switch structure below with additional strings. If using the SendableChooser
+   * make sure to add them to the chooser code above as well.
    */
   @Override
   public void autonomousInit() {
-    m_autoSelected = m_chooser.getSelected();
+    // m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
+    // System.out.println("Auto selected: " + m_autoSelected);
+    try {
+      autoCompiler.buildAutoMode("Mode.auto");
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   /**
@@ -96,15 +107,15 @@ public class Robot extends TimedRobot implements UrsaRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
-    }
+    // switch (m_autoSelected) {
+    // case kCustomAuto:
+    // // Put custom auto code here
+    // break;
+    // case kDefaultAuto:
+    // default:
+    // // Put default auto code here
+    // break;
+    // }
   }
 
   /**
@@ -114,7 +125,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
   public void teleopPeriodic() {
     
   }
-// private boolean test1 = false, test2 = false, test3 = false;
+  // private boolean test1 = false, test2 = false, test3 = false;
   /**
    * This function is called periodically during test mode.
    */

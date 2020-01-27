@@ -35,6 +35,7 @@ INTAKE/OUTTAKE:
 
 EXTRA:
 * Document code so we know what stuff does
+* Incorporate Logger for debug/error info
 * Figure out if we need Limelight, and if so, how to use it
 * Figure out if we should use Pixy instead, and if so, how to use it
 * Get LEDs working so we look cool

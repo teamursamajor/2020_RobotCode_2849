@@ -10,7 +10,6 @@ public class SerialTask extends GroupTask {
     }
 
     public void run() {
-
 		for (Task t : tasks) {
 			t.run();
 		}
