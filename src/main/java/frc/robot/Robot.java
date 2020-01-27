@@ -7,14 +7,11 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.DriverStation;
-import frc.tasks.SpinnerTask;
 import frc.tasks.DriveTask.DriveMode;
-import frc.tasks.SpinnerTask.SpinnerMode;
 import frc.tasks.DriveTask;
 
 
@@ -32,10 +29,9 @@ public class Robot extends TimedRobot implements UrsaRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   private Drive drive;
-  private Spinner spinner;
+  // private Spinner spinner;
   private Intake intake;
   // private SpinnerTask spinnerTask;
-  // private Shooter shooter;
   private Climb climb;
   private int testCounter;
 
@@ -52,11 +48,10 @@ public class Robot extends TimedRobot implements UrsaRobot {
     drive = new Drive();
     drive.initialize("DriveThread");
 
-   // spinner = new Spinner();
-    //spinner.initialize("SpinnerThread");
+    // spinner = new Spinner();
+    // spinner.initialize("SpinnerThread");
     // spinnerTask = new SpinnerTask(SpinnerMode.WAIT, spinner);
 
-    // shooter = new Shooter();
     // spinner.initialize("SpinnerThread");
 
     climb = new Climb();

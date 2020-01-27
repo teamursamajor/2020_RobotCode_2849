@@ -20,9 +20,9 @@ import java.util.regex.Matcher;
 /**
  * @author AlphaMale and Sheldon
  * 
- * This is a compiler for Auto Scripts. It takes an Auto Script file
- * and interprets tokens and arguments on each line as a set of tasks to
- * be executed in a given sequence.
+ * This is a compiler for Auto Scripts. It takes an Auto Script file and
+ * interprets tokens and arguments on each line as a set of tasks to be
+ * executed in a given sequence.
  * 
  * Auto Script syntax is located on the team Google Drive.
  */
@@ -32,7 +32,7 @@ public class AutoCompiler {
 	 * For grouping all tokens.
 	 */
 	interface Token {
-		public Task buildSubtree(ArrayList<Token> tokList);
+		public Task buildSubtree(ArrayList<Token> tokenList) throws Exception;
 	}
 
 	/**
@@ -41,16 +41,14 @@ public class AutoCompiler {
 	public HashMap<Class<? extends Token>, Pattern> regexMap = new HashMap<Class<? extends Token>, Pattern>();
 
 	// private Drive drive;
-	// private Shooter shooter;
 	// private Intake intake;
 
 	/**
 	 * Constructor for the Auto Compiler. Takes in a Drive and Shooter object and
 	 * creates regex mappings for each possible token in an Auto Script.
 	 */
-	public AutoCompiler(/*Drive drive, Shooter shooter, Intake intake*/) {
+	public AutoCompiler(/* Drive drive, Intake intake */) {
 		// this.drive = drive;
-		// this.shooter = shooter;
 		// this.intake = intake;
 
 		/*
@@ -78,21 +76,17 @@ public class AutoCompiler {
 		regexMap.put(DivideToken.class, Pattern.compile("^\\s*\\/\\s*"));
 
 		regexMap.put(CommaToken.class, Pattern.compile("^\\s*,"));
-		regexMap.put(StringLiteralToken.class, Pattern.compile("^\\s*(\"[^\"]*\")"));
+		regexMap.put(StringToken.class, Pattern.compile("^\\s*(\"[^\"]*\")"));
 		regexMap.put(RightBraceToken.class, Pattern.compile("^\\s*}"));
 		regexMap.put(LeftParenToken.class, Pattern.compile("^\\s*\\("));
 		regexMap.put(RightParenToken.class, Pattern.compile("^\\s*\\)"));
 	}
 
 	/**
-	 * A token for executing a given Auto Script.
-	 * Idenfied by the phrase "execute".
+	 * A token for executing a given Auto Script. Idenfied by the phrase "execute".
 	 */
 	class ExecuteToken implements Token {
-		// private String scriptName;
-
-		public ExecuteToken(/*String scriptName*/) {
-			// this.scriptName = "/home/lvuser/automodes/" + scriptName.trim() + ".auto";
+		public ExecuteToken() {
 		}
 
 		public String toString() {
@@ -100,7 +94,15 @@ public class AutoCompiler {
 		}
 
 		@Override
-		public Task buildSubtree(ArrayList<Token> tokList) {
+		public Task buildSubtree(ArrayList<Token> tokenList) throws Exception {
+			tokenList.remove(this);
+			// if the next token is a string, handle string data
+			if (tokenList.get(0) instanceof StringToken) {
+				StringTask stringTask = (StringTask) tokenList.get(0).buildSubtree(tokenList);
+				String scriptName = stringTask.getData();
+				Task otherMode = buildAutoMode("/home/lvuser/automodes/" + scriptName.trim() + ".auto");
+				return otherMode;
+			}
 			return null;
 		}
 	}
@@ -119,7 +121,7 @@ public class AutoCompiler {
 		}
 
 		@Override
-		public Task buildSubtree(ArrayList<Token> tokList) {
+		public Task buildSubtree(ArrayList<Token> tokenList) {
 			return null;
 		}
 	}
@@ -135,7 +137,7 @@ public class AutoCompiler {
 			return "SerialToken";
 		}
 
-		public Task buildSubtree(ArrayList<Token> tokList) {
+		public Task buildSubtree(ArrayList<Token> tokenList) {
 			return null;
 		}
 	}
@@ -152,7 +154,7 @@ public class AutoCompiler {
 		}
 
 		@Override
-		public Task buildSubtree(ArrayList<Token> tokList) {
+		public Task buildSubtree(ArrayList<Token> tokenList) {
 			return null;
 		}
 	}
@@ -162,18 +164,14 @@ public class AutoCompiler {
 	 * Identified by the phrase "print".
 	 */
 	class PrintToken implements Token {
-//		private String str;
-
-		public PrintToken(/*String str*/) { // TODO replace with StringLiteralToken
-//			this.str = str;
-		}
+		public PrintToken() {}
 
 		public String toString() {
 			return "PrintToken";
 		}
 
 		@Override
-		public Task buildSubtree(ArrayList<Token> tokList) {
+		public Task buildSubtree(ArrayList<Token> tokenList) {
 			return null;
 		}
 
@@ -206,7 +204,7 @@ public class AutoCompiler {
 		}
 
 		@Override
-		public Task buildSubtree(ArrayList<Token> tokList) {
+		public Task buildSubtree(ArrayList<Token> tokenList) {
 			// TODO Auto-generated method stub
 			return null;
 		}
@@ -239,7 +237,7 @@ public class AutoCompiler {
 		}
 
 		@Override
-		public Task buildSubtree(ArrayList<Token> tokList) {
+		public Task buildSubtree(ArrayList<Token> tokenList) {
 			return null;
 		}
 	}
@@ -271,7 +269,20 @@ public class AutoCompiler {
 		}
 
 		@Override
-		public Task buildSubtree(ArrayList<Token> tokList) {
+		public Task buildSubtree(ArrayList<Token> tokenList) throws Exception {
+			tokenList.remove(this);
+			if (tokenList.get(0) instanceof NumberToken) {
+				StringTask stringTask = (StringTask) tokenList.get(0).buildSubtree(tokenList);
+				String scriptName = stringTask.getData();
+				try {
+					Task otherMode = buildAutoMode("/home/lvuser/automodes/" + scriptName.trim() + ".auto");
+					return otherMode;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else {
+				throw new Exception();
+			}
 			return null;
 		}
 	}
@@ -288,7 +299,7 @@ public class AutoCompiler {
 		}
 
 		@Override
-		public Task buildSubtree(ArrayList<Token> tokList) {
+		public Task buildSubtree(ArrayList<Token> tokenList) throws Exception {
 			return null;
 		}
 	}
@@ -305,7 +316,7 @@ public class AutoCompiler {
 		}
 
 		@Override
-		public Task buildSubtree(ArrayList<Token> tokList) {
+		public Task buildSubtree(ArrayList<Token> tokenList) {
 			return null;
 		}
 	}
@@ -316,13 +327,20 @@ public class AutoCompiler {
 	class NumberToken implements Token {
 		public NumberToken() {}
 
+		private double stored;
+
+		public void storeData(String string) {
+			stored = Double.parseDouble(string);
+		}
+
 		public String toString() {
 			return "NumberToken";
 		}
 
 		@Override
-		public Task buildSubtree(ArrayList<Token> tokList) {
-			return null;
+		public Task buildSubtree(ArrayList<Token> tokenList) {
+			tokenList.remove(this);
+			return new NumberTask(stored);
 		}
 	}
 
@@ -338,7 +356,7 @@ public class AutoCompiler {
 		}
 
 		@Override
-		public Task buildSubtree(ArrayList<Token> tokList) {
+		public Task buildSubtree(ArrayList<Token> tokenList) {
 			return null;
 		}
 	}
@@ -356,7 +374,7 @@ public class AutoCompiler {
 		// TODO recognize if there's only one number in front, and if so, make that number negative
 
 		@Override
-		public Task buildSubtree(ArrayList<Token> tokList) {
+		public Task buildSubtree(ArrayList<Token> tokenList) {
 			return null;
 		}
 	}
@@ -373,7 +391,7 @@ public class AutoCompiler {
 		}
 
 		@Override
-		public Task buildSubtree(ArrayList<Token> tokList) {
+		public Task buildSubtree(ArrayList<Token> tokenList) {
 			// TODO Auto-generated method stub
 			return null;
 		}
@@ -391,7 +409,7 @@ public class AutoCompiler {
 		}
 
 		@Override
-		public Task buildSubtree(ArrayList<Token> tokList) {
+		public Task buildSubtree(ArrayList<Token> tokenList) {
 			// TODO Auto-generated method stub
 			return null;
 		}
@@ -409,8 +427,7 @@ public class AutoCompiler {
 		}
 
 		@Override
-		public Task buildSubtree(ArrayList<Token> tokList) {
-			// TODO Auto-generated method stub
+		public Task buildSubtree(ArrayList<Token> tokenList) {
 			return null;
 		}
 	}
@@ -419,22 +436,23 @@ public class AutoCompiler {
 	 * A token for any String phrases.
 	 * Identified by quotes surrounding text.
 	 */
-	class StringLiteralToken implements Token {
-		private String string;
+	class StringToken implements Token {
+		public StringToken() {}
 
-		public StringLiteralToken() {}
+		private String stored;
 
-		public void setString(String str) {
-			string = str;
+		public void storeData(String string) {
+			stored = string;
 		}
 
 		public String toString() {
-			return "StringLiteralToken";
+			return "StringToken";
 		}
 
 		@Override
-		public Task buildSubtree(ArrayList<Token> tokList) {
-			return null;
+		public Task buildSubtree(ArrayList<Token> tokenList) {
+			tokenList.remove(this);
+			return new StringTask(stored);
 		}
 	}
 
@@ -450,7 +468,7 @@ public class AutoCompiler {
 		}
 
 		@Override
-		public Task buildSubtree(ArrayList<Token> tokList) {
+		public Task buildSubtree(ArrayList<Token> tokenList) {
 			return null;
 		}
 	}
@@ -467,7 +485,7 @@ public class AutoCompiler {
 		}
 
 		@Override
-		public Task buildSubtree(ArrayList<Token> tokList) {
+		public Task buildSubtree(ArrayList<Token> tokenList) {
 			return null;
 		}
 	}
@@ -484,7 +502,7 @@ public class AutoCompiler {
 		}
 
 		@Override
-		public Task buildSubtree(ArrayList<Token> tokList) {
+		public Task buildSubtree(ArrayList<Token> tokenList) {
 			return null;
 		}
 	}
@@ -530,7 +548,13 @@ public class AutoCompiler {
 							 * Note: all of this "getConstructor", "newIntance" stuff is necessary because
 							 * each token is its own class, and the HashMap stores the whole class as a data type.
 							 */
-							tokenList.add(entry.getKey().getConstructor(this.getClass()).newInstance(this));
+							Token newToken = entry.getKey().getConstructor(this.getClass()).newInstance(this);
+							tokenList.add(newToken);
+							if (newToken instanceof StringToken) {
+								((StringToken) newToken).storeData(match.group());
+							} else if (newToken instanceof NumberToken) {
+								((NumberToken) newToken).storeData(match.group());
+							}
 							matchedToken = true;
 							matchedAny = true;
 							line = line.substring(match.end()); // Updates the current line to remove matched characters
@@ -567,34 +591,37 @@ public class AutoCompiler {
 			return new WaitTask(0);
 		}
 		while (tokenList.size() > 0) { // While there are still tokens to go through
-			Token t = tokenList.remove(0);
-			if (t instanceof ExecuteToken) {
-				// Task otherMode = buildAutoMode(((ExecuteToken) t).scriptName);
-				// taskSet.addTask(otherMode);
-			} else if (t instanceof FollowToken) {
-				taskSet.addTask(((FollowToken) t).buildSubtree(tokenList));
-			} else if (t instanceof WaitToken) {
-				taskSet.addTask(((WaitToken) t).buildSubtree(tokenList));
-			} else if (t instanceof PrintToken) {
-				taskSet.addTask(((PrintToken) t).buildSubtree(tokenList));
-			} else if (t instanceof DriveToken) {
-				taskSet.addTask(((DriveToken) t).buildSubtree(tokenList));
-			} else if (t instanceof TurnToken) {
-				taskSet.addTask(((TurnToken) t).buildSubtree(tokenList));
-			} else if (t instanceof DumpToken) {
-				taskSet.addTask(((TurnToken) t).buildSubtree(tokenList));
-			} else if (t instanceof IntakeToken) {
-				taskSet.addTask(((IntakeToken) t).buildSubtree(tokenList));
-			} else if (t instanceof ParallelToken) {
-				ParallelTask parallelSet = new ParallelTask();
-				parseAuto(tokenList, parallelSet);
-				taskSet.addTask(parallelSet);
-			} else if (t instanceof SerialToken) {
-				SerialTask serialSet = new SerialTask();
-				parseAuto(tokenList, serialSet);
-				taskSet.addTask(serialSet);
-			} else if (t instanceof RightBraceToken) {
-				return taskSet;
+			Token t = tokenList.get(0);
+			try {
+				if (t instanceof ExecuteToken) {
+					taskSet.addTask(((ExecuteToken) t).buildSubtree(tokenList));
+				} else if (t instanceof FollowToken) {
+					taskSet.addTask(((FollowToken) t).buildSubtree(tokenList));
+				} else if (t instanceof WaitToken) {
+					taskSet.addTask(((WaitToken) t).buildSubtree(tokenList));
+				} else if (t instanceof PrintToken) {
+					taskSet.addTask(((PrintToken) t).buildSubtree(tokenList));
+				} else if (t instanceof DriveToken) {
+					taskSet.addTask(((DriveToken) t).buildSubtree(tokenList));
+				} else if (t instanceof TurnToken) {
+					taskSet.addTask(((TurnToken) t).buildSubtree(tokenList));
+				} else if (t instanceof DumpToken) {
+					taskSet.addTask(((TurnToken) t).buildSubtree(tokenList));
+				} else if (t instanceof IntakeToken) {
+					taskSet.addTask(((IntakeToken) t).buildSubtree(tokenList));
+				} else if (t instanceof ParallelToken) {
+					ParallelTask parallelSet = new ParallelTask();
+					parseAuto(tokenList, parallelSet);
+					taskSet.addTask(parallelSet);
+				} else if (t instanceof SerialToken) {
+					SerialTask serialSet = new SerialTask();
+					parseAuto(tokenList, serialSet);
+					taskSet.addTask(serialSet);
+				} else if (t instanceof RightBraceToken) {
+					return taskSet;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		return taskSet;

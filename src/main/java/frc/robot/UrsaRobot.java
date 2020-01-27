@@ -29,11 +29,11 @@ public interface UrsaRobot {
 	// public static final int HATCH_SERVO = 8;
 
 	// Encoders and Sensors Ports
-	public static final int LINE_SENSOR_PORT = 0;
+	public static final int LINE_SENSOR_PORT = 5;
 
 	public static final int CONTROLLER_PORT = 0;
 	
-	public static final int CARGO_POT_CHANNEL = 0;
+	// public static final int CARGO_POT_CHANNEL = 0;
 
 	public static final int LEFT_ENCODER_CHANNEL_A = 0, LEFT_ENCODER_CHANNEL_B = 1;
 	public static final int RIGHT_ENCODER_CHANNEL_A = 2, RIGHT_ENCODER_CHANNEL_B = 3;
