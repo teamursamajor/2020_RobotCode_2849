@@ -12,8 +12,8 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-// import frc.tasks.DriveTask.DriveMode;
-// import frc.robot.*;
+import frc.tasks.DriveTask.DriveMode;
+import frc.robot.*;
 
 // TODO add align task/token
 
@@ -40,16 +40,16 @@ public class AutoCompiler {
 	 */
 	public HashMap<Class<? extends Token>, Pattern> regexMap = new HashMap<Class<? extends Token>, Pattern>();
 
-	// private Drive drive;
-	// private Intake intake;
+	private Drive drive;
+	private Intake intake;
 
 	/**
 	 * Constructor for the Auto Compiler. Takes in a Drive and Shooter object and
 	 * creates regex mappings for each possible token in an Auto Script.
 	 */
-	public AutoCompiler(/* Drive drive, Intake intake */) {
-		// this.drive = drive;
-		// this.intake = intake;
+	public AutoCompiler(Drive drive, Intake intake) {
+		this.drive = drive;
+		this.intake = intake;
 
 		/*
 		 * Regex mappings for each token. Considers the relevant string and any
@@ -66,7 +66,7 @@ public class AutoCompiler {
 
 		regexMap.put(DriveToken.class, Pattern.compile("^\\s*drive\\s*"));
 		regexMap.put(TurnToken.class, Pattern.compile("^\\s*turn\\s*"));
-		regexMap.put(DumpToken.class, Pattern.compile("^\\s*dump\\s*"));
+		regexMap.put(OuttakeToken.class, Pattern.compile("^\\s*dump\\s*"));
 		regexMap.put(IntakeToken.class, Pattern.compile("^\\s*intake\\s*"));
 
 		regexMap.put(NumberToken.class, Pattern.compile("^\\s*\\d+(\\.\\d+)?"));
@@ -100,10 +100,11 @@ public class AutoCompiler {
 			if (tokenList.get(0) instanceof StringToken) {
 				StringTask stringTask = (StringTask) tokenList.get(0).buildSubtree(tokenList);
 				String scriptName = stringTask.getData();
-				Task otherMode = buildAutoMode("/home/lvuser/automodes/" + scriptName.trim() + ".auto");
+				Task otherMode = buildAutoMode("/home/lvuser/automodes/" + scriptName.trim().replace(" ", "") + ".auto");
 				return otherMode;
+			} else { // expected string token
+				throw new Exception();
 			}
-			return null;
 		}
 	}
 
@@ -121,8 +122,17 @@ public class AutoCompiler {
 		}
 
 		@Override
-		public Task buildSubtree(ArrayList<Token> tokenList) {
-			return null;
+		public Task buildSubtree(ArrayList<Token> tokenList) throws Exception {
+			tokenList.remove(this);
+			// if the next token is a string, handle string data
+			if (tokenList.get(0) instanceof StringToken) {
+				StringTask stringTask = (StringTask) tokenList.get(0).buildSubtree(tokenList);
+				String scriptName = stringTask.getData();
+				Task otherMode = buildAutoMode("/home/lvuser/paths/" + scriptName.trim().replace(" ", "") + ".path");
+				return otherMode;
+			} else { // expected string token
+				throw new Exception();
+			}
 		}
 	}
 
@@ -137,6 +147,7 @@ public class AutoCompiler {
 			return "SerialToken";
 		}
 
+		@Override
 		public Task buildSubtree(ArrayList<Token> tokenList) {
 			return null;
 		}
@@ -171,8 +182,16 @@ public class AutoCompiler {
 		}
 
 		@Override
-		public Task buildSubtree(ArrayList<Token> tokenList) {
-			return null;
+		public Task buildSubtree(ArrayList<Token> tokenList) throws Exception {
+			tokenList.remove(this);
+			// if the next token is a string, handle string data
+			if (tokenList.get(0) instanceof StringToken) {
+				StringTask stringTask = (StringTask) tokenList.get(0).buildSubtree(tokenList);
+				String printString = stringTask.getData();
+				return new PrintTask(printString);
+			} else { // expected string token
+				throw new Exception();
+			}
 		}
 
 	}
@@ -182,31 +201,23 @@ public class AutoCompiler {
 	 * Identified by the phrase "wait".
 	 */
 	class WaitToken implements Token {
-//		private double wait;
-
-		public WaitToken(/*String time*/) {
-//			time = time.replace(" ", "");
-//			try {
-//				if (Double.parseDouble(time) >= 0) {
-//					wait = Double.parseDouble(time);
-//				}
-//			} catch (NumberFormatException e) {
-//				e.printStackTrace();
-//			}
-		}
-
-//		public WaitTask makeTask() {
-//			return new WaitTask((long) (wait * 1000.0d));
-//		}
+		public WaitToken() {}
 
 		public String toString() {
 			return "WaitToken";
 		}
 
 		@Override
-		public Task buildSubtree(ArrayList<Token> tokenList) {
-			// TODO Auto-generated method stub
-			return null;
+		public Task buildSubtree(ArrayList<Token> tokenList) throws Exception {
+			tokenList.remove(this);
+			// if the next token is a number, handle number data
+			if (tokenList.get(0) instanceof NumberToken) {
+				NumberTask numberTask = (NumberTask) tokenList.get(0).buildSubtree(tokenList);
+				double time = numberTask.getData();
+				return new WaitTask((long) (time * 1000.0d));
+			} else { // expected number token
+				throw new Exception();
+			}
 		}
 	}
 
@@ -215,30 +226,23 @@ public class AutoCompiler {
 	 * Identified by the phrase "drive".
 	 */
 	class DriveToken implements Token {
-//		private double dist;
-
-		public DriveToken(/*String distance*/) { // TODO replace with NumberToken
-//			distance = distance.replace(" ", "");
-//			try {
-//				if (Math.abs(Double.parseDouble(distance)) >= 0) {
-//					dist = Double.parseDouble(distance);
-//				}
-//			} catch (NumberFormatException e) {
-//				e.printStackTrace();
-//			}
-		}
-
-//		public DriveTask makeTask() {
-//			return new DriveTask(dist, drive, DriveMode.AUTO_DRIVE);
-//		}
+		public DriveToken() {}
 
 		public String toString() {
 			return "DriveToken";
 		}
 
 		@Override
-		public Task buildSubtree(ArrayList<Token> tokenList) {
-			return null;
+		public Task buildSubtree(ArrayList<Token> tokenList) throws Exception {
+			tokenList.remove(this);
+			// if the next token is a number, handle number data
+			if (tokenList.get(0) instanceof NumberToken) {
+				NumberTask numberTask = (NumberTask) tokenList.get(0).buildSubtree(tokenList);
+				double distance = numberTask.getData();
+				return new DriveTask(distance, drive, DriveMode.AUTO_DRIVE);
+			} else { // expected number token
+				throw new Exception();
+			}
 		}
 	}
 
@@ -247,22 +251,7 @@ public class AutoCompiler {
 	 * Identified by the phrase "turn".
 	 */
 	class TurnToken implements Token {
-//		private double turnAmount;
-
-		public TurnToken(/*String angle*/) { // TODO replace with NumberToken
-//			angle = angle.replace(" ", "");
-//			try {
-//				if (Math.abs(Double.parseDouble(angle)) >= 0) {
-//					turnAmount = Double.parseDouble(angle);
-//				}
-//			} catch (NumberFormatException e) {
-//				e.printStackTrace();
-//			}
-		}
-
-//		public DriveTask makeTask() {
-//			return new DriveTask(turnAmount, drive, DriveMode.TURN);
-//		}
+		public TurnToken() {}
 		
 		public String toString() {
 			return "TurnToken";
@@ -271,31 +260,26 @@ public class AutoCompiler {
 		@Override
 		public Task buildSubtree(ArrayList<Token> tokenList) throws Exception {
 			tokenList.remove(this);
+			// if the next token is a number, handle number data
 			if (tokenList.get(0) instanceof NumberToken) {
-				StringTask stringTask = (StringTask) tokenList.get(0).buildSubtree(tokenList);
-				String scriptName = stringTask.getData();
-				try {
-					Task otherMode = buildAutoMode("/home/lvuser/automodes/" + scriptName.trim() + ".auto");
-					return otherMode;
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			} else {
+				NumberTask numberTask = (NumberTask) tokenList.get(0).buildSubtree(tokenList);
+				double angle = numberTask.getData();
+				return new DriveTask(angle, drive, DriveMode.TURN);
+			} else { // expected number token
 				throw new Exception();
 			}
-			return null;
 		}
 	}
 
 	/**
-	 * A token for dumping balls from the shooter mechanism.
-	 * Identified by the phrase "dump".
+	 * A token for outtaking balls from the shooter mechanism.
+	 * Identified by the phrase "outtake".
 	 */
-	class DumpToken implements Token {
-		public DumpToken() {}
+	class OuttakeToken implements Token {
+		public OuttakeToken() {}
 
 		public String toString() {
-			return "DumpToken";
+			return "OuttakeToken";
 		}
 
 		@Override
@@ -330,7 +314,11 @@ public class AutoCompiler {
 		private double stored;
 
 		public void storeData(String string) {
-			stored = Double.parseDouble(string);
+			try {
+				stored = Double.parseDouble(string.trim().replace(" ", ""));
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			}
 		}
 
 		public String toString() {
@@ -442,7 +430,8 @@ public class AutoCompiler {
 		private String stored;
 
 		public void storeData(String string) {
-			stored = string;
+			// substring section removes the quotes
+			stored = string.substring(1,string.length()-1);
 		}
 
 		public String toString() {
@@ -590,7 +579,9 @@ public class AutoCompiler {
 		if (tokenList.size() == 0) {
 			return new WaitTask(0);
 		}
-		while (tokenList.size() > 0) { // While there are still tokens to go through
+		// Iterates while there are still tokens to go through
+		// Does not consider parentheses, numbers, commas, strings, or math operations
+		while (tokenList.size() > 0) {
 			Token t = tokenList.get(0);
 			try {
 				if (t instanceof ExecuteToken) {
@@ -605,7 +596,7 @@ public class AutoCompiler {
 					taskSet.addTask(((DriveToken) t).buildSubtree(tokenList));
 				} else if (t instanceof TurnToken) {
 					taskSet.addTask(((TurnToken) t).buildSubtree(tokenList));
-				} else if (t instanceof DumpToken) {
+				} else if (t instanceof OuttakeToken) {
 					taskSet.addTask(((TurnToken) t).buildSubtree(tokenList));
 				} else if (t instanceof IntakeToken) {
 					taskSet.addTask(((IntakeToken) t).buildSubtree(tokenList));
@@ -619,6 +610,8 @@ public class AutoCompiler {
 					taskSet.addTask(serialSet);
 				} else if (t instanceof RightBraceToken) {
 					return taskSet;
+				} else { // found no other valid tokens
+					throw new Exception();
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -700,22 +693,5 @@ public class AutoCompiler {
 		}
 		// TODO make a default auto mode
 		return "/home/lvuser/automodes/ .auto";
-	}
-	
-	public static void main(String[] args) {
-		AutoCompiler autocomp = new AutoCompiler();
-		try {
-			ArrayList<Token> toks = autocomp.tokenize("Mode.auto");
-			
-			for (Token t : toks) {
-				System.out.println(t);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 }
