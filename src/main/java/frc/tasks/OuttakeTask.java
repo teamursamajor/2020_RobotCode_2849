@@ -12,16 +12,20 @@ public class OuttakeTask extends Task implements UrsaRobot {
 
     private Outtake outtake;
     private OuttakeMode mode;
+    private long runTime = 1000;
 
-    public OuttakeTask(OuttakeMode mode, Outtake outtake) {
+    public OuttakeTask(Outtake outtake, OuttakeMode mode) {
         this.outtake = outtake;
         this.mode = mode;
         outtake.setMode(mode);
-        Thread t = new Thread(this, "OuttakeTask");
-        t.start();
     }
 
     public void run() {
+        try {
+            Thread.sleep(runTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         outtake.setMode(mode);
     }
 }

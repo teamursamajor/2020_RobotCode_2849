@@ -15,7 +15,7 @@ public class SpinnerTask extends Task implements UrsaRobot {
     private long runTime = 1000;
     private Spinner spinner;
 
-    public SpinnerTask(SpinnerMode mode, Spinner spinner) {
+    public SpinnerTask(Spinner spinner, SpinnerMode mode) {
         this.spinner = spinner;
         spinner.setMode(mode);
         Thread t = new Thread(this, "SpinnerTask");
@@ -28,5 +28,6 @@ public class SpinnerTask extends Task implements UrsaRobot {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        spinner.setMode(SpinnerMode.WAIT);
     }
 }

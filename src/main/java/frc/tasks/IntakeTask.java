@@ -12,11 +12,12 @@ public class IntakeTask extends Task implements UrsaRobot {
 
     private long runTime = 1000;
     private Intake intake;
+    private IntakeMode mode;
 
-    public IntakeTask(IntakeMode mode, Intake intake) {
+    public IntakeTask(Intake intake, IntakeMode mode) {
         this.intake = intake;
+        this.mode = mode;
         intake.setMode(mode);
-        
     }
 
     public void run() {
@@ -25,6 +26,6 @@ public class IntakeTask extends Task implements UrsaRobot {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        intake.setMode(IntakeMode.WAIT);
+        intake.setMode(mode);
     }
 }

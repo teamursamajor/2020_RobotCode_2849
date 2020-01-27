@@ -13,9 +13,9 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 import frc.tasks.DriveTask.DriveMode;
+import frc.tasks.IntakeTask.IntakeMode;
+import frc.tasks.OuttakeTask.OuttakeMode;
 import frc.robot.*;
-
-// TODO add align task/token
 
 /**
  * @author AlphaMale and Sheldon
@@ -24,13 +24,20 @@ import frc.robot.*;
  * interprets tokens and arguments on each line as a set of tasks to be
  * executed in a given sequence.
  * 
- * Auto Script syntax is located on the team Google Drive.
+ * Auto Script syntax will be located on the team Google Drive.
  */
 public class AutoCompiler {
+
 	/**
 	 * For grouping all tokens.
 	 */
 	interface Token {
+		/**
+		 * Generates a task based on the current and consecutive token(s).
+		 * @param tokenList The list of consecutive tokens.
+		 * @return A new task corresponding to the current token.
+		 * @throws Exception if the next token is invalid or if parsing arguments fails
+		 */
 		public Task buildSubtree(ArrayList<Token> tokenList) throws Exception;
 	}
 
@@ -53,31 +60,33 @@ public class AutoCompiler {
 		this.outtake = outtake;
 
 		/*
-		 * Regex mappings for each token. Considers the relevant string and any
-		 * whitespace preceding it.
+		 * Regex mappings for each token. Considers relevant character sequence
+		 * and any whitespace preceding it.
 		 */
-		regexMap.put(ExecuteToken.class, Pattern.compile("^\\s*execute\\s*"));
-		regexMap.put(FollowToken.class, Pattern.compile("^\\s*follow\\s*"));
+		regexMap.put(ExecuteToken.class, Pattern.compile("^\\s*execute"));
+		regexMap.put(FollowToken.class, Pattern.compile("^\\s*follow"));
 
 		regexMap.put(SerialToken.class, Pattern.compile("^\\s*serial\\s*\\{"));
 		regexMap.put(ParallelToken.class, Pattern.compile("^\\s*parallel\\s*\\{"));
 
-		regexMap.put(PrintToken.class, Pattern.compile("^\\s*print\\s*"));
-		regexMap.put(WaitToken.class, Pattern.compile("^\\s*wait\\s*"));
+		regexMap.put(PrintToken.class, Pattern.compile("^\\s*print"));
+		regexMap.put(WaitToken.class, Pattern.compile("^\\s*wait"));
 
-		regexMap.put(DriveToken.class, Pattern.compile("^\\s*drive\\s*"));
-		regexMap.put(TurnToken.class, Pattern.compile("^\\s*turn\\s*"));
-		regexMap.put(OuttakeToken.class, Pattern.compile("^\\s*outtake\\s*"));
-		regexMap.put(IntakeToken.class, Pattern.compile("^\\s*intake\\s*"));
+		regexMap.put(DriveToken.class, Pattern.compile("^\\s*drive"));
+		regexMap.put(TurnToken.class, Pattern.compile("^\\s*turn"));
+		regexMap.put(OuttakeToken.class, Pattern.compile("^\\s*outtake"));
+		regexMap.put(IntakeToken.class, Pattern.compile("^\\s*intake"));
 
+		regexMap.put(ArgumentToken.class, Pattern.compile("\\s*\\w+"));
 		regexMap.put(NumberToken.class, Pattern.compile("^\\s*-?\\d+(\\.\\d+)?"));
-		regexMap.put(AddToken.class, Pattern.compile("^\\s*\\+\\s*"));
-		regexMap.put(SubtractToken.class, Pattern.compile("^\\s*\\-\\s*"));
-		regexMap.put(MultiplyToken.class, Pattern.compile("^\\s*\\*\\s*"));
-		regexMap.put(DivideToken.class, Pattern.compile("^\\s*\\/\\s*"));
+		regexMap.put(StringToken.class, Pattern.compile("^\\s*(\"[^\"]*\")"));
+
+		regexMap.put(AddToken.class, Pattern.compile("^\\s*\\+"));
+		regexMap.put(SubtractToken.class, Pattern.compile("^\\s*\\-"));
+		regexMap.put(MultiplyToken.class, Pattern.compile("^\\s*\\*"));
+		regexMap.put(DivideToken.class, Pattern.compile("^\\s*\\/"));
 
 		regexMap.put(CommaToken.class, Pattern.compile("^\\s*,"));
-		regexMap.put(StringToken.class, Pattern.compile("^\\s*(\"[^\"]*\")"));
 		regexMap.put(RightBraceToken.class, Pattern.compile("^\\s*}"));
 		regexMap.put(LeftParenToken.class, Pattern.compile("^\\s*\\("));
 		regexMap.put(RightParenToken.class, Pattern.compile("^\\s*\\)"));
@@ -87,8 +96,7 @@ public class AutoCompiler {
 	 * A token for executing a given Auto Script. Idenfied by the phrase "execute".
 	 */
 	class ExecuteToken implements Token {
-		public ExecuteToken() {
-		}
+		public ExecuteToken() {}
 
 		public String toString() {
 			return "ExecuteToken";
@@ -110,7 +118,7 @@ public class AutoCompiler {
 	}
 
 	/**
-	 * A token for following a given Path. TODO update for PathWeaver
+	 * A token for following a given Path. TODO update for PathWeaver?
 	 * Identified by the phrase "follow".
 	 */
 	class FollowToken implements Token {
@@ -125,13 +133,11 @@ public class AutoCompiler {
 			tokenList.remove(this);
 			// if the next token is a string, handle string data
 			if (tokenList.get(0) instanceof StringToken) {
-				StringTask stringTask = (StringTask) tokenList.get(0).buildSubtree(tokenList);
-				String scriptName = stringTask.getData();
+				String scriptName = ((StringTask) tokenList.get(0).buildSubtree(tokenList)).getData();
 				Task otherMode = buildAutoMode("/home/lvuser/paths/" + scriptName.trim().replace(" ", "") + ".path");
 				return otherMode;
-			} else { // expected string token
+			} else // expected string token
 				throw new Exception();
-			}
 		}
 	}
 
@@ -185,12 +191,10 @@ public class AutoCompiler {
 			tokenList.remove(this);
 			// if the next token is a string, handle string data
 			if (tokenList.get(0) instanceof StringToken) {
-				StringTask stringTask = (StringTask) tokenList.get(0).buildSubtree(tokenList);
-				String printString = stringTask.getData();
+				String printString = ((StringTask) tokenList.get(0).buildSubtree(tokenList)).getData();
 				return new PrintTask(printString);
-			} else { // expected string token
+			} else // expected string token
 				throw new Exception();
-			}
 		}
 	}
 
@@ -210,8 +214,7 @@ public class AutoCompiler {
 			tokenList.remove(this);
 			// if the next token is a number, handle number data
 			if (tokenList.get(0) instanceof NumberToken) {
-				NumberTask numberTask = (NumberTask) tokenList.get(0).buildSubtree(tokenList);
-				double time = numberTask.getData();
+				double time = ((NumberTask) tokenList.get(0).buildSubtree(tokenList)).getData();
 				return new WaitTask((long) (time * 1000.0d));
 			} else { // expected number token
 				throw new Exception();
@@ -235,12 +238,10 @@ public class AutoCompiler {
 			tokenList.remove(this);
 			// if the next token is a number, handle number data
 			if (tokenList.get(0) instanceof NumberToken) {
-				NumberTask numberTask = (NumberTask) tokenList.get(0).buildSubtree(tokenList);
-				double distance = numberTask.getData();
+				double distance = ((NumberTask) tokenList.get(0).buildSubtree(tokenList)).getData();
 				return new DriveTask(distance, drive, DriveMode.AUTO_DRIVE);
-			} else { // expected number token
+			} else // expected number token
 				throw new Exception();
-			}
 		}
 	}
 
@@ -260,12 +261,10 @@ public class AutoCompiler {
 			tokenList.remove(this);
 			// if the next token is a number, handle number data
 			if (tokenList.get(0) instanceof NumberToken) {
-				NumberTask numberTask = (NumberTask) tokenList.get(0).buildSubtree(tokenList);
-				double angle = numberTask.getData();
+				double angle = ((NumberTask) tokenList.get(0).buildSubtree(tokenList)).getData();
 				return new DriveTask(angle, drive, DriveMode.TURN);
-			} else { // expected number token
+			} else // expected number token
 				throw new Exception();
-			}
 		}
 	}
 
@@ -282,7 +281,22 @@ public class AutoCompiler {
 
 		@Override
 		public Task buildSubtree(ArrayList<Token> tokenList) throws Exception {
-			return null;
+			tokenList.remove(this);
+			// if the next token is an argument, handle argument content
+			if (tokenList.get(0) instanceof ArgumentToken) {
+				String argument = ((ArgumentTask) tokenList.get(0).buildSubtree(tokenList)).getData().replace(" ", "");
+				OuttakeMode mode;
+				if (argument.equals("FASTOUT"))
+					mode = OuttakeMode.FASTOUT;
+				else if (argument.equals("SLOWOUT"))
+					mode = OuttakeMode.SLOWOUT;
+				else if (argument.equals("WAIT"))
+					mode = OuttakeMode.WAIT;
+				else // invalid mode specified; default to wait
+					mode = OuttakeMode.WAIT;
+				return new OuttakeTask(outtake, mode);
+			} else // expected argument token
+				throw new Exception();
 		}
 	}
 
@@ -298,8 +312,47 @@ public class AutoCompiler {
 		}
 
 		@Override
+		public Task buildSubtree(ArrayList<Token> tokenList) throws Exception {
+			tokenList.remove(this);
+			// if the next token is an argument, handle argument content
+			if (tokenList.get(0) instanceof ArgumentToken) {
+				String argument = ((ArgumentTask) tokenList.get(0).buildSubtree(tokenList)).getData().replace(" ", "");
+				IntakeMode mode;
+				if (argument.equals("IN"))
+					mode = IntakeMode.IN;
+				else if (argument.equals("OUT"))
+					mode = IntakeMode.OUT;
+				else if (argument.equals("WAIT"))
+					mode = IntakeMode.WAIT;
+				else // invalid mode specified; default to wait
+					mode = IntakeMode.WAIT;
+				return new IntakeTask(intake, mode);
+			} else // expected argument token
+				throw new Exception();
+		}
+	}
+
+	/**
+	 * A token for any arguments.
+	 * Identified by any extra alphanumeric/underscore characters
+	 */
+	class ArgumentToken implements Token {
+		public ArgumentToken() {}
+
+		private String stored;
+
+		public void storeData(String string) {
+			stored = string.replace(" ", "");
+		}
+
+		public String toString() {
+			return "ArgumentToken";
+		}
+
+		@Override
 		public Task buildSubtree(ArrayList<Token> tokenList) {
-			return null;
+			tokenList.remove(this);
+			return new ArgumentTask(stored);
 		}
 	}
 
@@ -327,6 +380,31 @@ public class AutoCompiler {
 		public Task buildSubtree(ArrayList<Token> tokenList) {
 			tokenList.remove(this);
 			return new NumberTask(stored);
+		}
+	}
+
+	/**
+	 * A token for any String phrases.
+	 * Identified by quotes surrounding text.
+	 */
+	class StringToken implements Token {
+		public StringToken() {}
+
+		private String stored;
+
+		public void storeData(String string) {
+			// substring section removes the quotes
+			stored = string.substring(1,string.length()-1);
+		}
+
+		public String toString() {
+			return "StringToken";
+		}
+
+		@Override
+		public Task buildSubtree(ArrayList<Token> tokenList) {
+			tokenList.remove(this);
+			return new StringTask(stored);
 		}
 	}
 
@@ -415,31 +493,6 @@ public class AutoCompiler {
 		@Override
 		public Task buildSubtree(ArrayList<Token> tokenList) {
 			return null;
-		}
-	}
-
-	/**
-	 * A token for any String phrases.
-	 * Identified by quotes surrounding text.
-	 */
-	class StringToken implements Token {
-		public StringToken() {}
-
-		private String stored;
-
-		public void storeData(String string) {
-			// substring section removes the quotes
-			stored = string.substring(1,string.length()-1);
-		}
-
-		public String toString() {
-			return "StringToken";
-		}
-
-		@Override
-		public Task buildSubtree(ArrayList<Token> tokenList) {
-			tokenList.remove(this);
-			return new StringTask(stored);
 		}
 	}
 

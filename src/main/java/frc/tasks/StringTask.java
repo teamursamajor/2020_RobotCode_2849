@@ -4,7 +4,7 @@ public class StringTask extends Task {
 
     private String string;
 
-    public StringTask (String string) {
+    public StringTask(String string) {
         this.string = string;
     }
 
