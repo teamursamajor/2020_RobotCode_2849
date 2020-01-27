@@ -10,8 +10,9 @@ SPINNER:
 * Comment/reorganize class
 
 AUTOCOMPILER:
-* Add arguments to Intake/Outtake tokens
 * Add math operation/paretheses/comma support
+* Use Logger to log errors in parsing when throwing exceptions
+* Test AutoCompiler with generating basic tasks
 * Use AutoCompiler/Pathmaker to design auto modes
   - Get Chris to come back for Pathmaker ;-;
   - Maybe use Pathfinder/Pathweaver instead

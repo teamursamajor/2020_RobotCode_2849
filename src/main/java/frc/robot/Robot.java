@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.DriverStation;
-import frc.tasks.DriveTask.DriveMode;
-import frc.tasks.DriveTask;
+// import frc.tasks.DriveTask.DriveMode;
+// import frc.tasks.DriveTask;
 
 
 /**
@@ -33,7 +33,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
   // private Intake intake;
   // private SpinnerTask spinnerTask;
   private Climb climb;
-  private int testCounter;
+  // private int testCounter;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -114,32 +114,33 @@ public class Robot extends TimedRobot implements UrsaRobot {
   public void teleopPeriodic() {
     
   }
-private boolean test1 = false, test2 = false, test3 = false;
+// private boolean test1 = false, test2 = false, test3 = false;
   /**
    * This function is called periodically during test mode.
    */
   @Override
   public void testPeriodic() {
    
-   
-    // System.out.println("test periodic running");
-    if (!DriveTask.driving && xbox.getSingleButtonPress(XboxController.BUTTON_B)){
-      testCounter++;
-    }
+    // TODO uncomment if testing automodes w/o auto code
 
-    if (!test1 && testCounter == 1) {
-      DriveTask task1 = new DriveTask(14, drive, DriveMode.AUTO_DRIVE);
-      test1 = true;
-    }
-    if (!test2 && testCounter == 2) {
-      DriveTask task2 = new DriveTask(90, drive, DriveMode.TURN);
-      test2 = true;
-    }
-    if (!test3 && testCounter == 3) {
-      DriveTask task3 = new DriveTask(12, drive, DriveMode.AUTO_DRIVE);
-      DriveTask task4 = new DriveTask(30, drive, DriveMode.TURN);
-      test3 = true;
-    }
+    // // System.out.println("test periodic running");
+    // if (!DriveTask.driving && xbox.getSingleButtonPress(XboxController.BUTTON_B)){
+    //   testCounter++;
+    // }
+
+    // if (!test1 && testCounter == 1) {
+    //   DriveTask task1 = new DriveTask(14, drive, DriveMode.AUTO_DRIVE);
+    //   test1 = true;
+    // }
+    // if (!test2 && testCounter == 2) {
+    //   DriveTask task2 = new DriveTask(90, drive, DriveMode.TURN);
+    //   test2 = true;
+    // }
+    // if (!test3 && testCounter == 3) {
+    //   DriveTask task3 = new DriveTask(12, drive, DriveMode.AUTO_DRIVE);
+    //   DriveTask task4 = new DriveTask(30, drive, DriveMode.TURN);
+    //   test3 = true;
+    // }
 
 
   }
