@@ -3,9 +3,9 @@ package frc.tasks;
 /**
  * This is a group task class for running tasks in parallel.
  */
-public class BundleTask extends GroupTask {
+public class ParallelTask extends GroupTask {
 
-	public BundleTask() {
+	public ParallelTask() {
 		super();
 	}
 
@@ -24,6 +24,6 @@ public class BundleTask extends GroupTask {
 	}
 
 	public String toString() {
-		return "--BundleTask:\n" + super.toString();
+		return "--ParallelTask:\n" + super.toString();
 	}
 }

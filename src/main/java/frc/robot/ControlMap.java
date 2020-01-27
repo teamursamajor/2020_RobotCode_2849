@@ -31,8 +31,8 @@ public class ControlMap {
         // map.put("arm_down", XboxController.AXIS_LEFTTRIGGER);
 
         // Intake
-        map.put("shooter_in", XboxController.BUTTON_LEFTBUMPER);
-        map.put("shooter_out", XboxController.BUTTON_RIGHTBUMPER);
+        map.put("intake_in", XboxController.BUTTON_LEFTBUMPER);
+        map.put("intake_out", XboxController.BUTTON_RIGHTBUMPER);
 
         // Spinner
         map.put("spinner", XboxController.BUTTON_A);
