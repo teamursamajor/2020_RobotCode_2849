@@ -42,14 +42,16 @@ public class AutoCompiler {
 
 	private Drive drive;
 	private Intake intake;
+	private Outtake outtake;
 
 	/**
-	 * Constructor for the Auto Compiler. Takes in a Drive and Shooter object and
-	 * creates regex mappings for each possible token in an Auto Script.
+	 * Constructor for the Auto Compiler. Takes in a Drive, Intake, and Outtake
+	 * and creates regex mappings for each possible token in an Auto Script.
 	 */
-	public AutoCompiler(Drive drive, Intake intake) {
+	public AutoCompiler(Drive drive, Intake intake, Outtake outtake) {
 		this.drive = drive;
 		this.intake = intake;
+		this.outtake = outtake;
 
 		/*
 		 * Regex mappings for each token. Considers the relevant string and any
@@ -66,10 +68,10 @@ public class AutoCompiler {
 
 		regexMap.put(DriveToken.class, Pattern.compile("^\\s*drive\\s*"));
 		regexMap.put(TurnToken.class, Pattern.compile("^\\s*turn\\s*"));
-		regexMap.put(OuttakeToken.class, Pattern.compile("^\\s*dump\\s*"));
+		regexMap.put(OuttakeToken.class, Pattern.compile("^\\s*outtake\\s*"));
 		regexMap.put(IntakeToken.class, Pattern.compile("^\\s*intake\\s*"));
 
-		regexMap.put(NumberToken.class, Pattern.compile("^\\s*\\d+(\\.\\d+)?"));
+		regexMap.put(NumberToken.class, Pattern.compile("^\\s*-?\\d+(\\.\\d+)?"));
 		regexMap.put(AddToken.class, Pattern.compile("^\\s*\\+\\s*"));
 		regexMap.put(SubtractToken.class, Pattern.compile("^\\s*\\-\\s*"));
 		regexMap.put(MultiplyToken.class, Pattern.compile("^\\s*\\*\\s*"));
@@ -113,9 +115,7 @@ public class AutoCompiler {
 	 * Identified by the phrase "follow".
 	 */
 	class FollowToken implements Token {
-		public FollowToken(/*String filename*/) { // TODO replace with StringLiteralToken
-//			filename = filename.replace(" ", "") + ".path"; // Assuming path files still end in path
-		}
+		public FollowToken() {}
 
 		public String toString() {
 			return "FollowToken";
@@ -193,7 +193,6 @@ public class AutoCompiler {
 				throw new Exception();
 			}
 		}
-
 	}
 
 	/**
@@ -360,6 +359,7 @@ public class AutoCompiler {
 			return "SubtractToken";
 		}
 		// TODO recognize if there's only one number in front, and if so, make that number negative
+		// TODO better yet recognize two numbers next to each other and then if the second is negative insert a subtracttoken
 
 		@Override
 		public Task buildSubtree(ArrayList<Token> tokenList) {
@@ -380,7 +380,6 @@ public class AutoCompiler {
 
 		@Override
 		public Task buildSubtree(ArrayList<Token> tokenList) {
-			// TODO Auto-generated method stub
 			return null;
 		}
 	}

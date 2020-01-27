@@ -34,15 +34,14 @@ public class Climb extends Subsystem<ClimbTask.ClimbMode> implements UrsaRobot {
 
         switch (subsystemMode) {
         case UP:
-            servo1.set(0);
+            servo1.set(0.420);
             servo2.set(0);
             // motor1.set(-0.3);
             // motor2.set(0.3);
             break;
         case DOWN:
-            System.out.println("down");
-            servo1.set(1);
-            servo2.set(1);
+            servo1.set(0);
+            servo2.set(0.69);
             // motor1.set(0.3);
             // motor2.set(-0.3);
             break;
