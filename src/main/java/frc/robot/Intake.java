@@ -10,16 +10,16 @@ import frc.tasks.IntakeTask.IntakeMode;
  */
 public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobot {
 
-    private Spark intakeMotor, beltMotor;
+    private final Spark intakeMotor, beltMotor;
     private int numOfCells; 
-    private DigitalInput lineSensor;
+    private final DigitalInput lineSensor;
     private boolean deltaLineSensor;
 
     public Intake() {
-        intakeMotor = new Spark(SHOOTER);
+        intakeMotor = new Spark(INTAKE_MOTOR);
         beltMotor = new Spark(BELT);
         numOfCells = 0;
-        lineSensor = new DigitalInput(LINE_SENSOR_PORT);
+        lineSensor = new DigitalInput(5);//LINE_SENSOR_PORT);
         deltaLineSensor = false;
     }
 

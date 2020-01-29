@@ -16,8 +16,8 @@ public class Climb extends Subsystem<ClimbTask.ClimbMode> implements UrsaRobot {
     public Climb() {
         motor1 = new Spark(5);
         motor2 = new Spark(7);
-        servo1 = new Servo(SERVO_PORT_1);
-        servo2 = new Servo(SERVO_PORT_2);
+        //servo1 = new Servo(SERVO_PORT_1);
+        //servo2 = new Servo(SERVO_PORT_2);
     }
 
     @Override
