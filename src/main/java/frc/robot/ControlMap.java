@@ -21,18 +21,11 @@ public class ControlMap {
 
     // TODO update controls for 2020
     public ControlMap() {
-        // // Arm automatic lifting
-        // map.put("arm_ground", XboxController.BUTTON_X);
-        // map.put("arm_bay", XboxController.BUTTON_Y);
-        // map.put("arm_rocket", XboxController.BUTTON_B);
-
-        // // Arm manual lifting
-        // map.put("arm_up", XboxController.AXIS_RIGHTTRIGGER);
-        // map.put("arm_down", XboxController.AXIS_LEFTTRIGGER);
+        
 
         // Intake
-        map.put("intake_in", XboxController.BUTTON_LEFTBUMPER);
-        map.put("intake_out", XboxController.BUTTON_RIGHTBUMPER);
+        map.put("outtake", XboxController.BUTTON_LEFTBUMPER);
+        map.put("intake", XboxController.BUTTON_RIGHTBUMPER);
 
         // Spinner
         map.put("spinner", XboxController.BUTTON_A);
@@ -43,8 +36,8 @@ public class ControlMap {
         // map.put("limelight_toggle", XboxController.POV_RIGHT);
 
         // Climb
-        map.put("climb_run", XboxController.BUTTON_START);
-        map.put("climb_stop", XboxController.BUTTON_BACK);
-        // For reference: Pressing these two controls together cancels climb.
+        map.put("climb_up", XboxController.POV_UP);
+        map.put("climb_down", XboxController.POV_DOWN);
+        // TODO Pressing these two controls together cancels climb.
     }
 }

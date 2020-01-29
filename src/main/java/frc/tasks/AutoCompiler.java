@@ -297,10 +297,8 @@ public class AutoCompiler {
 			if (tokenList.get(0) instanceof ArgumentToken) {
 				String argument = ((ArgumentTask) tokenList.get(0).buildSubtree(tokenList)).getData().replace(" ", "");
 				OuttakeMode mode;
-				if (argument.equals("FASTOUT"))
-					mode = OuttakeMode.FASTOUT;
-				else if (argument.equals("SLOWOUT"))
-					mode = OuttakeMode.SLOWOUT;
+				if (argument.equals("OUT"))
+					mode = OuttakeMode.OUT;
 				else if (argument.equals("WAIT"))
 					mode = OuttakeMode.WAIT;
 				else // invalid mode specified; default to wait
@@ -332,8 +330,8 @@ public class AutoCompiler {
 				IntakeMode mode;
 				if (argument.equals("IN"))
 					mode = IntakeMode.IN;
-				else if (argument.equals("OUT"))
-					mode = IntakeMode.OUT;
+				// else if (argument.equals("OUT"))
+					// mode = IntakeMode.OUT;
 				else if (argument.equals("WAIT"))
 					mode = IntakeMode.WAIT;
 				else // invalid mode specified; default to wait

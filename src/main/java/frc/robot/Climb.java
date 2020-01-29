@@ -22,11 +22,15 @@ public class Climb extends Subsystem<ClimbTask.ClimbMode> implements UrsaRobot {
 
     @Override
     public void runSubsystem() throws InterruptedException {
-        if (xbox.getButton(controls.map.get("climb_run"))) {
+        if (xbox.getButton(controls.map.get("climb_up"))) {
             subsystemMode = ClimbMode.UP;
-        } else if (xbox.getButton(controls.map.get("climb_stop"))) {
+        } else if (xbox.getButton(controls.map.get("climb_down"))) {
             subsystemMode = ClimbMode.DOWN;
-        } else {
+        }
+         else if (xbox.getButton(controls.map.get("climb_up")) && xbox.getButton(controls.map.get("climb_down")))
+            subsystemMode = ClimbMode.WAIT;
+            //stops climb if up and down are pressed
+        else {
             subsystemMode = ClimbMode.WAIT;
         }
 

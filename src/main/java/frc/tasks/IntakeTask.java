@@ -7,7 +7,7 @@ import frc.robot.*;
  */
 public class IntakeTask extends Task implements UrsaRobot {
     public enum IntakeMode {
-        IN, OUT, WAIT;
+        IN, WAIT;
     }
 
     private long runTime = 1000;

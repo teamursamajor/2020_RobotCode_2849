@@ -12,26 +12,15 @@ public class Outtake extends Subsystem<OuttakeTask.OuttakeMode> implements UrsaR
         shooterMotor = new Spark(SHOOTER);
     }
 
-    public void runSubsystem() throws InterruptedException {
-        // TODO: In the future implement a system similar to drive with order/state
-        // Use the color sensor in SpinnerTask to detect color and add control loop
-        
-         // Cargo Intake
-        
-        if (xbox.getButton(controls.map.get("shooter_fastout"))){
-            subsystemMode = OuttakeMode.FASTOUT;
-        } else if (xbox.getButton(controls.map.get("shooter_slowout"))){
-            subsystemMode = OuttakeMode.SLOWOUT;
-        } else { 
+    public void runSubsystem() throws InterruptedException {     
+        if (xbox.getButton(controls.map.get("outtake")))
+            subsystemMode = OuttakeMode.OUT;
+        else
             subsystemMode = OuttakeMode.WAIT;
-        }
 
         switch (subsystemMode) {
-        case SLOWOUT:
-            shooterMotor.set(0.50); //Shoots ball out slowly
-            break;
-        case FASTOUT:
-            shooterMotor.set(1.0); //Shoots ball out quickly
+        case OUT:
+            shooterMotor.set(0.50); //Shoots ball out
             break;
         case WAIT:
             shooterMotor.set(0.0); //The robot waits

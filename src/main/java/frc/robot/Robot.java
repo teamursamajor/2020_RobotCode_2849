@@ -31,9 +31,9 @@ public class Robot extends TimedRobot implements UrsaRobot {
   private Drive drive;
   private Spinner spinner;
   private Intake intake;
-  private Outtake outtake;
-  private Climb climb;
-  private AutoCompiler autoCompiler;
+  // private Outtake outtake;
+  // private Climb climb;
+  // private AutoCompiler autoCompiler;
 
   // private int testCounter;
 
@@ -53,16 +53,16 @@ public class Robot extends TimedRobot implements UrsaRobot {
     spinner = new Spinner();
     spinner.initialize("SpinnerThread");
 
-    climb = new Climb();
-    climb.initialize("ClimbThread");
+    // climb = new Climb();
+    // climb.initialize("ClimbThread");
 
     intake = new Intake();
     intake.initialize("IntakeThread");
 
-    outtake = new Outtake();
-    outtake.initialize("OuttakeThread");
+    // outtake = new Outtake();
+    // outtake.initialize("OuttakeThread");
 
-    autoCompiler = new AutoCompiler(drive, intake, outtake);
+    // autoCompiler = new AutoCompiler(drive, intake, outtake);
   }
 
   /**
@@ -95,11 +95,11 @@ public class Robot extends TimedRobot implements UrsaRobot {
     // m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     // System.out.println("Auto selected: " + m_autoSelected);
-    try {
-      autoCompiler.buildAutoMode("Mode.auto");
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    // try {
+    //   autoCompiler.buildAutoMode("Mode.auto");
+    // } catch (Exception e) {
+    //   e.printStackTrace();
+    // }
   }
 
   /**

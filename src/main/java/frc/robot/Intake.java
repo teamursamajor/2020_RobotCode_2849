@@ -11,7 +11,7 @@ import frc.tasks.IntakeTask.IntakeMode;
 public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobot {
 
     private final Spark intakeMotor, beltMotor;
-    private int numOfCells; 
+    private int numOfCells;
     private final DigitalInput lineSensor;
     private boolean deltaLineSensor;
 
@@ -24,33 +24,26 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
     }
 
     public void runSubsystem() throws InterruptedException {
-        //Sets subsystem mode based on controller input
-         if (xbox.getButton(controls.map.get("intake_in"))) {
+        // Sets subsystem mode based on controller input
+        if (xbox.getButton(controls.map.get("intake")))
             subsystemMode = IntakeMode.IN;
-        } else if (xbox.getButton(controls.map.get("intake_out"))) {
-            subsystemMode = IntakeMode.OUT;
-        } else {
+        else
             subsystemMode = IntakeMode.WAIT;
-        }
-        //Adds a ball to the counter if the ball trips the line sensor
+        // Adds a ball to the counter if the ball trips the line sensor
         if (lineSensor.get() && !deltaLineSensor) {
-            deltaLineSensor = true;
-            numOfCells++;
+        deltaLineSensor = true;
+        numOfCells++;
         }
         else if (!lineSensor.get()) {
-            deltaLineSensor = false;
+        deltaLineSensor = false;
         }
 
         System.out.println(lineSensor.get()+" "+ deltaLineSensor+" "+ numOfCells);
         // Controlling the power of the motors based on the subsystem mode
         switch (subsystemMode) {
         case IN:
-            intakeMotor.set(0.55);
+            intakeMotor.set(0.45);
             beltMotor.set(0.55);
-            break;
-        case OUT:
-            intakeMotor.set(-1.0);
-            beltMotor.set(0.0);
             break;
         case WAIT:
             intakeMotor.set(0.0);
