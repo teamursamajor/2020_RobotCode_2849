@@ -3,7 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.tasks.SpinnerTask;
 import frc.tasks.SpinnerTask.SpinnerMode;
 
@@ -14,7 +14,7 @@ import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.util.Color;
 
 /**
- * :D
+ * This class operates the Spinner mechanism.
  */
 public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaRobot {
 
@@ -22,12 +22,10 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
     private String gameData;
     private char color, goal, previousColor;
     private boolean running;
-    // private long startTime;
 
     private int sameColor = 0, colorCounter = 0;
-    // private char previousColor;
 
-    //get slices to spin
+    // for storing slices to spin
     private int slicesToSpin;
 
     // control loop stuff
@@ -61,15 +59,16 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
     }
 
     public void runSubsystem() throws InterruptedException {
-
-        // final long currentTime = System.currentTimeMillis();
-
+        /*
+         * Matches the color the color sensor is seeing to the closest
+         * of four possible colors.
+         */
         Color detectedColor = colorSensor.getColor();
         ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
 
-        SmartDashboard.putNumber("Red", detectedColor.red);
-        SmartDashboard.putNumber("Green", detectedColor.green);
-        SmartDashboard.putNumber("Blue", detectedColor.blue);
+        // SmartDashboard.putNumber("Red", detectedColor.red);
+        // SmartDashboard.putNumber("Green", detectedColor.green);
+        // SmartDashboard.putNumber("Blue", detectedColor.blue);
 
         if (match.color == kBlueTarget)
             color = 'B';
@@ -89,9 +88,11 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
 
         if (xbox.getSingleButtonPress(XboxController.BUTTON_A)) {
             running = true;
-            if (goal != ' ')
-                slicesToSpin = getSlicesToSpin(color, goal);
-        // startTime = System.currentTimeMillis();
+            if (goal != ' ') { // if there's a valid color to spin to
+                slicesToSpin = getSlicesToSpin(color, offsetColor(goal, 2));
+                System.out.println(offsetColor(goal, 2) + " " + slicesToSpin);
+            }
+        
         } if (xbox.getSingleButtonPress(XboxController.BUTTON_B))
             running = false;
 
@@ -123,17 +124,21 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
 
             break;
         case DETECT:
+            // TODO maybe move this back to spinSlices?
             int slices = 0;
-            
             float direction = Math.signum(slicesToSpin);
             int threshold = Math.abs(slicesToSpin) - 1;
-            double spinPower = .26 * direction;
+            double spinPower = .20 * direction;
             
+            // System.out.println(threshold);
+
             if (color != previousColor)
                 slices++;
-            if (slices >= threshold)
+            if (slices >= threshold) {
                 spinPower = .17 * direction;
-            if(color == goal)
+                // System.out.println(spinPower);
+            }
+            if(color == offsetColor(goal, 2))
                 running = false;
             
             spinMotor.set(spinPower);
@@ -141,7 +146,6 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
 
             break;
             
-
             /*
             //Logic for which direction to spin, 1 = CW, -1 = CCW
             int dir = colToNum(goal)-colToNum(color);
@@ -159,7 +163,6 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
             colorCounter = sameColor = 0;
             break;
         }
-
     }
 
     /**
@@ -172,12 +175,11 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
             if (color != previousColor)
                 sameColor = 0;
             else {
-                sameColor++;
-                if (sameColor == 5) { // threshold for a correct color
+                sameColor++; // increments each time we see the same color
+                if (sameColor == 5) { // threshold for counting a new color
                     colorCounter++;
-                    System.out.println(color + " color change at " + colorCounter);
-
-                    if (colorCounter >= sliceThreshold) {
+                    // System.out.println(color + " color change at " + colorCounter);
+                    if (colorCounter >= sliceThreshold) { // starts PID once it exceeds the slice threshold
                         controlPower = (goodKP * (slices - colorCounter) + .12);
                         // System.out.println(controlPower);
                     }
@@ -185,13 +187,18 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
             }
             previousColor = color;
         } else { // if it's seen the right color enough times
-            System.out.println("done");
             running = false;
         }
     }
 
+    /**
+     * Calculates the number of slices to spin given the current
+     * and goal color.
+     * @param startColor The color the wheel is currently on
+     * @param goalColor The color to go to
+     * @return The number of slices to spin
+     */
     public int getSlicesToSpin(char startColor, char goalColor){
-
         int distance;
         String allColors = "YRGB";
         int indexOfStartColor = allColors.indexOf(startColor);
@@ -199,14 +206,11 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
 
         distance = (indexOfGoalColor - indexOfStartColor);
 
-        if(distance == 3)
+        if (distance == 3)
             return -1;
-        else if(distance == -3)
+        if (distance == -3)
             return 1;
-        else{
         return distance;
-        }
-
     }
 
     /**

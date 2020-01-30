@@ -1,12 +1,12 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Servo;
+// import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Spark;
 import frc.tasks.ClimbTask;
 import frc.tasks.ClimbTask.ClimbMode;
 
 /**
- * This class operates the climb mechanism.
+ * This class operates the Climb mechanism.
  */
 public class Climb extends Subsystem<ClimbTask.ClimbMode> implements UrsaRobot {
 

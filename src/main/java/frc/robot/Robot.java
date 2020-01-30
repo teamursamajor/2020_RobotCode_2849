@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 // import edu.wpi.first.wpilibj.DriverStation;
 // import frc.tasks.DriveTask.DriveMode;
 // import frc.tasks.DriveTask;
-import frc.tasks.AutoCompiler;
+// import frc.tasks.AutoCompiler;
 
 /**
  * The VM is configured to automatically run this class, and to call the

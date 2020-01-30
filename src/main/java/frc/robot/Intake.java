@@ -6,7 +6,7 @@ import frc.tasks.IntakeTask;
 import frc.tasks.IntakeTask.IntakeMode;
 
 /**
- * This class will control the intake mechanism.
+ * This class operates the Intake mechanism.
  */
 public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobot {
 
@@ -19,24 +19,26 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
         intakeMotor = new Spark(INTAKE_MOTOR);
         beltMotor = new Spark(BELT);
         numOfCells = 0;
-        lineSensor = new DigitalInput(5);//LINE_SENSOR_PORT);
+        lineSensor = new DigitalInput(LINE_SENSOR_PORT);
         deltaLineSensor = false;
     }
 
     public void runSubsystem() throws InterruptedException {
         // Sets subsystem mode based on controller input
-        if (xbox.getButton(controls.map.get("intake"))) {
+        // Only works if sensor has not seen 5 balls pass
+        // TODO test
+        if (xbox.getButton(controls.map.get("intake")) && numOfCells < 5) {
             subsystemMode = IntakeMode.IN;
-            // System.out.println("Button");
-        } else
+        } else {
             subsystemMode = IntakeMode.WAIT;
+        }
+
         // Adds a ball to the counter if the ball trips the line sensor
         if (lineSensor.get() && !deltaLineSensor) {
-        deltaLineSensor = true;
-        numOfCells++;
-        }
-        else if (!lineSensor.get()) {
-        deltaLineSensor = false;
+            deltaLineSensor = true;
+            numOfCells++;
+        } else if (!lineSensor.get()) {
+            deltaLineSensor = false;
         }
 
         // System.out.println(lineSensor.get()+" "+ deltaLineSensor+" "+ numOfCells);
@@ -54,7 +56,7 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
     }
 
     /**
-     * Resets ball count.
+     * Resets ball count to zero.
      */
     public void resetCount() {
         numOfCells = 0;
