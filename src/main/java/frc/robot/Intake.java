@@ -25,9 +25,10 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
 
     public void runSubsystem() throws InterruptedException {
         // Sets subsystem mode based on controller input
-        if (xbox.getButton(controls.map.get("intake")))
+        if (xbox.getButton(controls.map.get("intake"))) {
             subsystemMode = IntakeMode.IN;
-        else
+            // System.out.println("Button");
+        } else
             subsystemMode = IntakeMode.WAIT;
         // Adds a ball to the counter if the ball trips the line sensor
         if (lineSensor.get() && !deltaLineSensor) {
@@ -38,11 +39,11 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
         deltaLineSensor = false;
         }
 
-        System.out.println(lineSensor.get()+" "+ deltaLineSensor+" "+ numOfCells);
+        // System.out.println(lineSensor.get()+" "+ deltaLineSensor+" "+ numOfCells);
         // Controlling the power of the motors based on the subsystem mode
         switch (subsystemMode) {
         case IN:
-            intakeMotor.set(0.45);
+            intakeMotor.set(0.40);
             beltMotor.set(0.55);
             break;
         case WAIT:

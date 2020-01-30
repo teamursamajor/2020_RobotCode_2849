@@ -14,7 +14,7 @@ import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.util.Color;
 
 /**
- * 
+ * :D
  */
 public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaRobot {
 
@@ -165,7 +165,7 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
     }
 
     /**
-     * Returns true if the current color matches with the goal color
+     * Returns true if the current color matches with the goal color >:)
      */
     public boolean correctColor() {
         return goal == color;
