@@ -118,6 +118,25 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
 
             break;
         case DETECT:
+            int slices = 0;
+            float direction = Math.signum(getSlicesToSpin(color, goal));
+            int threshold = getSlicesToSpin(color, goal) - 1;
+            double spinPower = .26 * direction;
+            
+            if (color != previousColor)
+                slices++;
+            if (slices >= threshold)
+                spinPower = .17 * direction;
+            if(color == goal)
+                running = false;
+            
+            spinMotor.set(spinPower);
+            previousColor = color;
+
+            break;
+            
+
+            /*
             //Logic for which direction to spin, 1 = CW, -1 = CCW
             int dir = colToNum(goal)-colToNum(color);
             if (Math.abs(dir % 2) == 0) dir = 1;
@@ -127,6 +146,7 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
             if (color == goal)
                 running = false;
             break;
+            */
         case WAIT:
             spinMotor.set(0.0);
             controlPower = 0.26;
@@ -162,6 +182,22 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
             System.out.println("done");
             running = false;
         }
+    }
+
+    public int getSlicesToSpin(char startColor, char goalColor){
+
+        int distance;
+        String allColors = "YRGBYRGB";
+        int indexOfStartColor = allColors.indexOf(startColor, goalColor);
+        int indexOfGoalColor = allColors.indexOf(goalColor);
+
+        if(startColor == 'B' && goalColor == 'Y')
+            return 1;
+
+        distance = (indexOfGoalColor - indexOfStartColor) * -1;
+
+        return distance;
+
     }
 
     /**
