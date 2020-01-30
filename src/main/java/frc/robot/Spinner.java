@@ -27,6 +27,9 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
     private int sameColor = 0, colorCounter = 0;
     // private char previousColor;
 
+    //get slices to spin
+    private int slicesToSpin;
+
     // control loop stuff
     final double goodKP = 0.02;
     double controlPower = 0.26;
@@ -84,10 +87,12 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
         else
             goal = ' ';
 
-        if (xbox.getSingleButtonPress(XboxController.BUTTON_A))
+        if (xbox.getSingleButtonPress(XboxController.BUTTON_A)) {
             running = true;
+            if (goal != ' ')
+                slicesToSpin = getSlicesToSpin(color, goal);
         // startTime = System.currentTimeMillis();
-        if (xbox.getSingleButtonPress(XboxController.BUTTON_B))
+        } if (xbox.getSingleButtonPress(XboxController.BUTTON_B))
             running = false;
 
         if (running)
@@ -119,8 +124,9 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
             break;
         case DETECT:
             int slices = 0;
-            float direction = Math.signum(getSlicesToSpin(color, goal));
-            int threshold = getSlicesToSpin(color, goal) - 1;
+            
+            float direction = Math.signum(slicesToSpin);
+            int threshold = Math.abs(slicesToSpin) - 1;
             double spinPower = .26 * direction;
             
             if (color != previousColor)
@@ -187,16 +193,19 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
     public int getSlicesToSpin(char startColor, char goalColor){
 
         int distance;
-        String allColors = "YRGBYRGB";
-        int indexOfStartColor = allColors.indexOf(startColor, goalColor);
+        String allColors = "YRGB";
+        int indexOfStartColor = allColors.indexOf(startColor);
         int indexOfGoalColor = allColors.indexOf(goalColor);
 
-        if(startColor == 'B' && goalColor == 'Y')
+        distance = (indexOfGoalColor - indexOfStartColor);
+
+        if(distance == 3)
+            return -1;
+        else if(distance == -3)
             return 1;
-
-        distance = (indexOfGoalColor - indexOfStartColor) * -1;
-
+        else{
         return distance;
+        }
 
     }
 
