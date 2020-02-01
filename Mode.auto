@@ -1,6 +1,7 @@
 print "hello"
+execute "test"
 drive 10
 turn 90
-intake IN
-outtake FASTOUT
+intake false
+outtake true
 wait 3

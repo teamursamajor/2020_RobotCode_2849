@@ -26,4 +26,8 @@ public class DataToken<E> extends Token {
         this.value = null;
         return res;
     }
+
+    public String toString() {
+        return "Token of type " + type + " with value " + value;
+    }
 }

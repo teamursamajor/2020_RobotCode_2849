@@ -18,4 +18,8 @@ public class Token {
         this.syntax = syntax;
     }
 
+    public String toString() {
+        return "Token of type " + type;
+    }
+
 }
