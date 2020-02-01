@@ -4,6 +4,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Spark;
 import frc.tasks.ClimbTask;
 import frc.tasks.ClimbTask.ClimbMode;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
+
 
 /**
  * This class operates the Climb mechanism.
@@ -13,16 +16,25 @@ public class Climb extends Subsystem<ClimbTask.ClimbMode> implements UrsaRobot {
     private Spark motor1, motor2;
     // private Servo servo1, servo2;
 
+    private DigitalInput limitSwitch;
+
+    private int distanceToGo = 5;
+
     public Climb() {
         motor1 = new Spark(CLIMB_FRONT);
         motor2 = new Spark(CLIMB_BACK);
         //servo1 = new Servo(SERVO_PORT_1);
         //servo2 = new Servo(SERVO_PORT_2);
+
+        limitSwitch = new DigitalInput(CLIMB_SWITCH_PORT);
+        climbEncoder.setDistancePerPulse(CLIMB_INCHES_PER_TICK);
+        climbEncoder.reset();
     }
 
     @Override
     public void runSubsystem() throws InterruptedException {
         if (xbox.getDPad(controls.map.get("climb_up"))) {
+            running = true;
             subsystemMode = ClimbMode.UP;
         } else if (xbox.getDPad(controls.map.get("climb_down"))) {
             subsystemMode = ClimbMode.DOWN;
@@ -33,6 +45,15 @@ public class Climb extends Subsystem<ClimbTask.ClimbMode> implements UrsaRobot {
             subsystemMode = ClimbMode.WAIT;
         }
 
+
+        if(limitSwitch.get()) //check to see if climb got to right height
+            running = false;
+        if(climbEncoder.getDistance() >= distanceToGo) //stop if encoder says we've gone right distance
+            running = false;
+
+        if (running = false)
+            subsystemMode = ClimbMode.WAIT;
+
         // System.out.println(servo1.get() + " " + servo2.get());
 
         switch (subsystemMode) {
@@ -41,6 +62,9 @@ public class Climb extends Subsystem<ClimbTask.ClimbMode> implements UrsaRobot {
             // servo2.set(0);
             motor1.set(-1);
             motor2.set(-1);
+
+            
+
             break;
         case DOWN:
             // servo1.set(0);
