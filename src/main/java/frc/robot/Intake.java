@@ -20,6 +20,7 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
         beltMotor = new Spark(BELT);
         numOfCells = 0;
         lineSensor = new DigitalInput(LINE_SENSOR_PORT);
+        lineSensor.notify();
         deltaLineSensor = false;
     }
 
@@ -36,7 +37,9 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
         // Adds a ball to the counter if the ball trips the line sensor
         if (lineSensor.get() && !deltaLineSensor) {
             deltaLineSensor = true;
+            System.out.println(deltaLineSensor + ". we saw da balls");
             numOfCells++;
+            System.out.println(numOfCells);
         } else if (!lineSensor.get()) {
             deltaLineSensor = false;
         }
@@ -62,3 +65,4 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
         numOfCells = 0;
     }
 }
+//:DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
