@@ -3,7 +3,6 @@ package frc.robot;
 // import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Encoder;
 
 import frc.auto.tasks.ClimbTask;
 import frc.auto.tasks.ClimbTask.ClimbMode;
