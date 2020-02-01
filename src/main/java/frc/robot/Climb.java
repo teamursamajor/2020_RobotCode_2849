@@ -33,7 +33,6 @@ public class Climb extends Subsystem<ClimbTask.ClimbMode> implements UrsaRobot {
     @Override
     public void runSubsystem() throws InterruptedException {
         if (xbox.getDPad(controls.map.get("climb_up"))) {
-            running = true;
             subsystemMode = ClimbMode.UP;
         } else if (xbox.getDPad(controls.map.get("climb_down"))) {
             subsystemMode = ClimbMode.DOWN;
@@ -46,11 +45,8 @@ public class Climb extends Subsystem<ClimbTask.ClimbMode> implements UrsaRobot {
 
 
         if(limitSwitch.get()) //check to see if climb got to right height
-            running = false;
+            subsystemMode = ClimbMode.STOP;
         if(climbEncoder.getDistance() >= distanceToGo) //stop if encoder says we've gone right distance
-            running = false;
-
-        if (running = false)
             subsystemMode = ClimbMode.STOP;
 
         // System.out.println(servo1.get() + " " + servo2.get());
@@ -61,9 +57,6 @@ public class Climb extends Subsystem<ClimbTask.ClimbMode> implements UrsaRobot {
             // servo2.set(0);
             motor1.set(-1);
             motor2.set(-1);
-
-            
-
             break;
         case DOWN:
             // servo1.set(0);

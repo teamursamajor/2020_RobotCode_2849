@@ -18,20 +18,21 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
     public Intake() {
         intakeMotor = new Spark(INTAKE_MOTOR);
         beltMotor = new Spark(BELT);
-        numOfCells = -1; // accounts for double check bug
         lineSensor = new DigitalInput(LINE_SENSOR_PORT);
-        lineSensor.notify();
         deltaLineSensor = false;
+        resetCount();
     }
 
     public void runSubsystem() throws InterruptedException {
-        // Sets subsystem mode based on controller input
-        // Only works if sensor has not seen 5 balls pass
-        // TODO test
-        if (xbox.getButton(controls.map.get("intake")) && numOfCells < 5) {
+        if (xbox.getButton(controls.map.get("intake"))) {
             subsystemMode = IntakeMode.IN;
         } else {
             subsystemMode = IntakeMode.STOP;
+        }
+
+        // Resets ball count when we outtake
+        if (xbox.getButton(controls.map.get("outtake_out"))) {
+            resetCount();
         }
 
         // Adds a ball to the counter if the ball trips the line sensor
@@ -42,14 +43,15 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
             System.out.println(numOfCells);
         } else if (!lineSensor.get()) {
             deltaLineSensor = false;
-            System.out.println(deltaLineSensor);
+            // System.out.println(deltaLineSensor);
         }
 
         // System.out.println(lineSensor.get()+" "+ deltaLineSensor+" "+ numOfCells);
         // Controlling the power of the motors based on the subsystem mode
         switch (subsystemMode) {
         case IN:
-            intakeMotor.set(-0.50);
+            if (numOfCells < 5) // stops the intake motor once we've seen 5 balls
+                intakeMotor.set(-0.50);
             beltMotor.set(0.55);
             break;
         case STOP:
@@ -60,10 +62,10 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
     }
 
     /**
-     * Resets ball count to zero.
+     * Resets ball count.
      */
     public void resetCount() {
-        numOfCells = -1;
+        numOfCells = 0;
+        System.out.println("reset balls.");
     }
 }
-//:DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD

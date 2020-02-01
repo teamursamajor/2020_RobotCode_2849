@@ -15,18 +15,24 @@ public class Outtake extends Subsystem<OuttakeTask.OuttakeMode> implements UrsaR
         outtakeMotor = new Spark(OUTTAKE);
     }
 
-    public void runSubsystem() throws InterruptedException {     
-        if (xbox.getButton(controls.map.get("outtake")))
+    public void runSubsystem() throws InterruptedException {    
+        if (xbox.getButton(controls.map.get("outtake_out"))) {
             subsystemMode = OuttakeMode.OUT;
-        else
+        } else if (xbox.getButton(controls.map.get("outtake_in"))) {
+            subsystemMode = OuttakeMode.IN;
+        } else {
             subsystemMode = OuttakeMode.STOP;
-
+        }
+        
         switch (subsystemMode) {
         case OUT:
-            outtakeMotor.set(0.50); //Shoots ball out
+            outtakeMotor.set(-0.25); // Releases outtake
+            break;
+        case IN:
+            outtakeMotor.set(0.25); // Restores outtake
             break;
         case STOP:
-            outtakeMotor.set(0.0); //The robot waits
+            outtakeMotor.set(0.0);
             break;
         }
     }

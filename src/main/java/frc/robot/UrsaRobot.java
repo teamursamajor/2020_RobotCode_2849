@@ -19,19 +19,19 @@ public interface UrsaRobot {
 
 	// Spark Ports
 	// 6 unused
-	public static final int DRIVE_FRONT_LEFT = 7, DRIVE_BACK_LEFT = 3;
+	public static final int DRIVE_FRONT_LEFT = 7, DRIVE_BACK_LEFT = 4;
 	public static final int DRIVE_FRONT_RIGHT = 6, DRIVE_BACK_RIGHT = 8;
 
-	public static final int SPINNER = 9, OUTTAKE = 4, BELT = 10;
+	public static final int SPINNER = 9, OUTTAKE = 1, BELT = 3;
 	
-	public static final int CLIMB_FRONT = 2, CLIMB_BACK = 1;
-	public static final int INTAKE_MOTOR = 5;
+	public static final int CLIMB_FRONT = 5, CLIMB_BACK = 10;
+	public static final int INTAKE_MOTOR = 2;
 	
 	// public static final int HATCH_SERVO = 8;
 
 	// Encoders and Sensors Ports
 	public static final int LINE_SENSOR_PORT = 5;
-	public static final int CLIMB_SWITCH_PORT = 4;
+	public static final int CLIMB_SWITCH_PORT = 7;
 	//public static final int SERVO_PORT_1 = 6;
 	//public static final int SERVO_PORT_2 = 4;
 
@@ -39,7 +39,7 @@ public interface UrsaRobot {
 
 	public static final int LEFT_ENCODER_CHANNEL_A = 0, LEFT_ENCODER_CHANNEL_B = 1;
 	public static final int RIGHT_ENCODER_CHANNEL_A = 2, RIGHT_ENCODER_CHANNEL_B = 3;
-	public static final int CLIMB_ENCODER_CHANNEL_A = 4, CLIMB_ENCODER_CHANNEL_B= 5;
+	public static final int CLIMB_ENCODER_CHANNEL_A = 4, CLIMB_ENCODER_CHANNEL_B= 6;
 
 	public static Encoder leftEncoder = new Encoder(LEFT_ENCODER_CHANNEL_A, LEFT_ENCODER_CHANNEL_B);
 	public static Encoder rightEncoder = new Encoder(RIGHT_ENCODER_CHANNEL_A, RIGHT_ENCODER_CHANNEL_B);

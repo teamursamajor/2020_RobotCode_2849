@@ -18,20 +18,21 @@ public interface TokenList {
     Token FOLLOW_TOKEN = new Token(TokenType.FOLLOW, new String[] { "^\\s*follow" });
     Token PRINT_TOKEN = new Token(TokenType.PRINT, new String[] { "^\\s*print" });
 
-    Token LPAREN_TOKEN = new Token(TokenType.LPAREN, new String[] { "" });
-    Token RPAREN_TOKEN = new Token(TokenType.RPAREN, new String[] { "" });
-    Token COMMA_TOKEN = new Token(TokenType.COMMA, new String[] { "" });
-    Token PLUS_TOKEN = new Token(TokenType.PLUS, new String[] { "" });
-    Token MINUS_TOKEN = new Token(TokenType.MINUS, new String[] { "" });
-    Token MULTIPLY_TOKEN = new Token(TokenType.MULTIPLY, new String[] { "" });
-    Token DIVIDE_TOKEN = new Token(TokenType.DIVIDE, new String[] { "" });
+    Token LPAREN_TOKEN = new Token(TokenType.LPAREN, new String[] { "^\\s*\\(" });
+    Token RPAREN_TOKEN = new Token(TokenType.RPAREN, new String[] { "^\\s*\\)" });
+    Token COMMA_TOKEN = new Token(TokenType.COMMA, new String[] { "^\\s*," });
+
+    Token PLUS_TOKEN = new Token(TokenType.PLUS, new String[] { "^\\s*\\+" });
+    Token MINUS_TOKEN = new Token(TokenType.MINUS, new String[] { "^\\s*\\-" });
+    Token MULTIPLY_TOKEN = new Token(TokenType.MULTIPLY, new String[] { "^\\s*\\*" });
+    Token DIVIDE_TOKEN = new Token(TokenType.DIVIDE, new String[] { "^\\s*\\/" });
     
     Token RBRACE_TOKEN = new Token(TokenType.RBRACE, new String[] { "^\\s*}" });
 
     /**
      * List of all regular tokens to search through in order
      */
-    public Token[] regularTokens = new Token[] { DRIVE_TOKEN, INTAKE_TOKEN, OUTTAKE_TOKEN, TURN_TOKEN, WAIT_TOKEN,
+    Token[] regularTokens = new Token[] { DRIVE_TOKEN, INTAKE_TOKEN, OUTTAKE_TOKEN, TURN_TOKEN, WAIT_TOKEN,
             PARALLEL_TOKEN, SERIAL_TOKEN, EXECUTE_TOKEN, PRINT_TOKEN, LPAREN_TOKEN, RPAREN_TOKEN, PLUS_TOKEN,
             MINUS_TOKEN, MULTIPLY_TOKEN, DIVIDE_TOKEN, RBRACE_TOKEN };
 

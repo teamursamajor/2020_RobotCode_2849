@@ -19,21 +19,16 @@ public class ControlMap {
      * need to go to Arm.java and change the xbox method to getButton() too.
      */
 
-    // TODO update controls for 2020
     public ControlMap() {
-        
+        // Outtake
+        map.put("outtake_out", XboxController.BUTTON_X);
+        map.put("outtake_in", XboxController.BUTTON_Y);
 
         // Intake
-        map.put("outtake", XboxController.BUTTON_LEFTBUMPER);
         map.put("intake", XboxController.BUTTON_RIGHTBUMPER);
 
         // Spinner
         map.put("spinner", XboxController.BUTTON_A);
-
-        // // Auto Align
-        // map.put("auto_align", XboxController.POV_UP);
-        // map.put("cancel_auto_align", XboxController.POV_DOWN);
-        // map.put("limelight_toggle", XboxController.POV_RIGHT);
 
         // Climb
         map.put("climb_up", XboxController.POV_UP);
