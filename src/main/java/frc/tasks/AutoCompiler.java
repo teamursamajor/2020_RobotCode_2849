@@ -757,3 +757,20 @@ public class AutoCompiler {
 		return "/home/lvuser/automodes/default.auto";
 	}
 }
+/*
+ * Runner:
+ * switch (token){
+ * 	case (ADD):
+ * 
+ * 	break;
+ *  case (SUBTRACT)
+ * 		Intake.Something()
+ *  case (ADD)
+ * 		Intake.something
+ * }
+ * 
+ * 
+ * 
+ * 
+ *  
+ */

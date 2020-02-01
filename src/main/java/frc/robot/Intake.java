@@ -18,7 +18,7 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
     public Intake() {
         intakeMotor = new Spark(INTAKE_MOTOR);
         beltMotor = new Spark(BELT);
-        numOfCells = 0;
+        numOfCells = -1; // accounts for double check bug
         lineSensor = new DigitalInput(LINE_SENSOR_PORT);
         deltaLineSensor = false;
     }
@@ -37,15 +37,20 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
         if (lineSensor.get() && !deltaLineSensor) {
             deltaLineSensor = true;
             numOfCells++;
+            // if(numOfCells == 2) //Every time the first ball is recognized, sum balls is set to 2 so we set it back to 1
+            //     numOfCells = 1;
+
+            System.out.println(deltaLineSensor + " "  + numOfCells);
         } else if (!lineSensor.get()) {
             deltaLineSensor = false;
+            System.out.println(deltaLineSensor);
         }
 
         // System.out.println(lineSensor.get()+" "+ deltaLineSensor+" "+ numOfCells);
         // Controlling the power of the motors based on the subsystem mode
         switch (subsystemMode) {
         case IN:
-            intakeMotor.set(-0.40);
+            intakeMotor.set(-0.50);
             beltMotor.set(0.55);
             break;
         case WAIT:
@@ -59,6 +64,6 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
      * Resets ball count to zero.
      */
     public void resetCount() {
-        numOfCells = 0;
+        numOfCells = -1;
     }
 }
