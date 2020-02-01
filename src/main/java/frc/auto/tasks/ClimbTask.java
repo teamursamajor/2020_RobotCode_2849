@@ -1,4 +1,4 @@
-package frc.tasks;
+package frc.auto.tasks;
 
 import frc.robot.*;
 
@@ -7,7 +7,7 @@ import frc.robot.*;
  */
 public class ClimbTask extends Task implements UrsaRobot {
     public enum ClimbMode {
-        UP, DOWN, WAIT;
+        UP, DOWN, STOP;
     }
 
     private long runTime = 1000;
@@ -25,6 +25,6 @@ public class ClimbTask extends Task implements UrsaRobot {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        climb.setMode(ClimbMode.WAIT);
+        climb.setMode(ClimbMode.STOP);
     }
 }

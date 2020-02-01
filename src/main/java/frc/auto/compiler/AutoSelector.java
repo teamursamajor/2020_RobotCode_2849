@@ -1,4 +1,4 @@
-package frc.tasks;
+package frc.auto.compiler;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * This class allows Auto Modes to be selected via the SmartDashboard interface.
- * <b>NEEDS TO BE UPDATED FOR 2019</b>
+ * TODO <b>UPDATE FOR 2020</b>
  */
 public class AutoSelector {
 	private ArrayList<SendableChooser<String>> autoList = new ArrayList<SendableChooser<String>>();

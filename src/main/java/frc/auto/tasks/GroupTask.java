@@ -1,4 +1,4 @@
-package frc.tasks;
+package frc.auto.tasks;
 
 import java.util.ArrayList;
 

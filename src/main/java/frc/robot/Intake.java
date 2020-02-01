@@ -2,8 +2,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Spark;
-import frc.tasks.IntakeTask;
-import frc.tasks.IntakeTask.IntakeMode;
+import frc.auto.tasks.IntakeTask;
+import frc.auto.tasks.IntakeTask.IntakeMode;
 
 /**
  * This class operates the Intake mechanism.
@@ -31,7 +31,7 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
         if (xbox.getButton(controls.map.get("intake")) && numOfCells < 5) {
             subsystemMode = IntakeMode.IN;
         } else {
-            subsystemMode = IntakeMode.WAIT;
+            subsystemMode = IntakeMode.STOP;
         }
 
         // Adds a ball to the counter if the ball trips the line sensor
@@ -52,7 +52,7 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
             intakeMotor.set(-0.50);
             beltMotor.set(0.55);
             break;
-        case WAIT:
+        case STOP:
             intakeMotor.set(0.0);
             beltMotor.set(0.0);
             break;

@@ -1,5 +1,9 @@
-package frc.compilerv2.tokens;
+package frc.auto.tokens;
 
+/**
+ * A template class for data tokens in an Auto Script.
+ * @param <E> The data type of the token.
+ */
 public class DataToken<E> extends Token {
 
     private E value;
@@ -21,5 +25,9 @@ public class DataToken<E> extends Token {
         res.setValue(value);
         this.value = null;
         return res;
+    }
+
+    public String toString() {
+        return "Token of type " + type + " with value " + value;
     }
 }

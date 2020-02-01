@@ -1,8 +1,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Spark;
-import frc.tasks.DriveTask;
-import frc.tasks.DriveTask.DriveMode;
+import frc.auto.tasks.DriveTask;
+import frc.auto.tasks.DriveTask.DriveMode;
 
 /**
  * This subsystem class allows us to drive the robot. It contains the following

@@ -4,8 +4,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Spark;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.tasks.SpinnerTask;
-import frc.tasks.SpinnerTask.SpinnerMode;
+import frc.auto.tasks.SpinnerTask;
+import frc.auto.tasks.SpinnerTask.SpinnerMode;
 
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
@@ -100,7 +100,7 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
             // chooses SPIN unless there is a color to detect
             subsystemMode = goal == ' ' ? SpinnerMode.SPIN : SpinnerMode.DETECT;
         else
-            subsystemMode = SpinnerMode.WAIT;
+            subsystemMode = SpinnerMode.STOP;
 
         switch (subsystemMode) {
         case SPIN:
@@ -157,7 +157,7 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
                 running = false;
             break;
             */
-        case WAIT:
+        case STOP:
             spinMotor.set(0.0);
             controlPower = 0.26;
             colorCounter = sameColor = 0;

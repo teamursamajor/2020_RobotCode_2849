@@ -1,4 +1,4 @@
-package frc.tasks;
+package frc.auto.tasks;
 
 import frc.robot.UrsaRobot;
 import frc.robot.XboxController;

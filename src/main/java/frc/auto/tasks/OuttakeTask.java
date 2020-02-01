@@ -1,4 +1,4 @@
-package frc.tasks;
+package frc.auto.tasks;
 
 import frc.robot.*;
 
@@ -7,7 +7,7 @@ import frc.robot.*;
  */
 public class OuttakeTask extends Task implements UrsaRobot {
     public enum OuttakeMode {
-        OUT, WAIT;
+        OUT, STOP;
     }
 
     private Outtake outtake;

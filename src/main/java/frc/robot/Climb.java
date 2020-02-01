@@ -2,11 +2,11 @@ package frc.robot;
 
 // import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Spark;
-import frc.tasks.ClimbTask;
-import frc.tasks.ClimbTask.ClimbMode;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 
+import frc.auto.tasks.ClimbTask;
+import frc.auto.tasks.ClimbTask.ClimbMode;
 
 /**
  * This class operates the Climb mechanism.
@@ -39,10 +39,10 @@ public class Climb extends Subsystem<ClimbTask.ClimbMode> implements UrsaRobot {
         } else if (xbox.getDPad(controls.map.get("climb_down"))) {
             subsystemMode = ClimbMode.DOWN;
         } else if (xbox.getDPad(controls.map.get("climb_up")) && xbox.getDPad(controls.map.get("climb_down")))
-            subsystemMode = ClimbMode.WAIT;
+            subsystemMode = ClimbMode.STOP;
             //stops climb if up and down are pressed
         else {
-            subsystemMode = ClimbMode.WAIT;
+            subsystemMode = ClimbMode.STOP;
         }
 
 
@@ -52,7 +52,7 @@ public class Climb extends Subsystem<ClimbTask.ClimbMode> implements UrsaRobot {
             running = false;
 
         if (running = false)
-            subsystemMode = ClimbMode.WAIT;
+            subsystemMode = ClimbMode.STOP;
 
         // System.out.println(servo1.get() + " " + servo2.get());
 
@@ -72,7 +72,7 @@ public class Climb extends Subsystem<ClimbTask.ClimbMode> implements UrsaRobot {
             motor1.set(1);
             motor2.set(1);
             break;
-        case WAIT:
+        case STOP:
             motor1.set(0.0);
             motor2.set(0.0);
             break;
