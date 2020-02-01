@@ -24,7 +24,7 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
     }
 
     public void runSubsystem() throws InterruptedException {
-        if (xbox.getButton(controls.map.get("intake"))) {
+        if (xbox.getButton(controls.map.get("intake")) && numOfCells < 5) {
             subsystemMode = IntakeMode.IN;
         } else {
             subsystemMode = IntakeMode.STOP;
@@ -50,8 +50,7 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
         // Controlling the power of the motors based on the subsystem mode
         switch (subsystemMode) {
         case IN:
-            if (numOfCells < 5) // stops the intake motor once we've seen 5 balls
-                intakeMotor.set(-0.50);
+            intakeMotor.set(-0.50);
             beltMotor.set(0.55);
             break;
         case STOP:
@@ -66,6 +65,5 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
      */
     public void resetCount() {
         numOfCells = 0;
-        System.out.println("reset balls.");
     }
 }

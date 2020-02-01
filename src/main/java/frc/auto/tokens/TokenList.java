@@ -40,5 +40,5 @@ public interface TokenList {
     DataToken<Double> NUMBER_TOKEN = new DataToken<Double>(TokenType.NUMBER, new String[] { "^\\s*-?\\d+(\\.\\d+)?" });
     DataToken<String> STRING_TOKEN = new DataToken<String>(TokenType.STRING, new String[] { "^\\s*(\"[^\"]*\")" });
     DataToken<Boolean> BOOLEAN_TOKEN = new DataToken<Boolean>(TokenType.BOOLEAN, new String[] { "^\\s*true", "^\\s*false" });
-
+    DataToken<String> ARGUMENT_TOKEN = new DataToken<String>(TokenType.ARGUMENT, new String[] { "^\\s*\\w*" }); //TODO only make regexes for the specific words?
 }

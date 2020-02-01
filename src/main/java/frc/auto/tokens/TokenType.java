@@ -12,7 +12,7 @@ public enum TokenType {
     PARALLEL, SERIAL, EXECUTE, FOLLOW, WAIT, PRINT, RBRACE, LPAREN, RPAREN, COMMA,
 
     /* Data Types */
-    NUMBER, STRING, BOOLEAN,
+    NUMBER, STRING, BOOLEAN, ARGUMENT,
 
     // Math Operators */
     PLUS, MINUS, MULTIPLY, DIVIDE
