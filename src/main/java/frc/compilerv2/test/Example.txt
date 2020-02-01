@@ -1,0 +1,26 @@
+drive 10
+turn 5
+
+-----------------------
+
+|[drive] 10
+[drive]| 10
+[drive] |[10][endline]
+
+Tokenizer Code:
+while (still stuff on the line to read... really you could use a for loop or smth){
+    
+    for (Token t : TokenList){
+        // basically use regex lollll
+        String str = line.substring(t.syntax[0].length)  //Also get longest possible syntax max (if you have alternate syntax structures)
+        if (match){
+            valid
+            arrlist.add(t)
+            break;
+        }
+    }
+}
+
+Lexer Code: do later/tomorrow?
+https://ruslanspivak.com/lsbasi-part1/
+
