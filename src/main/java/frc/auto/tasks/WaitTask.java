@@ -1,7 +1,7 @@
-package frc.tasks;
+package frc.auto.tasks;
 
 /**
- * This is a task class for adding delay when running Auto Modes.
+ * This is a task class for adding delay when running Auto Scripts.
  */
 public class WaitTask extends Task {
 	

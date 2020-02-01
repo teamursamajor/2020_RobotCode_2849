@@ -1,4 +1,4 @@
-package frc.tasks;
+package frc.auto.tasks;
 
 /**
  * This is a group task class for running tasks in sequence.

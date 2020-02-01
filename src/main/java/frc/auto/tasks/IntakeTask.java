@@ -1,4 +1,4 @@
-package frc.tasks;
+package frc.auto.tasks;
 
 import frc.robot.*;
 
@@ -7,7 +7,7 @@ import frc.robot.*;
  */
 public class IntakeTask extends Task implements UrsaRobot {
     public enum IntakeMode {
-        IN, WAIT;
+        IN, STOP;
     }
 
     private long runTime = 1000;

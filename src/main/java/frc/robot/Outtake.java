@@ -1,8 +1,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Spark;
-import frc.tasks.OuttakeTask;
-import frc.tasks.OuttakeTask.OuttakeMode;
+import frc.auto.tasks.OuttakeTask;
+import frc.auto.tasks.OuttakeTask.OuttakeMode;
 
 /**
  * This class operates the Outtake mechanism.
@@ -19,13 +19,13 @@ public class Outtake extends Subsystem<OuttakeTask.OuttakeMode> implements UrsaR
         if (xbox.getButton(controls.map.get("outtake")))
             subsystemMode = OuttakeMode.OUT;
         else
-            subsystemMode = OuttakeMode.WAIT;
+            subsystemMode = OuttakeMode.STOP;
 
         switch (subsystemMode) {
         case OUT:
             outtakeMotor.set(0.50); //Shoots ball out
             break;
-        case WAIT:
+        case STOP:
             outtakeMotor.set(0.0); //The robot waits
             break;
         }

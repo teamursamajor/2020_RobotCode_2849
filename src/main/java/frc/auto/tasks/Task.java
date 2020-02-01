@@ -1,7 +1,7 @@
-package frc.tasks;
+package frc.auto.tasks;
 
 /**
- * This is an class for tasks.
+ * A template class for Auto Tasks.
  */
 public abstract class Task extends Thread {
 
