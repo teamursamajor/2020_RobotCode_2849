@@ -76,7 +76,8 @@ public class AutoCompiler {
 								taskSet.addTask(new IntakeTask(intake, IntakeMode.STOP));
 						}
 						throw new Exception();
-					// TODO add OUTTAKE case with argument token
+					case OUTTAKE:
+						
                 }
 			} catch (Exception e) {
 				e.printStackTrace();

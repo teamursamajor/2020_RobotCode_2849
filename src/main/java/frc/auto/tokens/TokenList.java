@@ -8,7 +8,8 @@ public interface TokenList {
     /* Regular Tokens */
     Token DRIVE_TOKEN = new Token(TokenType.DRIVE, new String[] { "^\\s*drive" });
     Token INTAKE_TOKEN = new Token(TokenType.INTAKE, new String[] { "^\\s*intake" });
-    Token OUTTAKE_TOKEN = new Token(TokenType.OUTTAKE, new String[] { "^\\s*outtake" });
+    // Note: Tokens with arguments, like Outtake, may have their arguments included in the String[] of possible syntax for the token.
+    Token OUTTAKE_TOKEN = new Token(TokenType.OUTTAKE, new String[] { "^\\s*outtake\\s*in", "^\\s*outtake\\s*out", "^\\s*outtake\\s*stop" });
     Token TURN_TOKEN = new Token(TokenType.TURN, new String[] { "^\\s*turn" });
     Token WAIT_TOKEN = new Token(TokenType.WAIT, new String[] { "^\\s*wait" });
 
@@ -40,5 +41,4 @@ public interface TokenList {
     DataToken<Double> NUMBER_TOKEN = new DataToken<Double>(TokenType.NUMBER, new String[] { "^\\s*-?\\d+(\\.\\d+)?" });
     DataToken<String> STRING_TOKEN = new DataToken<String>(TokenType.STRING, new String[] { "^\\s*(\"[^\"]*\")" });
     DataToken<Boolean> BOOLEAN_TOKEN = new DataToken<Boolean>(TokenType.BOOLEAN, new String[] { "^\\s*true", "^\\s*false" });
-    DataToken<String> ARGUMENT_TOKEN = new DataToken<String>(TokenType.ARGUMENT, new String[] { "^\\s*\\w*" }); //TODO only make regexes for the specific words?
 }

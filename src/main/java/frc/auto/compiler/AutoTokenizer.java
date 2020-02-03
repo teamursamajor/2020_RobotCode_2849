@@ -36,7 +36,7 @@ public class AutoTokenizer implements TokenList {
 
             // Iterates through current line, as long as it still has characters
             while (line.trim().length() > 0) {
-                matchedToken = false; // Resets
+                matchedToken = false; // Resets to check for new matched tokens
 
                 // If the line begins with a comment, disregard the line
                 if (line.trim().charAt(0) == '#') {
@@ -45,18 +45,23 @@ public class AutoTokenizer implements TokenList {
                 }
 
                 // Used for regex matching
-                Matcher match;
+                Matcher match = match(line, "");
 
                 // Goes through each token and tries to match the corresponding syntax
                 for (Token t : regularTokens) {
-                    match = match(line, t.syntax[0]);
-                    if (match.find()) { // If matching syntax has been found
-                        tokenList.add(t);
-                        matchedToken = true;
-                        matchedAny = true;
-                        line = line.substring(match.end()); // Removes matched characters from line
-                        break;
+                    // Searches through all possible syntaxes
+                    for (int i = 0; i < t.syntax.length; i++) {
+                        match = match(line, t.syntax[i]);
+                        if (match.find()) { // If matching syntax has been found
+                            tokenList.add(t);
+                            matchedToken = true;
+                            matchedAny = true;
+                            line = line.substring(match.end()); // Removes matched characters from line
+                            break;
+                        }
                     }
+                    if (match.find())
+                        break;
                 }
 
                 // Handling number tokens
