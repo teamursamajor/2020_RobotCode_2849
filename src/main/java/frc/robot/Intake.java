@@ -3,7 +3,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Spark;
 import frc.auto.tasks.IntakeTask;
-import frc.auto.tasks.IntakeTask.IntakeMode;
 
 /**
  * This class operates the Intake mechanism.
@@ -28,17 +27,6 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
     }
 
     public void runSubsystem() throws InterruptedException {
-        if (xbox.getButton(controls.map.get("intake")) && numOfCells < 5) {
-            subsystemMode = IntakeMode.IN;
-        } else {
-            subsystemMode = IntakeMode.STOP;
-        }
-
-        // Resets ball count when we outtake
-        if (xbox.getButton(controls.map.get("outtake_out"))) {
-            resetCount();
-        }
-
         // Adds a ball to the counter if the ball trips the line sensor
         if (lineSensor.get() && !deltaLineSensor) {
             deltaLineSensor = true;
@@ -65,9 +53,16 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
     }
 
     /**
-     * Resets ball count.
+     * Resets power cell count.
      */
     public void resetCount() {
         numOfCells = 0;
+    }
+
+    /**
+     * @return The number of power cells in the intake
+     */
+    public int getCount() {
+        return numOfCells;
     }
 }

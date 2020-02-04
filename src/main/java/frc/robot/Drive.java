@@ -56,7 +56,6 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 
 		// System.out.println("left power: " +driveOrder.leftPower);
 		// System.out.println("right power: " +driveOrder.rightPower);
-
 	}
 
 	/**
@@ -65,7 +64,6 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	 * <li>left/right velocity</li>
 	 * <li>left/right distance traveled</li>
 	 * <li>the current heading of the robot</li>
-	 * <ul>
 	 */
 	public void updateStateInfo() {
 		final double leftDistance = getLeftEncoder();

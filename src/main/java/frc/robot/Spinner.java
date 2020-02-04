@@ -23,7 +23,6 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
     private Spark spinMotor;
     private String gameData;
     private char color, goal, previousColor;
-    private boolean running;
 
     private int sameColor = 0, colorCounter = 0;
 
@@ -54,7 +53,7 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
      */
     public Spinner() {
         spinMotor = new Spark(SPINNER);
-        running = false;
+        setMode(SpinnerMode.STOP);
         colorMatcher.addColorMatch(kBlueTarget);
         colorMatcher.addColorMatch(kGreenTarget);
         colorMatcher.addColorMatch(kRedTarget);
@@ -82,6 +81,9 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
         if (match.color == kYellowTarget)
             color = 'Y';
 
+        /*
+         * Determines goal color from DriverStation Game Data
+         */
         gameData = DriverStation.getInstance().getGameSpecificMessage();
 
         if (gameData.length() > 0) // If we've gotten a color to check for
@@ -89,25 +91,8 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
         else
             goal = ' ';
 
-        if (xbox.getSingleButtonPress(XboxController.BUTTON_A)) {
-            running = true;
-            if (goal != ' ') { // if there's a valid color to spin to
-                slicesToSpin = getSlicesToSpin(color, offsetColor(goal, 2));
-                System.out.println(offsetColor(goal, 2) + " " + slicesToSpin);
-            }
-        
-        } if (xbox.getSingleButtonPress(XboxController.BUTTON_B))
-            running = false;
-
-        if (running)
-            // chooses SPIN unless there is a color to detect
-            subsystemMode = goal == ' ' ? SpinnerMode.SPIN : SpinnerMode.DETECT;
-        else
-            subsystemMode = SpinnerMode.STOP;
-
         switch (subsystemMode) {
         case SPIN:
-
             // spinMotor.set(0.26);
             spinSlices(25);
             if (controlPower < maxPower && controlPower > minPower) {
@@ -124,7 +109,6 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
             // else {
             // running = false;
             // }
-
             break;
         case DETECT:
             // TODO maybe move this back to spinSlices?
@@ -141,15 +125,15 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
                 spinPower = .17 * direction;
                 // System.out.println(spinPower);
             }
-            if(color == offsetColor(goal, 2))
-                running = false;
+            if (color == offsetColor(goal, 2))
+                setMode(SpinnerMode.STOP);
             
             spinMotor.set(spinPower);
             previousColor = color;
 
             break;
             
-            /*
+            /* TODO remove
             //Logic for which direction to spin, 1 = CW, -1 = CCW
             int dir = colToNum(goal)-colToNum(color);
             if (Math.abs(dir % 2) == 0) dir = 1;
@@ -190,18 +174,16 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
             }
             previousColor = color;
         } else { // if it's seen the right color enough times
-            running = false;
+            setMode(SpinnerMode.STOP);
         }
     }
 
     /**
-     * Calculates the number of slices to spin given the current
-     * and goal color.
-     * @param startColor The color the wheel is currently on
-     * @param goalColor The color to go to
-     * @return The number of slices to spin
+     * Calculates the number of slices to spin given the current and goal color.
+     * @param startColor The color the wheel is currently on.
+     * @param goalColor The color to go to.
      */
-    public int getSlicesToSpin(char startColor, char goalColor){
+    public void getSlicesToSpin(char startColor, char goalColor){
         int distance;
         String allColors = "YRGB";
         int indexOfStartColor = allColors.indexOf(startColor);
@@ -210,10 +192,11 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
         distance = (indexOfGoalColor - indexOfStartColor);
 
         if (distance == 3)
-            return -1;
-        if (distance == -3)
-            return 1;
-        return distance;
+            slicesToSpin = -1;
+        else if (distance == -3)
+            slicesToSpin = 1;
+        else
+            slicesToSpin = distance;
     }
 
     /**

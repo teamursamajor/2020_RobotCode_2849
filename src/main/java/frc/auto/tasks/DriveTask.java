@@ -182,6 +182,10 @@ public class DriveTask extends Task implements UrsaRobot {
                 leftSpeed = speedY;
                 rightSpeed = speedX;
             }
+            
+            // Updates previous speed values for the next loop
+            previousX = speedX;
+            previousY = speedY;
 
             return new DriveOrder(leftSpeed, rightSpeed);
         }
