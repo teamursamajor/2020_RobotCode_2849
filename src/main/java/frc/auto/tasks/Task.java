@@ -3,7 +3,7 @@ package frc.auto.tasks;
 /**
  * This is an abstract class for Auto Tasks.
  * Each Task can initialize its own thread, but most only do so
- * during a parallel task.
+ * during a {@link ParallelTask}.
  */
 public abstract class Task extends Thread {
 
