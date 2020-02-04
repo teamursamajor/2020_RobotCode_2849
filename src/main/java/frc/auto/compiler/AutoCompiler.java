@@ -58,8 +58,8 @@ public class AutoCompiler {
 
 				case TURN:
 					if (tokenList.get(0).type == TokenType.NUMBER) { // expecting Number next
-						double distance = ((DataToken<Double>) tokenList.remove(0)).getValue();
-						taskSet.addTask(new DriveTask(distance, drive, DriveMode.TURN));
+						double angle = ((DataToken<Double>) tokenList.remove(0)).getValue();
+						taskSet.addTask(new DriveTask(angle, drive, DriveMode.TURN));
 						break;
 					}
 					throw new Exception(); // if there is not a Number
@@ -95,7 +95,7 @@ public class AutoCompiler {
 				case FOLLOW: // TODO figure out if/when/how to implement path
 					if (tokenList.get(0).type == TokenType.STRING) { // expecting String next
 						// String pathName = ((DataToken<String>) tokenList.remove(0)).getValue();
-						// taskSet.addTask(new FollowTask(...))
+						// taskSet.addTask(new FollowTask(drive, pathName))
 						break;
 					}
 					throw new Exception(); // if there is not a String
