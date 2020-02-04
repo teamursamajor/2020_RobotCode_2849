@@ -3,6 +3,10 @@
 META:
 * Give members opportunities to code/learn/work independently
 * Make sure people understand Java, how to debug stuff, working with WPILib
+* Document code so we know what stuff does
+* Incorporate Logger for debug/error info
+* Split DriveTask into TurnTask/DriveTask?
+* Move subsystem mode enums to subsystem classes? Or keep in modes?
 
 SPINNER:
 * Comment/reorganize class
@@ -28,8 +32,6 @@ INTAKE/OUTTAKE:
 * Test and refine system
 
 EXTRA:
-* Document code so we know what stuff does
-* Incorporate Logger for debug/error info
 * Figure out if we need Limelight, and if so, how to use it
 * Figure out if we should use Pixy instead, and if so, how to use it
 * Get LEDs working so we look cool
