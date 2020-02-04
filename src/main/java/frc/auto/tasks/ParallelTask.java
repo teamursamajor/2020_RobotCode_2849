@@ -1,19 +1,19 @@
 package frc.auto.tasks;
 
 /**
- * This is a group task class for running tasks in parallel.
+ * This is a Group Task class for running Tasks in parallel (all at once).
  */
 public class ParallelTask extends GroupTask {
 
 	public ParallelTask() {
 		super();
 	}
-
+	
 	public void run() {
-
 		for (Task t : tasks) {
-			t.start();
+			t.initialize();
 		}
+		
 		for (Task t : tasks) {
 			try {
 				t.join(); // Acts as a Thread.sleep

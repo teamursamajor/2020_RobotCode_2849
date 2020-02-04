@@ -17,8 +17,8 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	public static Spark mFrontLeft, mFrontRight, mRearLeft, mRearRight;
 
 	/**
-	 * Constructor for Drive class. Only one Drive object should be instantiated at
-	 * any time.
+	 * Constructor for the Drive subsystem.
+	 * Only one Drive object should be instantiated at any time.
 	 */
 	public Drive() {
 		setMode(DriveMode.DRIVE_STICKS);

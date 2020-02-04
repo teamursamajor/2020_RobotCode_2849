@@ -11,6 +11,10 @@ public class Outtake extends Subsystem<OuttakeTask.OuttakeMode> implements UrsaR
 
     private Spark outtakeMotor;
 
+    /**
+     * Constructor for the Outtake mechanism.
+     * Only one Outtake object should be instantiated at any time.
+     */
     public Outtake() {
         outtakeMotor = new Spark(OUTTAKE);
     }

@@ -15,6 +15,10 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
     private final DigitalInput lineSensor;
     private boolean deltaLineSensor;
 
+    /**
+     * Constructor for the Intake mechanism.
+     * Only one Intake object should be instantiated at any time.
+     */
     public Intake() {
         intakeMotor = new Spark(INTAKE_MOTOR);
         beltMotor = new Spark(BELT);

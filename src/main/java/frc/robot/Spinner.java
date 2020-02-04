@@ -4,8 +4,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Spark;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.auto.tasks.SpinnerTask;
-import frc.auto.tasks.SpinnerTask.SpinnerMode;
 
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
@@ -16,7 +14,11 @@ import edu.wpi.first.wpilibj.util.Color;
 /**
  * This class operates the Spinner mechanism.
  */
-public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaRobot {
+public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot {
+
+    public enum SpinnerMode {
+        SPIN, DETECT, STOP;
+    }
 
     private Spark spinMotor;
     private String gameData;
@@ -47,7 +49,8 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
     private final Color kYellowTarget = ColorMatch.makeColor(0.311, 0.569, 0.120);
 
     /**
-     * Constructor for Spinner objects.
+     * Constructor for the Spinner mechanism.
+     * Only one Spinner object should be instantiated at any time.
      */
     public Spinner() {
         spinMotor = new Spark(SPINNER);
