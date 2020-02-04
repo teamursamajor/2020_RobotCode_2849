@@ -21,7 +21,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	 * Only one Drive object should be instantiated at any time.
 	 */
 	public Drive() {
-		setMode(DriveMode.DRIVE_STICKS);
+		setMode(DriveMode.AUTO_DRIVE);
 
 		mFrontRight = new Spark(DRIVE_FRONT_RIGHT);
 		mFrontLeft = new Spark(DRIVE_FRONT_LEFT);
