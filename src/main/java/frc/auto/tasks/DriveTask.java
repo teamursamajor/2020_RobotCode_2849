@@ -10,6 +10,12 @@ import frc.robot.Drive;
  */
 public class DriveTask extends Task implements UrsaRobot {
 
+    private static double speedX = 0;
+    private static double speedY = 0;
+    private static double limit = 0.2;
+    private static double previousX = 0;
+    private static double previousY = 0;
+
     /*
      * We have two Drive Modes, Auto and DriveSticks, to represent Autonomous and
      * Teleop
@@ -114,11 +120,31 @@ public class DriveTask extends Task implements UrsaRobot {
             double leftSpeed, rightSpeed, leftStickY, rightStickX;
             if (isArcadeDrive) {
                 // Arcade Drive
-                leftStickY = xbox.getSquaredAxis(XboxController.AXIS_LEFTSTICK_Y);
-                rightStickX = -xbox.getSquaredAxis(XboxController.AXIS_RIGHTSTICK_X);
+               // leftStickY = xbox.getSquaredAxis(XboxController.AXIS_LEFTSTICK_Y);
+               // rightStickX = -xbox.getSquaredAxis(XboxController.AXIS_RIGHTSTICK_X);
+
+               leftStickY = xbox.getAxis(XboxController.AXIS_LEFTSTICK_Y);
+               rightStickX = -xbox.getAxis(XboxController.AXIS_RIGHTSTICK_X);
 
                 leftSpeed = leftStickY + rightStickX;
                 rightSpeed = leftStickY - rightStickX;
+
+                double changeX = rightSpeed-previousX;
+               double changeY = leftSpeed-previousY;
+
+               if(Math.abs(changeX)>limit){
+                   changeX = Math.signum(changeX)*limit;
+               }
+
+               if(Math.abs(changeY)>limit){
+                   changeY = Math.signum(changeY)*limit;
+               }
+
+               speedX+=changeX;
+               speedY+=changeY;
+
+               leftSpeed = speedY;
+               rightSpeed = speedX;
 
                 double max = Math.max(leftSpeed, rightSpeed); // the greater of the two values
                 double min = Math.min(leftSpeed, rightSpeed); // the lesser of the two values
@@ -132,8 +158,28 @@ public class DriveTask extends Task implements UrsaRobot {
                 }
             } else {
                 // Tank Drive
-                leftSpeed = xbox.getSquaredAxis(XboxController.AXIS_LEFTSTICK_Y);
-                rightSpeed = -xbox.getSquaredAxis(XboxController.AXIS_RIGHTSTICK_Y);
+                //leftSpeed = xbox.getSquaredAxis(XboxController.AXIS_LEFTSTICK_Y);
+                //rightSpeed = -xbox.getSquaredAxis(XboxController.AXIS_RIGHTSTICK_Y);
+
+                leftSpeed = xbox.getAxis(XboxController.AXIS_LEFTSTICK_Y);
+                rightSpeed = -xbox.getAxis(XboxController.AXIS_RIGHTSTICK_Y);
+
+                double changeX = rightSpeed-previousX;
+                double changeY = leftSpeed-previousY;
+ 
+                if(Math.abs(changeX)>limit){
+                    changeX = Math.signum(changeX)*limit;
+                }
+ 
+                if(Math.abs(changeY)>limit){
+                    changeY = Math.signum(changeY)*limit;
+                }
+ 
+                speedX+=changeX;
+                speedY+=changeY;
+ 
+                leftSpeed = speedY;
+                rightSpeed = speedX;
             }
 
             return new DriveOrder(leftSpeed, rightSpeed);
