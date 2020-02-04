@@ -7,14 +7,13 @@ import frc.auto.tasks.*;
 import frc.auto.tasks.DriveTask.DriveMode;
 import frc.auto.tasks.IntakeTask.IntakeMode;
 import frc.auto.tasks.OuttakeTask.OuttakeMode;
-
 import frc.auto.tokens.*;
 import frc.robot.*;
 
 /**
  * @author AlphaMale and Sheldon
  * 
- * This is a compiler for Auto Script files. It takes an Auto Script file and interprets
+ * This is a compiler for the Auto Script language. It takes an Auto Script and interprets
  * tokens and arguments on each line as a set of tasks to be executed in sequence.
  * 
  * Auto Script syntax is located on the team Google Drive.
