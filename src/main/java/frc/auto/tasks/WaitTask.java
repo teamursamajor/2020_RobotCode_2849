@@ -8,7 +8,6 @@ public class WaitTask extends Task {
 	private long waitTime = 20;
 	
 	public WaitTask(long time) {
-		initialize();
 		waitTime = time;
 	}
 
