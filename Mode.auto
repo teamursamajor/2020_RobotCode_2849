@@ -1,7 +1,1 @@
-print "hello"
-execute "test"
-drive 10
-turn 90
-intake false
-outtake true
-wait 3
+(4,5,6)

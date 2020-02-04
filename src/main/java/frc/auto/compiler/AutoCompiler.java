@@ -49,12 +49,6 @@ public class AutoCompiler {
 			Token t = tokenList.remove(0);
 			try {
                 switch (t.type) {
-                    case EXECUTE:
-                        if (tokenList.get(0).type == TokenType.STRING) { // expecting String next
-                            String scriptName = ((DataToken<String>) tokenList.remove(0)).getValue();
-                            taskSet.addTask(buildAutoMode("/home/lvuser/automodes/" + scriptName.trim().replace(" ", "") + ".auto"));
-                        }
-                        throw new Exception();
                     case DRIVE:
                         if (tokenList.get(0).type == TokenType.NUMBER) { // expecting Number next
                             double distance = ((DataToken<Double>) tokenList.remove(0)).getValue();
@@ -64,7 +58,7 @@ public class AutoCompiler {
 					case TURN:
 						if (tokenList.get(0).type == TokenType.NUMBER) { // expecting Number next
 							double distance = ((DataToken<Double>) tokenList.remove(0)).getValue();
-							taskSet.addTask(new DriveTask(distance, drive, DriveMode.AUTO_DRIVE));
+							taskSet.addTask(new DriveTask(distance, drive, DriveMode.TURN));
 						}
 						throw new Exception();
 					case INTAKE:
@@ -77,7 +71,26 @@ public class AutoCompiler {
 						}
 						throw new Exception();
 					case OUTTAKE:
-						
+						if (t.argument == 0) {
+							taskSet.addTask(new OuttakeTask(outtake, OuttakeMode.IN));
+						} else if (t.argument == 1) {
+							taskSet.addTask(new OuttakeTask(outtake, OuttakeMode.OUT));
+						} else if (t.argument == 2) {
+							taskSet.addTask(new OuttakeTask(outtake, OuttakeMode.STOP));
+						}
+					
+
+					case EXECUTE:
+                        if (tokenList.get(0).type == TokenType.STRING) { // expecting String next
+                            String scriptName = ((DataToken<String>) tokenList.remove(0)).getValue();
+                            taskSet.addTask(buildAutoMode("/home/lvuser/automodes/" + scriptName.trim().replace(" ", "") + ".auto"));
+                        }
+						throw new Exception();
+					case FOLLOW:
+						if (tokenList.get(0).type == TokenType.STRING) { // expecting String next
+							String pathName = ((DataToken<String>) tokenList.remove(0)).getValue();
+							// taskSet.addTask(new FollowTask(...)) TODO figure out how to implement path
+						}
                 }
 			} catch (Exception e) {
 				e.printStackTrace();
