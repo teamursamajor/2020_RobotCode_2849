@@ -105,15 +105,16 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
         switch (subsystemMode) {
         case SPIN:
 
-            // spinMotor.set(0.26);
-            spinSlices(25);
-            if (controlPower < maxPower && controlPower > minPower) {
-                // System.out.println("good job. The power is " + controlPower);
-                spinMotor.set(controlPower);
-            } else {
-                // System.out.println("You Done Goofed. The power is " + controlPower);
-                spinMotor.set(minPower);
-            }
+            spinMotor.set(0.2);
+            // TODO uncomment
+            // spinSlices(25);
+            // if (controlPower < maxPower && controlPower > minPower) {
+            //     // System.out.println("good job. The power is " + controlPower);
+            //     spinMotor.set(controlPower);
+            // } else {
+            //     // System.out.println("You Done Goofed. The power is " + controlPower);
+            //     spinMotor.set(minPower);
+            // }
             // if (currentTime - startTime < 20000)
             // spinMotor.set(1.0);
             // // positive = CCW

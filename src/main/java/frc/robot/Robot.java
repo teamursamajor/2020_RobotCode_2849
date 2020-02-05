@@ -47,20 +47,20 @@ public class Robot extends TimedRobot implements UrsaRobot {
     // m_chooser.addOption("My Auto", kCustomAuto);
     // SmartDashboard.putData("Auto choices", m_chooser);
 
-    drive = new Drive();
-    drive.initialize("DriveThread");
+   // drive = new Drive();
+    //drive.initialize("DriveThread");
 
     spinner = new Spinner();
     spinner.initialize("SpinnerThread");
 
-    climb = new Climb();
-    climb.initialize("ClimbThread");
+    //climb = new Climb();
+    //climb.initialize("ClimbThread");
 
-    intake = new Intake();
-    intake.initialize("IntakeThread");
+    //intake = new Intake();
+    //intake.initialize("IntakeThread");
 
-    outtake = new Outtake();
-    outtake.initialize("OuttakeThread");
+    //outtake = new Outtake();
+    //outtake.initialize("OuttakeThread");
 
     // autoCompiler = new AutoCompiler(drive, intake, outtake);
   }
