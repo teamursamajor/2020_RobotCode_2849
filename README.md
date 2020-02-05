@@ -25,6 +25,20 @@ https://pdocs.kauailabs.com/navx-mxp/software/roborio-libraries/java/
 
 We use a sensor called the NavX MXP, which requires some outside libraries. Open the link and download the latest build of the libraries. After installing, run the setup program. Then, open VS Code and press CTRL + Shift + P to show all commands. Search for "Manage Vendor Libraries," then "Install new libraries (offline)," then click on the NavX libraries.
 
+**Falcon 500:**
+
+https://github.com/CrossTheRoadElec/Phoenix-Releases/releases/download/v5.18.1.0/CTRE.Phoenix.Framework.v5.18.1.0.zip
+https://github.com/CrossTheRoadElec/Phoenix-Releases/releases/download/firm_FXv20.2.3/TalonFX-Application-20.2.3.0-season2020.zip
+
+Follow the installers above to install the necessary firmware for operating Falcon 500s.
+
+Documentation:
+https://content.vexrobotics.com/vexpro/Falcon/Falcon500UserGuide-20200107.pdf
+https://readthedocs.org/projects/phoenix-documentation/downloads/pdf/latest/
+https://phoenix-documentation.readthedocs.io/en/latest/index.html
+http://www.ctr-electronics.com/downloads/api/java/html/index.html
+https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages
+
 **JRE (Java Runtime Environment):**
 
 If Strings or other basic objects are throwing errors, you are missing your JRE. Install it from https://java.com/en/download/manual.jsp
