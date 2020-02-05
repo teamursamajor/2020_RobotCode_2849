@@ -49,19 +49,17 @@ public class AutoTokenizer implements TokenList {
 
                 // Goes through each token and tries to match the corresponding syntax
                 for (Token t : regularTokens) {
-                    // Searches through all possible syntaxes
+                    // Searches through all possible arguments
                     for (int i = 0; i < t.syntax.length; i++) {
                         match = match(line, t.syntax[i]);
-                        if (match.find()) { // If matching syntax has been found
-                            tokenList.add(t);
+                        if (match.find()) { // If matching argument has been found
+                            tokenList.add(t.setArgument(i));
                             matchedToken = true;
                             matchedAny = true;
                             line = line.substring(match.end()); // Removes matched characters from line
                             break;
                         }
                     }
-                    if (match.find())
-                        break;
                 }
 
                 // Handling number tokens

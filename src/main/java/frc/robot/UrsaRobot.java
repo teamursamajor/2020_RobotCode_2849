@@ -17,6 +17,9 @@ public interface UrsaRobot {
 	// Arcade vs Tank drive
 	public static boolean isArcadeDrive = true;
 
+	// Did I axe
+	public static boolean didIAxe = false;
+
 	// Spark Ports
 	// 6 unused
 	public static final int DRIVE_FRONT_LEFT = 7, DRIVE_BACK_LEFT = 4;

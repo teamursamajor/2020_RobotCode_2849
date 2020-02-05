@@ -3,9 +3,13 @@ package frc.auto.tasks;
 import frc.robot.*;
 
 /**
- * This is a task class for controlling the Intake mechanism during autonomous.
+ * This is a Task class for controlling the Intake mechanism during autonomous.
  */
 public class IntakeTask extends Task implements UrsaRobot {
+
+    /**
+     * Modes for Intake.
+     */
     public enum IntakeMode {
         IN, STOP;
     }

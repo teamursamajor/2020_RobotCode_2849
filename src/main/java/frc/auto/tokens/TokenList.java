@@ -34,8 +34,8 @@ public interface TokenList {
      * List of all regular tokens to search through in order
      */
     Token[] regularTokens = new Token[] { DRIVE_TOKEN, INTAKE_TOKEN, OUTTAKE_TOKEN, TURN_TOKEN, WAIT_TOKEN,
-            PARALLEL_TOKEN, SERIAL_TOKEN, EXECUTE_TOKEN, PRINT_TOKEN, LPAREN_TOKEN, RPAREN_TOKEN, PLUS_TOKEN,
-            MINUS_TOKEN, MULTIPLY_TOKEN, DIVIDE_TOKEN, RBRACE_TOKEN };
+            PARALLEL_TOKEN, SERIAL_TOKEN, EXECUTE_TOKEN, PRINT_TOKEN, LPAREN_TOKEN, RPAREN_TOKEN, COMMA_TOKEN,
+            PLUS_TOKEN, MINUS_TOKEN, MULTIPLY_TOKEN, DIVIDE_TOKEN, RBRACE_TOKEN };
 
     /* Data Tokens */
     DataToken<Double> NUMBER_TOKEN = new DataToken<Double>(TokenType.NUMBER, new String[] { "^\\s*-?\\d+(\\.\\d+)?" });

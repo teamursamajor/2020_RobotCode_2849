@@ -6,13 +6,13 @@ package frc.auto.tokens;
 public enum TokenType {
 
     /* Movement/Subsystems */
-    DRIVE, INTAKE, OUTTAKE, TURN,
+    DRIVE, TURN, INTAKE, OUTTAKE,
 
     /* Running Logic */
     PARALLEL, SERIAL, EXECUTE, FOLLOW, WAIT, PRINT, RBRACE, LPAREN, RPAREN, COMMA,
 
     /* Data Types */
-    NUMBER, STRING, BOOLEAN, ARGUMENT,
+    NUMBER, STRING, BOOLEAN,
 
     // Math Operators */
     PLUS, MINUS, MULTIPLY, DIVIDE

@@ -3,7 +3,7 @@ package frc.auto.tasks;
 import java.util.ArrayList;
 
 /**
- * This is an abstract class for group tasks (parallel and serial).
+ * This is an abstract class for Group Tasks (parallel and serial).
  */
 public abstract class GroupTask extends Task {
     protected ArrayList<Task> tasks = new ArrayList<Task>();

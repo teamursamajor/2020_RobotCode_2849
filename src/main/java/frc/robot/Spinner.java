@@ -4,8 +4,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Spark;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.auto.tasks.SpinnerTask;
-import frc.auto.tasks.SpinnerTask.SpinnerMode;
 
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
@@ -16,12 +14,15 @@ import edu.wpi.first.wpilibj.util.Color;
 /**
  * This class operates the Spinner mechanism.
  */
-public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaRobot {
+public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot {
+
+    public enum SpinnerMode {
+        SPIN, DETECT, STOP;
+    }
 
     private Spark spinMotor;
     private String gameData;
     private char color, goal, previousColor;
-    private boolean running;
 
     private int sameColor = 0, colorCounter = 0;
 
@@ -47,11 +48,12 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
     private final Color kYellowTarget = ColorMatch.makeColor(0.311, 0.569, 0.120);
 
     /**
-     * Constructor for Spinner objects.
+     * Constructor for the Spinner mechanism.
+     * Only one Spinner object should be instantiated at any time.
      */
     public Spinner() {
         spinMotor = new Spark(SPINNER);
-        running = false;
+        setMode(SpinnerMode.STOP);
         colorMatcher.addColorMatch(kBlueTarget);
         colorMatcher.addColorMatch(kGreenTarget);
         colorMatcher.addColorMatch(kRedTarget);
@@ -79,6 +81,9 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
         if (match.color == kYellowTarget)
             color = 'Y';
 
+        /*
+         * Determines goal color from DriverStation Game Data
+         */
         gameData = DriverStation.getInstance().getGameSpecificMessage();
 
         if (gameData.length() > 0) // If we've gotten a color to check for
@@ -86,35 +91,17 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
         else
             goal = ' ';
 
-        if (xbox.getSingleButtonPress(XboxController.BUTTON_A)) {
-            running = true;
-            if (goal != ' ') { // if there's a valid color to spin to
-                slicesToSpin = getSlicesToSpin(color, offsetColor(goal, 2));
-                System.out.println(offsetColor(goal, 2) + " " + slicesToSpin);
-            }
-        
-        } if (xbox.getSingleButtonPress(XboxController.BUTTON_B))
-            running = false;
-
-        if (running)
-            // chooses SPIN unless there is a color to detect
-            subsystemMode = goal == ' ' ? SpinnerMode.SPIN : SpinnerMode.DETECT;
-        else
-            subsystemMode = SpinnerMode.STOP;
-
         switch (subsystemMode) {
         case SPIN:
-
-            spinMotor.set(0.2);
-            // TODO uncomment
-            // spinSlices(25);
-            // if (controlPower < maxPower && controlPower > minPower) {
-            //     // System.out.println("good job. The power is " + controlPower);
-            //     spinMotor.set(controlPower);
-            // } else {
-            //     // System.out.println("You Done Goofed. The power is " + controlPower);
-            //     spinMotor.set(minPower);
-            // }
+            // spinMotor.set(0.26);
+            spinSlices(25);
+            if (controlPower < maxPower && controlPower > minPower) {
+                // System.out.println("good job. The power is " + controlPower);
+                spinMotor.set(controlPower);
+            } else {
+                // System.out.println("You Done Goofed. The power is " + controlPower);
+                spinMotor.set(minPower);
+            }
             // if (currentTime - startTime < 20000)
             // spinMotor.set(1.0);
             // // positive = CCW
@@ -122,7 +109,6 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
             // else {
             // running = false;
             // }
-
             break;
         case DETECT:
             // TODO maybe move this back to spinSlices?
@@ -139,15 +125,15 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
                 spinPower = .17 * direction;
                 // System.out.println(spinPower);
             }
-            if(color == offsetColor(goal, 2))
-                running = false;
+            if (color == offsetColor(goal, 2))
+                setMode(SpinnerMode.STOP);
             
             spinMotor.set(spinPower);
             previousColor = color;
 
             break;
             
-            /*
+            /* TODO remove
             //Logic for which direction to spin, 1 = CW, -1 = CCW
             int dir = colToNum(goal)-colToNum(color);
             if (Math.abs(dir % 2) == 0) dir = 1;
@@ -188,18 +174,16 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
             }
             previousColor = color;
         } else { // if it's seen the right color enough times
-            running = false;
+            setMode(SpinnerMode.STOP);
         }
     }
 
     /**
-     * Calculates the number of slices to spin given the current
-     * and goal color.
-     * @param startColor The color the wheel is currently on
-     * @param goalColor The color to go to
-     * @return The number of slices to spin
+     * Calculates the number of slices to spin given the current and goal color.
+     * @param startColor The color the wheel is currently on.
+     * @param goalColor The color to go to.
      */
-    public int getSlicesToSpin(char startColor, char goalColor){
+    public void getSlicesToSpin(char startColor, char goalColor){
         int distance;
         String allColors = "YRGB";
         int indexOfStartColor = allColors.indexOf(startColor);
@@ -208,10 +192,11 @@ public class Spinner extends Subsystem<SpinnerTask.SpinnerMode> implements UrsaR
         distance = (indexOfGoalColor - indexOfStartColor);
 
         if (distance == 3)
-            return -1;
-        if (distance == -3)
-            return 1;
-        return distance;
+            slicesToSpin = -1;
+        else if (distance == -3)
+            slicesToSpin = 1;
+        else
+            slicesToSpin = distance;
     }
 
     /**
