@@ -33,12 +33,12 @@ public class Token {
     }
 
     /**
-     * Sets a token to use a given alternate syntax.
-     * Corresponds to the index of that syntax.
-     * @param index The index of the alternate syntax
+     * Sets a token to use a given argument.
+     * Corresponds to the index of that argument.
+     * @param index The index of the argument
      */
-    public Token setIndex(int index) {
-        return new Token(type, syntax, index);
+    public Token setArgument(int arg) {
+        return new Token(type, syntax, arg);
     }
 
     public String toString() {
