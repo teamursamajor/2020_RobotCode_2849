@@ -1,14 +1,13 @@
 package frc.auto.tasks;
 
 /**
- * This is a task class for adding delay when running Auto Scripts.
+ * This is a Task class for adding delay when running Auto Scripts.
  */
 public class WaitTask extends Task {
 	
 	private long waitTime = 20;
 	
 	public WaitTask(long time) {
-		super();
 		waitTime = time;
 	}
 

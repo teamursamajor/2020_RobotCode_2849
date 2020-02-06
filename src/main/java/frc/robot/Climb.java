@@ -4,13 +4,14 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.DigitalInput;
 
-import frc.auto.tasks.ClimbTask;
-import frc.auto.tasks.ClimbTask.ClimbMode;
-
 /**
  * This class operates the Climb mechanism.
  */
-public class Climb extends Subsystem<ClimbTask.ClimbMode> implements UrsaRobot {
+public class Climb extends Subsystem<Climb.ClimbMode> implements UrsaRobot {
+
+    public enum ClimbMode {
+        UP, DOWN, STOP;
+    }
 
     private Spark motor1, motor2;
     // private Servo servo1, servo2;
@@ -19,11 +20,15 @@ public class Climb extends Subsystem<ClimbTask.ClimbMode> implements UrsaRobot {
 
     private int distanceToGo = 5;
 
+    /**
+     * Constructor for the Climb mechanism. Only one Climb object should be
+     * instantiated at any time.
+     */
     public Climb() {
         motor1 = new Spark(CLIMB_FRONT);
         motor2 = new Spark(CLIMB_BACK);
-        //servo1 = new Servo(SERVO_PORT_1);
-        //servo2 = new Servo(SERVO_PORT_2);
+        // servo1 = new Servo(SERVO_PORT_1);
+        // servo2 = new Servo(SERVO_PORT_2);
 
         limitSwitch = new DigitalInput(CLIMB_SWITCH_PORT);
         climbEncoder.setDistancePerPulse(CLIMB_INCHES_PER_TICK);
@@ -32,22 +37,10 @@ public class Climb extends Subsystem<ClimbTask.ClimbMode> implements UrsaRobot {
 
     @Override
     public void runSubsystem() throws InterruptedException {
-        if (xbox.getDPad(controls.map.get("climb_up"))) {
-            subsystemMode = ClimbMode.UP;
-        } else if (xbox.getDPad(controls.map.get("climb_down"))) {
-            subsystemMode = ClimbMode.DOWN;
-        } else if (xbox.getDPad(controls.map.get("climb_up")) && xbox.getDPad(controls.map.get("climb_down")))
-            subsystemMode = ClimbMode.STOP;
-            //stops climb if up and down are pressed
-        else {
-            subsystemMode = ClimbMode.STOP;
-        }
-
-
-        if(limitSwitch.get()) //check to see if climb got to right height
-            subsystemMode = ClimbMode.STOP;
-        if(climbEncoder.getDistance() >= distanceToGo) //stop if encoder says we've gone right distance
-            subsystemMode = ClimbMode.STOP;
+        // Stop if climb got to right height (limit switch pressed) or encoder says
+        // we've gone correct distance
+        if (limitSwitch.get() || climbEncoder.getDistance() >= distanceToGo)
+            setMode(ClimbMode.STOP);
 
         // System.out.println(servo1.get() + " " + servo2.get());
 

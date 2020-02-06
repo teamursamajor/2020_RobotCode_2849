@@ -11,9 +11,13 @@ import edu.wpi.first.wpilibj.TimedRobot;
 // import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.DriverStation;
-// import frc.tasks.DriveTask.DriveMode;
-// import frc.tasks.DriveTask;
 // import frc.tasks.AutoCompiler;
+
+import frc.auto.tasks.DriveTask.DriveMode;
+import frc.auto.tasks.IntakeTask.IntakeMode;
+import frc.auto.tasks.OuttakeTask.OuttakeMode;
+import frc.robot.Climb.ClimbMode;
+import frc.robot.Spinner.SpinnerMode;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -47,20 +51,20 @@ public class Robot extends TimedRobot implements UrsaRobot {
     // m_chooser.addOption("My Auto", kCustomAuto);
     // SmartDashboard.putData("Auto choices", m_chooser);
 
-    drive = new Drive();
-    drive.initialize("DriveThread");
+   // drive = new Drive();
+    //drive.initialize("DriveThread");
 
     spinner = new Spinner();
     spinner.initialize("SpinnerThread");
 
-    climb = new Climb();
-    climb.initialize("ClimbThread");
+    //climb = new Climb();
+    //climb.initialize("ClimbThread");
 
-    intake = new Intake();
-    intake.initialize("IntakeThread");
+    //intake = new Intake();
+    //intake.initialize("IntakeThread");
 
-    outtake = new Outtake();
-    outtake.initialize("OuttakeThread");
+    //outtake = new Outtake();
+    //outtake.initialize("OuttakeThread");
 
     // autoCompiler = new AutoCompiler(drive, intake, outtake);
   }
@@ -119,13 +123,59 @@ public class Robot extends TimedRobot implements UrsaRobot {
   }
 
   /**
+   * This function is run when teleop mode is first started up and should be
+	 * used for any teleop initialization code.
+   */
+  @Override
+  public void teleopInit() {
+    drive.setMode(DriveMode.DRIVE_STICKS);
+  }
+
+  /**
    * This function is called periodically during operator control.
+   * It is used to check for controller inputs.
    */
   @Override
   public void teleopPeriodic() {
-    
+    /* Spinner Control */
+    if (xbox.getSingleButtonPress(controls.map.get("spinner_run"))) {
+      // Chooses SPIN unless there is a color to detect
+      spinner.setMode(spinner.getGoal() == ' ' ? SpinnerMode.SPIN : SpinnerMode.DETECT);
+      if (spinner.getMode() == SpinnerMode.DETECT)
+        spinner.getSlicesToSpin(spinner.getColor(), spinner.offsetColor(spinner.getGoal(), 2));
+    }
+    if (xbox.getSingleButtonPress(controls.map.get("spinner_stop")))
+      spinner.setMode(SpinnerMode.STOP);
+
+    /* Intake Control */
+    if (xbox.getButton(controls.map.get("intake")) && intake.getCount() < 5) {
+      intake.setMode(IntakeMode.IN); // Only operates if we haven't gotten 5 power cells yet
+    } else
+      intake.setMode(IntakeMode.STOP);
+
+    /* Outtake Control */
+    if (xbox.getButton(controls.map.get("outtake_out"))) {
+      outtake.setMode(OuttakeMode.OUT);
+      intake.resetCount(); // Resets power cell count when we outtake
+    } else if (xbox.getButton(controls.map.get("outtake_in"))) {
+      outtake.setMode(OuttakeMode.IN);
+    } else
+      outtake.setMode(OuttakeMode.STOP);
+
+    /* Climb Control */
+    if (xbox.getDPad(controls.map.get("climb_up"))) {
+      climb.setMode(ClimbMode.UP);
+    } else if (xbox.getDPad(controls.map.get("climb_down"))) {
+      climb.setMode(ClimbMode.DOWN);
+    } else
+      climb.setMode(ClimbMode.STOP);
+    // Stops climb if both up and down are pressed
+    if (xbox.getDPad(controls.map.get("climb_up")) && xbox.getDPad(controls.map.get("climb_down")))
+      climb.setMode(ClimbMode.STOP); 
   }
+
   // private boolean test1 = false, test2 = false, test3 = false;
+
   /**
    * This function is called periodically during test mode.
    */
@@ -153,14 +203,11 @@ public class Robot extends TimedRobot implements UrsaRobot {
     //   test3 = true;
     // }
 
-
   }
 
   @Override
   public void disabledInit() {
     // spinner.setMode(SpinnerMode.WAIT);
   }
-
-  
 
 }

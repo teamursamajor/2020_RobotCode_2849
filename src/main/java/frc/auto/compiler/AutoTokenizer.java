@@ -53,7 +53,7 @@ public class AutoTokenizer implements TokenList {
                     for (int i = 0; i < t.syntax.length; i++) {
                         match = match(line, t.syntax[i]);
                         if (match.find()) { // If matching argument has been found
-                            tokenList.add(t.setIndex(i));
+                            tokenList.add(t.setArgument(i));
                             matchedToken = true;
                             matchedAny = true;
                             line = line.substring(match.end()); // Removes matched characters from line

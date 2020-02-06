@@ -28,7 +28,8 @@ public class ControlMap {
         map.put("intake", XboxController.BUTTON_RIGHTBUMPER);
 
         // Spinner
-        map.put("spinner", XboxController.BUTTON_A);
+        map.put("spinner_run", XboxController.BUTTON_A);
+        map.put("spinner_stop", XboxController.BUTTON_B);
 
         // Climb
         map.put("climb_up", XboxController.POV_UP);

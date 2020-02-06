@@ -1,7 +1,7 @@
 package frc.auto.tasks;
 
 /**
- * This is a group task class for running tasks in sequence.
+ * This is a Group Task class for running Tasks in serial order (sequence).
  */
 public class SerialTask extends GroupTask {
 

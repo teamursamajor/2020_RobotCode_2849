@@ -13,7 +13,7 @@ public abstract class Subsystem<E> implements Runnable {
 
     private Thread t;
 
-    /*
+    /**
      * Constructor for starting threads for each subsystem
      */
     public Subsystem() {
@@ -24,8 +24,7 @@ public abstract class Subsystem<E> implements Runnable {
 
     public void run() {
         while (running) {
-            // When the thread is interrupted to set a mode (see below), it will just
-            // restart itself.
+            // When the thread is interrupted, it will just restart itself.
             try {
                 runSubsystem();
                 Thread.sleep(20);
