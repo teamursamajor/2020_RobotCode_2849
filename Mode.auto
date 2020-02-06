@@ -1,1 +1,16 @@
-(4,5,6)
+print "hello"
+execute "test"
+drive 10
+turn 90
+intake false
+outtake out
+outtake stop
+outtake in
+wait 3
+parallel {
+    turn 30
+    drive 10
+}
+serial {
+    (4, 5, 6)
+}

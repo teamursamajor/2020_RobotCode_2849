@@ -24,10 +24,10 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 		setMode(DriveMode.DRIVE_STICKS);
 
 		mFrontRight = new Spark(DRIVE_FRONT_RIGHT);
-		mFrontLeft = new Spark(DRIVE_FRONT_LEFT);
+		mRearRight = mFrontRight;
 
-		mRearLeft = new Spark(DRIVE_BACK_LEFT);
-		mRearRight = new Spark(DRIVE_BACK_RIGHT);
+		mFrontLeft = new Spark(DRIVE_FRONT_LEFT);
+		mRearLeft = mFrontLeft;
 		
 		// TODO change this based on distance testing
 		leftEncoder.setDistancePerPulse(INCHES_PER_TICK);

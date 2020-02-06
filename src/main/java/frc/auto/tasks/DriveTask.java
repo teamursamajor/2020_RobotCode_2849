@@ -120,15 +120,16 @@ public class DriveTask extends Task implements UrsaRobot {
             double leftSpeed, rightSpeed, leftStickY, rightStickX;
             if (isArcadeDrive) {
                 // Arcade Drive
-               // leftStickY = xbox.getSquaredAxis(XboxController.AXIS_LEFTSTICK_Y);
-               // rightStickX = -xbox.getSquaredAxis(XboxController.AXIS_RIGHTSTICK_X);
+            //    leftStickY = xbox.getSquaredAxis(XboxController.AXIS_LEFTSTICK_Y);
+            //    rightStickX = -xbox.getSquaredAxis(XboxController.AXIS_RIGHTSTICK_X);
 
-               leftStickY = xbox.getAxis(XboxController.AXIS_LEFTSTICK_Y);
-               rightStickX = -xbox.getAxis(XboxController.AXIS_RIGHTSTICK_X);
+               leftStickY = -xbox.getAxis(XboxController.AXIS_LEFTSTICK_Y);
+               rightStickX = xbox.getAxis(XboxController.AXIS_RIGHTSTICK_X);
 
                 leftSpeed = leftStickY + rightStickX;
                 rightSpeed = leftStickY - rightStickX;
 
+                
                 double changeX = rightSpeed-previousX;
                double changeY = leftSpeed-previousY;
 
@@ -158,8 +159,8 @@ public class DriveTask extends Task implements UrsaRobot {
                 }
             } else {
                 // Tank Drive
-                //leftSpeed = xbox.getSquaredAxis(XboxController.AXIS_LEFTSTICK_Y);
-                //rightSpeed = -xbox.getSquaredAxis(XboxController.AXIS_RIGHTSTICK_Y);
+                // leftSpeed = xbox.getSquaredAxis(XboxController.AXIS_LEFTSTICK_Y);
+                // rightSpeed = -xbox.getSquaredAxis(XboxController.AXIS_RIGHTSTICK_Y);
 
                 leftSpeed = xbox.getAxis(XboxController.AXIS_LEFTSTICK_Y);
                 rightSpeed = -xbox.getAxis(XboxController.AXIS_RIGHTSTICK_Y);
@@ -181,6 +182,9 @@ public class DriveTask extends Task implements UrsaRobot {
                 leftSpeed = speedY;
                 rightSpeed = speedX;
             }
+
+            previousX = speedX;
+            previousY = speedY;
 
             return new DriveOrder(leftSpeed, rightSpeed);
         }

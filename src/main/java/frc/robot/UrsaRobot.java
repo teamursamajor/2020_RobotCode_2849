@@ -22,10 +22,10 @@ public interface UrsaRobot {
 
 	// Spark Ports
 	// 6 unused
-	public static final int DRIVE_FRONT_LEFT = 7, DRIVE_BACK_LEFT = 4;
-	public static final int DRIVE_FRONT_RIGHT = 6, DRIVE_BACK_RIGHT = 8;
+	public static final int DRIVE_FRONT_LEFT = 0, DRIVE_BACK_LEFT = 0;
+	public static final int DRIVE_FRONT_RIGHT = 1, DRIVE_BACK_RIGHT = 1;
 
-	public static final int SPINNER = 9, OUTTAKE = 1, BELT = 3;
+	public static final int SPINNER = 9, OUTTAKE = 4, BELT = 3;
 	
 	public static final int CLIMB_FRONT = 5, CLIMB_BACK = 10;
 	public static final int INTAKE_MOTOR = 2;
