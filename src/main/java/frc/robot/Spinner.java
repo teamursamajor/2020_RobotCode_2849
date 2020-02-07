@@ -66,12 +66,12 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
             // Chooses SPIN unless there is a color to detect
             setMode(getGoal() == ' ' ? SpinnerMode.SPIN : SpinnerMode.DETECT);
             if (getMode() == SpinnerMode.DETECT)
-            getSlicesToSpin(getColor(), offsetColor(getGoal(), 2));
+                getSlicesToSpin(getColor(), offsetColor(getGoal(), 2));
         }
         if (xbox.getSingleButtonPress(controls.map.get("spinner_stop")))
             setMode(SpinnerMode.STOP);
     }
-    
+
     public void runSubsystem() throws InterruptedException {
         /*
          * Matches the color the color sensor is seeing to the closest
@@ -105,15 +105,15 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
 
         switch (subsystemMode) {
         case SPIN:
-            // spinMotor.set(0.26);
-            spinSlices(25);
-            if (controlPower < maxPower && controlPower > minPower) {
-                // System.out.println("good job. The power is " + controlPower);
-                spinMotor.set(controlPower);
-            } else {
-                // System.out.println("You Done Goofed. The power is " + controlPower);
-                spinMotor.set(minPower);
-            }
+            spinMotor.set(0.26);
+            // spinSlices(25);
+            // if (controlPower < maxPower && controlPower > minPower) {
+            //     // System.out.println("good job. The power is " + controlPower);
+            //     spinMotor.set(controlPower);
+            // } else {
+            //     // System.out.println("You Done Goofed. The power is " + controlPower);
+            //     spinMotor.set(minPower);
+            // }
             // if (currentTime - startTime < 20000)
             // spinMotor.set(1.0);
             // // positive = CCW

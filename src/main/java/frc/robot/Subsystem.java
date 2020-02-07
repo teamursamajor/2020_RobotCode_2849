@@ -21,10 +21,11 @@ public abstract class Subsystem<E> implements Runnable {
     }
 
     /**
-     * Checks for controller inputs.
+     * Checks for controller inputs for the given subsystem.
+     * Should only run during teleop mode.
      */
     public abstract void readControls();
-    
+
     // Thread Methods
 
     public void run() {
