@@ -220,4 +220,9 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 		message = "DEBUGGING: " + message;
 		System.out.println(message);
 	}
+
+	@Override
+	public void readControls() {
+		// TODO fill in here?
+	}
 }

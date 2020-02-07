@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Spark;
 import frc.auto.tasks.OuttakeTask;
+import frc.auto.tasks.OuttakeTask.OuttakeMode;
 
 /**
  * This class operates the Outtake mechanism.
@@ -16,8 +17,19 @@ public class Outtake extends Subsystem<OuttakeTask.OuttakeMode> implements UrsaR
      */
     public Outtake() {
         outtakeMotor = new Spark(OUTTAKE);
+        setMode(OuttakeMode.STOP);
     }
+    
+    @Override
+    public void readControls() {
+        if (xbox.getButton(controls.map.get("outtake_out"))) {
+            setMode(OuttakeMode.OUT);
+        } else if (xbox.getButton(controls.map.get("outtake_in"))) {
+            setMode(OuttakeMode.IN);
+        } else
+            setMode(OuttakeMode.STOP);
 
+    }
     public void runSubsystem() throws InterruptedException {
         switch (subsystemMode) {
         case OUT:
@@ -31,4 +43,6 @@ public class Outtake extends Subsystem<OuttakeTask.OuttakeMode> implements UrsaR
             break;
         }
     }
+
+    
 }

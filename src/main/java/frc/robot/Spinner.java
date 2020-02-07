@@ -60,6 +60,18 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
         colorMatcher.addColorMatch(kYellowTarget);
     }
 
+    @Override
+    public void readControls() {
+        if (xbox.getSingleButtonPress(controls.map.get("spinner_run"))) {
+            // Chooses SPIN unless there is a color to detect
+            setMode(getGoal() == ' ' ? SpinnerMode.SPIN : SpinnerMode.DETECT);
+            if (getMode() == SpinnerMode.DETECT)
+            getSlicesToSpin(getColor(), offsetColor(getGoal(), 2));
+        }
+        if (xbox.getSingleButtonPress(controls.map.get("spinner_stop")))
+            setMode(SpinnerMode.STOP);
+    }
+    
     public void runSubsystem() throws InterruptedException {
         /*
          * Matches the color the color sensor is seeing to the closest

@@ -2,6 +2,7 @@ package frc.robot;
 
 // import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Spark;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 
 /**
@@ -24,7 +25,7 @@ public class Climb extends Subsystem<Climb.ClimbMode> implements UrsaRobot {
      * Constructor for the Climb mechanism. Only one Climb object should be
      * instantiated at any time.
      */
-    public Climb() {
+    public Climb() {    
         motor1 = new Spark(CLIMB_FRONT);
         motor2 = new Spark(CLIMB_BACK);
         // servo1 = new Servo(SERVO_PORT_1);
@@ -35,6 +36,18 @@ public class Climb extends Subsystem<Climb.ClimbMode> implements UrsaRobot {
         climbEncoder.reset();
     }
 
+    @Override
+    public void readControls() {
+        if (xbox.getDPad(controls.map.get("climb_up"))) {
+            setMode(ClimbMode.UP);
+        } else if (xbox.getDPad(controls.map.get("climb_down"))) {
+            setMode(ClimbMode.DOWN);
+        } else
+            setMode(ClimbMode.STOP);
+        // Stops climb if both up and down are pressed
+        if (xbox.getDPad(controls.map.get("climb_up")) && xbox.getDPad(controls.map.get("climb_down")))
+            setMode(ClimbMode.STOP); 
+    }
     @Override
     public void runSubsystem() throws InterruptedException {
         // Stop if climb got to right height (limit switch pressed) or encoder says
@@ -63,4 +76,6 @@ public class Climb extends Subsystem<Climb.ClimbMode> implements UrsaRobot {
             break;
         }
     }
+
+    
 }
