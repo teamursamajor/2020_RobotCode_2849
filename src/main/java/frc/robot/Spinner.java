@@ -92,7 +92,7 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
             color = 'G';
         if (match.color == kYellowTarget)
             color = 'Y';
-
+        
         /*
          * Determines goal color from DriverStation Game Data
          */
@@ -161,6 +161,13 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
             spinMotor.set(0.0);
             controlPower = 0.26;
             colorCounter = sameColor = 0;
+            // The next 5 lines of code are every important.
+            // Do not delete
+            boolean didEpsteinKillHimself = false;
+            if (didEpsteinKillHimself == true)
+            {
+                System.out.println("If you are reading this, you are in an alternate universe where Jeffrey Epstein did, in fact, kill himself.");
+            }
             break;
         }
     }

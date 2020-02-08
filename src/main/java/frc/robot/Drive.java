@@ -1,6 +1,6 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Spark;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.auto.tasks.DriveTask;
 import frc.auto.tasks.DriveTask.DriveMode;
 
@@ -8,34 +8,44 @@ import frc.auto.tasks.DriveTask.DriveMode;
  * This subsystem class allows us to drive the robot. It contains the following
  * information:
  * <ul>
- * <li><b>Encoders:</b> getRightRate(), getLeftRate()</li>
+ * <li><b>Encoders:</b> getLeftDistance(), getRightDistance(), getLeftRate(),
+ * getRightRate()</li>
  * <li><b>Heading:</b> uses degrees as a measurement</li>
  * </ul>
  */
 public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 
-	public static Spark mFrontLeft, mFrontRight, mRearLeft, mRearRight;
+	// public static Spark mFrontLeft, mFrontRight, mRearLeft, mRearRight;
+	public static WPI_TalonSRX mFrontLeft, mFrontRight, mRearLeft, mRearRight;
 
 	/**
-	 * Constructor for the Drive subsystem.
-	 * Only one Drive object should be instantiated at any time.
+	 * Constructor for the Drive subsystem. Only one Drive object should be
+	 * instantiated at any time.
 	 */
 	public Drive() {
 		setMode(DriveMode.AUTO_DRIVE);
 
-		mFrontRight = new Spark(DRIVE_FRONT_RIGHT);
-		mRearRight = mFrontRight;
+		mFrontRight = new WPI_TalonSRX(DRIVE_FRONT_RIGHT);
+		mRearRight = new WPI_TalonSRX(DRIVE_BACK_RIGHT);
 
-		mFrontLeft = new Spark(DRIVE_FRONT_LEFT);
-		mRearLeft = mFrontLeft;
-		
-		// TODO change this based on distance testing
-		leftEncoder.setDistancePerPulse(INCHES_PER_TICK);
-		rightEncoder.setDistancePerPulse(INCHES_PER_TICK);
-		rightEncoder.setReverseDirection(true);
+		mFrontLeft = new WPI_TalonSRX(DRIVE_FRONT_LEFT);
+		mRearLeft = new WPI_TalonSRX(DRIVE_BACK_LEFT);
 
-		leftEncoder.reset();
-		rightEncoder.reset();
+		mFrontRight.configFactoryDefault();
+		mRearRight.configFactoryDefault();
+		mFrontLeft.configFactoryDefault();
+		mRearLeft.configFactoryDefault();
+
+		// TODO maybe use??
+		mRearRight.follow(mFrontRight);
+		mRearLeft.follow(mFrontLeft);
+
+		// TODO remove all of these
+		// leftEncoder.setDistancePerPulse(INCHES_PER_TICK);
+		// rightEncoder.setDistancePerPulse(INCHES_PER_TICK);
+		// rightEncoder.setReverseDirection(true);
+		// leftEncoder.reset();
+		// rightEncoder.reset();
 	}
 
 	/**
@@ -47,15 +57,23 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 		updateStateInfo();
 		final DriveTask.DriveOrder driveOrder = subsystemMode.callLoop();
 
-		//System.out.println("Left encoder: " + leftEncoder.getDistance());
-		//System.out.println("Right encoder: " + rightEncoder.getDistance());
+		System.out.println("Left sensor: " + mFrontLeft.getSelectedSensorPosition());
+		System.out.println("Right sensor: " + mFrontRight.getSelectedSensorPosition());
+
+		/*
+		 * These currently only set power based on percentage. In the future, we will
+		 * use different control modes. These may be set through the method
+		 * .set(ControlMode mode, double value)
+		 */
 		mFrontLeft.set(driveOrder.leftPower);
 		mFrontRight.set(-driveOrder.rightPower);
-		mRearLeft.set(driveOrder.leftPower);
-		mRearRight.set(-driveOrder.rightPower);
 
-		// System.out.println("left power: " +driveOrder.leftPower);
-		// System.out.println("right power: " +driveOrder.rightPower);
+		// TODO maybe don't need?
+		// mRearLeft.set(driveOrder.leftPower);
+		// mRearRight.set(-driveOrder.rightPower);
+
+		// System.out.println("Left power: " + driveOrder.leftPower);
+		// System.out.println("Right power: " + driveOrder.rightPower);
 	}
 
 	/**
@@ -66,11 +84,11 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	 * <li>the current heading of the robot</li>
 	 */
 	public void updateStateInfo() {
-		final double leftDistance = getLeftEncoder();
-		final double rightDistance = getRightEncoder();
+		final double leftDistance = getLeftDistance();
+		final double rightDistance = getRightDistance();
 		// System.out.println("left encoder: " + leftDistance);
 		// System.out.println("right encoder: " + rightDistance);
-		//System.out.println("avg pos: " + (leftDistance + rightDistance) / 2);
+		// System.out.println("avg pos: " + (leftDistance + rightDistance) / 2);
 
 		// System.out.println(leftDistance + " " + rightDistance);
 
@@ -86,7 +104,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 
 		// double averageDeltaPos = (leftDeltaPos + rightDeltaPos) / 2.0;
 		// if (Math.abs(averageDeltaPos) <= 1 || deltaTime <= 5) // TODO change 1
-		// 	return;
+		// return;
 
 		DriveTask.DriveState.updateState(leftVelocity, rightVelocity, leftDistance, rightDistance, getHeading());
 	}
@@ -124,41 +142,43 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	}
 
 	/**
-	 * @return - the left encoder's distance value
+	 * @return the left encoder's distance value. Unit is distance as scaled by
+	 *         INCHES_PER_TICK.
 	 */
-	public double getLeftEncoder() {
-		return leftEncoder.getDistance();
+	public double getLeftDistance() {
+		return mFrontLeft.getSelectedSensorPosition() * INCHES_PER_TICK;
 	}
 
 	/**
-	 * @return - the right encoder's distance value
+	 * @return the right encoder's distance value. Unit is distance as scaled by
+	 *         INCHES_PER_TICK.
 	 */
-	public double getRightEncoder() {
-		return rightEncoder.getDistance();
+	public double getRightDistance() {
+		return mFrontRight.getSelectedSensorPosition() * INCHES_PER_TICK;
 	}
 
 	/**
-	 * @return Get the current rate of the encoder. Units are distance per second as
-	 *         scaled by the value from setDistancePerPulse().
+	 * @return the current rate of the left encoder. Units are distance per second
+	 *         as scaled by INCHES_PER_TICK.
 	 */
 	public double getLeftRate() {
-		return leftEncoder.getRate();
+		return mFrontLeft.getSelectedSensorVelocity() * INCHES_PER_TICK;
 	}
 
 	/**
-	 * @return Get the current rate of the encoder. Units are distance per second as
-	 *         scaled by the value from setDistancePerPulse().
+	 * @return the current rate of the right encoder. Units are distance per second
+	 *         as scaled by INCHES_PER_TICK.
 	 */
 	public double getRightRate() {
-		return rightEncoder.getRate();
+		return mFrontRight.getSelectedSensorVelocity() * INCHES_PER_TICK;
 	}
 
 	/**
 	 * Resets the current encoder distance to zero
 	 */
 	public void resetEncoders() {
-		leftEncoder.reset();
-		rightEncoder.reset();
+		mFrontLeft.setSelectedSensorPosition(0);
+		mFrontRight.setSelectedSensorPosition(0);
 	}
 
 	/**
@@ -172,20 +192,20 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 
 	/**
 	 * Stops all four motors. Remember that robot will still have forward momentum
-	 * and slide slightly
+	 * and slide slightly.
 	 */
 	public static void stop() {
 		mFrontLeft.stopMotor();
 		mFrontRight.stopMotor();
-		mRearLeft.stopMotor();
-		mRearRight.stopMotor();
+		// mRearLeft.stopMotor();
+		// mRearRight.stopMotor();
 	}
 
 	/**
 	 * Sets all drive motors to the same power. Accounts for the flip between the
 	 * left and right sides
 	 * 
-	 * @param power - the power the motors get set to
+	 * @param power the power the motors get set to
 	 */
 	public static void setPower(final double power) {
 		setRightPower(power);
@@ -195,30 +215,21 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	/**
 	 * Sets the front and back left motors.
 	 *
-	 * @param power - the power the motor is set to
+	 * @param power the power the motor is set to
 	 */
 	public static void setLeftPower(final double power) {
 		mFrontLeft.set(-power);
-		mRearLeft.set(-power);
+		// mRearLeft.set(-power);
 	}
 
 	/**
 	 * Sets the front and back right motors.
 	 *
-	 * @param power - the power the motor is set to.
+	 * @param power the power the motor is set to.
 	 */
 	public static void setRightPower(final double power) {
 		mFrontRight.set(power);
-		mRearRight.set(power);
-	}
-	
-	//System.out.println(mRearRight);
-	/**
-	 * Will print out DEBUGGING followed by a message. Used for testing code.
-	 */
-	public void debugMessage(String message) {
-		message = "DEBUGGING: " + message;
-		System.out.println(message);
+		// mRearRight.set(power);
 	}
 
 	@Override

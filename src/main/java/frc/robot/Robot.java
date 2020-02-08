@@ -150,7 +150,6 @@ public class Robot extends TimedRobot implements UrsaRobot {
    */
   @Override
   public void testPeriodic() {
-   
     // TODO uncomment if testing automodes w/o auto code
 
     // // System.out.println("test periodic running");
@@ -171,21 +170,17 @@ public class Robot extends TimedRobot implements UrsaRobot {
     //   DriveTask task4 = new DriveTask(30, drive, DriveMode.TURN);
     //   test3 = true;
     // }
-
   }
 
   @Override
   public void disabledInit() {
-    // spinner.setMode(SpinnerMode.WAIT);
   }
 
   public static void jetPlane() {
-
     System.out.println("   ____       _");
     System.out.println(" |__\\_\\_o,___/ \\");
     System.out.println("([___\\_\\_____-\\'");
     System.out.println(" | o'");
-
   }
 
 }
