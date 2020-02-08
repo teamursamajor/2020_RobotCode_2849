@@ -29,7 +29,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
   // private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   private Drive drive;
-  // private DriveFalcon driveFalcon;
+  private DriveFalcon driveFalcon;
   private Spinner spinner;
   private Intake intake;
   private Outtake outtake;
@@ -51,8 +51,8 @@ public class Robot extends TimedRobot implements UrsaRobot {
     drive = new Drive();
     drive.initialize("DriveThread");
 
-    // driveFalcon = new DriveFalcon();
-    // driveFalcon.initialize("DriveFalconThread");
+    driveFalcon = new DriveFalcon();
+    driveFalcon.initialize("DriveFalconThread");
 
     spinner = new Spinner();
     spinner.initialize("SpinnerThread");
@@ -177,6 +177,15 @@ public class Robot extends TimedRobot implements UrsaRobot {
   @Override
   public void disabledInit() {
     // spinner.setMode(SpinnerMode.WAIT);
+  }
+
+  public static void jetPlane() {
+
+    System.out.println("   ____       _");
+    System.out.println(" |__\\_\\_o,___/ \\");
+    System.out.println("([___\\_\\_____-\\'");
+    System.out.println(" | o'");
+
   }
 
 }
