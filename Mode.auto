@@ -11,6 +11,3 @@ parallel {
     turn 30
     drive 10
 }
-serial {
-    (4, 5, 6)
-}

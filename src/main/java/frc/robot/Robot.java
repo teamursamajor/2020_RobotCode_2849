@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 // import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.DriverStation;
-// import frc.tasks.AutoCompiler;
+import frc.auto.compiler.AutoCompiler;
 
 import frc.auto.tasks.DriveTask.DriveMode;
 
@@ -29,12 +29,11 @@ public class Robot extends TimedRobot implements UrsaRobot {
   // private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   private Drive drive;
-  private DriveFalcon driveFalcon;
   private Spinner spinner;
   private Intake intake;
   private Outtake outtake;
   private Climb climb;
-  // private AutoCompiler autoCompiler;
+  private AutoCompiler autoCompiler;
 
   // private int testCounter;
 
@@ -51,9 +50,6 @@ public class Robot extends TimedRobot implements UrsaRobot {
     drive = new Drive();
     drive.initialize("DriveThread");
 
-    driveFalcon = new DriveFalcon();
-    driveFalcon.initialize("DriveFalconThread");
-
     spinner = new Spinner();
     spinner.initialize("SpinnerThread");
 
@@ -66,7 +62,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
     outtake = new Outtake();
     outtake.initialize("OuttakeThread");
 
-    // autoCompiler = new AutoCompiler(drive, intake, outtake);
+    autoCompiler = new AutoCompiler(drive, intake, outtake);
   }
 
   /**
@@ -99,11 +95,11 @@ public class Robot extends TimedRobot implements UrsaRobot {
     // m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     // System.out.println("Auto selected: " + m_autoSelected);
-    // try {
-    //   autoCompiler.buildAutoMode("Mode.auto");
-    // } catch (Exception e) {
-    //   e.printStackTrace();
-    // }
+    try {
+      System.out.println(autoCompiler.buildAutoMode("Mode.auto").toString());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   /**
