@@ -2,13 +2,12 @@
 
 META:
 * Get Falcon/PDP firmware on competition RoboRIO
-* Install Falcon utilities on Acer laptop (couldn't bc no wifi)
 * Give members opportunities to code/learn/work independently
 * Make sure people understand Java, how to debug stuff, working with WPILib
 * Document code so we know what stuff does
 * Incorporate Logger for debug/error info
-* Split DriveTask into TurnTask/DriveTask?
 * Move subsystem mode enums to subsystem classes? Or keep in modes?
+* Make a MusicTask. Music in auto 2020
 
 SPINNER:
 * Comment/reorganize class
