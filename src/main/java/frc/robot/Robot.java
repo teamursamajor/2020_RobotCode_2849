@@ -34,6 +34,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
   private Outtake outtake;
   private Climb climb;
   private AutoCompiler autoCompiler;
+  private MusicPlayer musicPlayer;
 
   // private int testCounter;
 
@@ -61,6 +62,9 @@ public class Robot extends TimedRobot implements UrsaRobot {
 
     outtake = new Outtake();
     outtake.initialize("OuttakeThread");
+
+    musicPlayer = new MusicPlayer();
+    musicPlayer.initialize("MusicThread");
 
     autoCompiler = new AutoCompiler(drive, intake, outtake);
   }
@@ -137,6 +141,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
     intake.readControls();
     outtake.readControls();
     spinner.readControls();
+    musicPlayer.readControls();
   }
 
   // private boolean test1 = false, test2 = false, test3 = false;
