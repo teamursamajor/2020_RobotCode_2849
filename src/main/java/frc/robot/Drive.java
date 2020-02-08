@@ -25,20 +25,21 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	public Drive() {
 		setMode(DriveMode.AUTO_DRIVE);
 
+		mFrontLeft = new WPI_TalonSRX(DRIVE_FRONT_LEFT);
+		mRearLeft = new WPI_TalonSRX(DRIVE_BACK_LEFT);
 		mFrontRight = new WPI_TalonSRX(DRIVE_FRONT_RIGHT);
 		mRearRight = new WPI_TalonSRX(DRIVE_BACK_RIGHT);
 
-		mFrontLeft = new WPI_TalonSRX(DRIVE_FRONT_LEFT);
-		mRearLeft = new WPI_TalonSRX(DRIVE_BACK_LEFT);
-
-		mFrontRight.configFactoryDefault();
-		mRearRight.configFactoryDefault();
 		mFrontLeft.configFactoryDefault();
 		mRearLeft.configFactoryDefault();
+		mFrontRight.configFactoryDefault();
+		mRearRight.configFactoryDefault();
+
+		resetEncoders();
 
 		// TODO maybe use??
-		mRearRight.follow(mFrontRight);
-		mRearLeft.follow(mFrontLeft);
+		// mRearRight.follow(mFrontRight);
+		// mRearLeft.follow(mFrontLeft);
 
 		// TODO remove all of these
 		// leftEncoder.setDistancePerPulse(INCHES_PER_TICK);
@@ -57,23 +58,28 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 		updateStateInfo();
 		final DriveTask.DriveOrder driveOrder = subsystemMode.callLoop();
 
-		// System.out.println("Left sensor: " + getLeftDistance());
-		// System.out.println("Right sensor: " + getRightDistance());
+		System.out.println("Left sensor: " + getLeftDistance());
+		System.out.println("Right sensor: " + getRightDistance());
 
 		/*
 		 * These currently only set power based on percentage. In the future, we will
 		 * use different control modes. These may be set through the method
 		 * .set(ControlMode mode, double value)
 		 */
-		mFrontLeft.set(driveOrder.leftPower);
-		mFrontRight.set(-driveOrder.rightPower);
 
-		// TODO maybe don't need?
-		// mRearLeft.set(driveOrder.leftPower);
-		// mRearRight.set(-driveOrder.rightPower);
+		
+		// mFrontLeft.set(0.2);
+		// mFrontRight.set(-0.2);
+		// mRearLeft.set(0.2);
+		// mRearRight.set(-0.2);
 
-		// System.out.println("Left power: " + driveOrder.leftPower);
-		// System.out.println("Right power: " + driveOrder.rightPower);
+		mFrontLeft.set(-driveOrder.leftPower);
+		mFrontRight.set(driveOrder.rightPower);
+		mRearLeft.set(-driveOrder.leftPower);
+		mRearRight.set(driveOrder.rightPower);
+
+		System.out.println("Left power: " + driveOrder.leftPower);
+		System.out.println("Right power: " + driveOrder.rightPower);
 	}
 
 	/**
@@ -154,7 +160,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	 *         INCHES_PER_TICK.
 	 */
 	public double getRightDistance() {
-		return mFrontRight.getSelectedSensorPosition() * INCHES_PER_TICK;
+		return -mFrontRight.getSelectedSensorPosition() * INCHES_PER_TICK;
 	}
 
 	/**
@@ -170,7 +176,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	 *         as scaled by INCHES_PER_TICK.
 	 */
 	public double getRightRate() {
-		return mFrontRight.getSelectedSensorVelocity() * INCHES_PER_TICK;
+		return -mFrontRight.getSelectedSensorVelocity() * INCHES_PER_TICK;
 	}
 
 	/**
@@ -179,6 +185,8 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	public void resetEncoders() {
 		mFrontLeft.setSelectedSensorPosition(0);
 		mFrontRight.setSelectedSensorPosition(0);
+		mRearLeft.setSelectedSensorPosition(0);
+		mRearRight.setSelectedSensorPosition(0);
 	}
 
 	/**
@@ -197,8 +205,8 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	public static void stop() {
 		mFrontLeft.stopMotor();
 		mFrontRight.stopMotor();
-		// mRearLeft.stopMotor();
-		// mRearRight.stopMotor();
+		mRearLeft.stopMotor();
+		mRearRight.stopMotor();
 	}
 
 	/**
@@ -218,8 +226,8 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	 * @param power the power the motor is set to
 	 */
 	public static void setLeftPower(final double power) {
-		mFrontLeft.set(-power);
-		// mRearLeft.set(-power);
+		mFrontLeft.set(power);
+		mRearLeft.set(power);
 	}
 
 	/**
@@ -228,8 +236,8 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	 * @param power the power the motor is set to.
 	 */
 	public static void setRightPower(final double power) {
-		mFrontRight.set(power);
-		// mRearRight.set(power);
+		mFrontRight.set(-power);
+		mRearRight.set(-power);
 	}
 
 	@Override

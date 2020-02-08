@@ -49,7 +49,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
     // SmartDashboard.putData("Auto choices", m_chooser);
 
     drive = new Drive();
-    // drive.initialize("DriveThread");
+    drive.initialize("DriveThread");
 
     spinner = new Spinner();
     spinner.initialize("SpinnerThread");
@@ -100,7 +100,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     // System.out.println("Auto selected: " + m_autoSelected);
     try {
-      System.out.println(autoCompiler.buildAutoMode("/home/lvuser/deploy/modes/Mode.auto").toString());
+      autoCompiler.buildAutoMode("/home/lvuser/deploy/modes/Test1.auto").run();
     } catch (Exception e) {
       e.printStackTrace();
     }

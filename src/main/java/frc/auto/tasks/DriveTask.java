@@ -61,6 +61,7 @@ public class DriveTask extends Task implements UrsaRobot {
             double kdDrive = 0; // Derivative coefficient for PID controller
             double kpDrive = 1.0 / 25.0; // Proportional coefficient for PID controller
             double minimumPower = 0.25;
+            double maximumPower = 1.0;
 
             // if (driving)
             // System.out.println("distance left: " + Math.abs(desiredLocation - currentDistance));
@@ -107,7 +108,16 @@ public class DriveTask extends Task implements UrsaRobot {
                 rightOutputPower = Math.signum(rightOutputPower) * minimumPower;
             }
 
-            // System.out.println(driving + " " + leftOutputPower + " " + rightOutputPower);
+            if (Math.abs(leftOutputPower) > maximumPower) {
+                leftOutputPower = Math.signum(leftOutputPower) * maximumPower;
+            }
+
+            if (Math.abs(rightOutputPower) > maximumPower) {
+                rightOutputPower = Math.signum(rightOutputPower) * maximumPower;
+            }
+            
+            System.out.println(currentDistance);
+            System.out.println(driving + " " + leftOutputPower + " " + rightOutputPower);
             return new DriveOrder(leftOutputPower, rightOutputPower);
         }
 

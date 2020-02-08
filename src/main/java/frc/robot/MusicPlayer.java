@@ -15,7 +15,6 @@ public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaR
     
     private Orchestra orchestra;
     private ArrayList<TalonFX> instruments;
-    private TalonFX talon1, talon2;
     private String music;
 
     /**
@@ -23,10 +22,10 @@ public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaR
      */
     public MusicPlayer() {
         instruments = new ArrayList<TalonFX>();
-        talon1 = new TalonFX(1);
-        talon2 = new TalonFX(2);
-        instruments.add(talon1);
-        instruments.add(talon2);
+        instruments.add(new TalonFX(0));
+        instruments.add(new TalonFX(1));
+        instruments.add(new TalonFX(2));
+        instruments.add(new TalonFX(3));
         music = "music/megalovania.chrp";
         orchestra = new Orchestra(instruments, music);
         setMode(MusicMode.STOP);
