@@ -98,7 +98,7 @@ public class AutoCompiler {
 						System.out.println("test");
 						String scriptName = ((DataToken<String>) tokenList.remove(0)).getValue();
 						taskSet.addTask(buildAutoMode(
-								"/home/lvuser/automodes/" + scriptName.trim().replace(" ", "") + ".auto"));
+								"/home/lvuser/deploy/modes/" + scriptName.trim().replace(" ", "") + ".auto"));
 						break;
 					}
 					throw new Exception(); // if there is not a String
