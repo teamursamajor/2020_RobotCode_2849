@@ -57,8 +57,8 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 		updateStateInfo();
 		final DriveTask.DriveOrder driveOrder = subsystemMode.callLoop();
 
-		System.out.println("Left sensor: " + getLeftDistance());
-		System.out.println("Right sensor: " + getRightDistance());
+		// System.out.println("Left sensor: " + getLeftDistance());
+		// System.out.println("Right sensor: " + getRightDistance());
 
 		/*
 		 * These currently only set power based on percentage. In the future, we will
