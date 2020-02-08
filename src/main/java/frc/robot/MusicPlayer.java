@@ -8,27 +8,30 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 public class MusicPlayer extends Subsystem<MusicPlayer.MusicMode> implements UrsaRobot {
     
     public enum MusicMode {
-        PLAY, PAUSE
+        PLAY, PAUSE, STOP
     }
     
     private Orchestra orchestra;
     private ArrayList<TalonFX> instruments;
-    private TalonFX talon1;
+    private TalonFX talon1, talon2;
     private String music;
 
     public MusicPlayer() {
         instruments = new ArrayList<TalonFX>();
-        talon1 = new TalonFX(2);
+        talon1 = new TalonFX(0);
+        talon2 = new TalonFX(3);
         instruments.add(talon1);
-        music = "imperial.chrp";
+        instruments.add(talon2);
+        music = "music/allstar.chrp";
         orchestra = new Orchestra(instruments, music);
+        setMode(MusicMode.STOP);
     }
 
     @Override
     public void readControls() {
-        if (xbox.getSingleButtonPress(XboxController.BUTTON_A))
+        if (xbox.getSingleButtonPress(XboxController.BUTTON_START))
             setMode(MusicMode.PLAY);
-        if (xbox.getSingleButtonPress(XboxController.BUTTON_B))
+        if (xbox.getSingleButtonPress(XboxController.BUTTON_BACK))
             setMode(MusicMode.PAUSE);
     }
 
@@ -40,6 +43,9 @@ public class MusicPlayer extends Subsystem<MusicPlayer.MusicMode> implements Urs
             break;
         case PAUSE:
             orchestra.pause();
+            break;
+        case STOP:
+            orchestra.stop();
             break;
         }
     }

@@ -137,10 +137,10 @@ public class Robot extends TimedRobot implements UrsaRobot {
    */
   @Override
   public void teleopPeriodic() {
-    climb.readControls();
-    intake.readControls();
-    outtake.readControls();
-    spinner.readControls();
+    // climb.readControls();
+    // intake.readControls();
+    // outtake.readControls();
+    // spinner.readControls();
     musicPlayer.readControls();
   }
 
