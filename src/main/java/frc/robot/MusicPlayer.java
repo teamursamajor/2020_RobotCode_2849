@@ -29,11 +29,11 @@ public class MusicPlayer extends Subsystem<MusicPlayer.MusicMode> implements Urs
      */
     public MusicPlayer() {
         instruments = new ArrayList<TalonFX>();
-        talon1 = new TalonFX(0);
-        talon2 = new TalonFX(3);
+        talon1 = new TalonFX(1);
+        talon2 = new TalonFX(2);
         instruments.add(talon1);
         instruments.add(talon2);
-        music = "music/allstar.chrp";
+        music = "music/megalovania.chrp";
         orchestra = new Orchestra(instruments, music);
         setMode(MusicMode.STOP);
     }
