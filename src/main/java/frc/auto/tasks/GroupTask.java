@@ -23,8 +23,8 @@ public abstract class GroupTask extends Task {
     public String toString() {
         String ret = new String();
         for (Task t : tasks) {
-            ret += t.toString();
+            ret += "--" + t.toString();
         }
-        return ret + "--\n";
+        return ret;
     }
 }

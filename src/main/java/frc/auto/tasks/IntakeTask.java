@@ -18,6 +18,11 @@ public class IntakeTask extends Task implements UrsaRobot {
     private Intake intake;
     private IntakeMode mode;
 
+    /**
+     * Constructor for IntakeTasks.
+     * @param intake The active instance of Intake.
+     * @param mode The desired Intake mode.
+     */
     public IntakeTask(Intake intake, IntakeMode mode) {
         this.intake = intake;
         this.mode = mode;
@@ -31,5 +36,9 @@ public class IntakeTask extends Task implements UrsaRobot {
             e.printStackTrace();
         }
         intake.setMode(mode);
+    }
+
+    public String toString() {
+        return "IntakeTask: " + mode + "\n";
     }
 }

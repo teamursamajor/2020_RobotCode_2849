@@ -6,6 +6,7 @@ import frc.robot.Drive;
 
 // TODO make this only work for auto driving and split turn task into its own class
 // TODO make this work with Falcons/motion profiling
+// TODO clean this up please
 
 /**
  * This is a Task class for controlling the Drive mechanism in teleop and autonomous.
@@ -251,6 +252,9 @@ public class DriveTask extends Task implements UrsaRobot {
     private static double desiredLocation = 0.0, startDistance = 0.0, direction = 1.0, desiredAngle = 0.0;
     public static boolean driving = false;
 
+    private DriveMode currentMode;
+    private double arg;
+
     /**
      * Used to set the DriveMode and run drive autonomously with AUTO_DRIVE, TURN,
      * or PATH
@@ -263,6 +267,9 @@ public class DriveTask extends Task implements UrsaRobot {
      * @param mode     The DriveMode that this Task is being used for
      */
     public DriveTask(double argument, Drive drive, DriveMode mode) {
+        currentMode = mode;
+        arg = argument;
+
         switch (mode) {
         case AUTO_DRIVE:
             double desiredDistance = argument;
@@ -271,15 +278,15 @@ public class DriveTask extends Task implements UrsaRobot {
             desiredLocation = startDistance + desiredDistance;
             driving = true;
             drive.setMode(DriveMode.AUTO_DRIVE);
-            Thread t = new Thread("DriveTask");
-            t.start();
+            // Thread t = new Thread("DriveTask");
+            // t.start();
             break;
         case TURN:
             desiredAngle = argument;
             driving = true;
             drive.setMode(DriveMode.TURN);
-            Thread turnThread = new Thread("TurnTask");
-            turnThread.start();
+            // Thread turnThread = new Thread("TurnTask");
+            // turnThread.start();
             break;
         case DRIVE_STICKS:
             System.out.println(
@@ -296,5 +303,9 @@ public class DriveTask extends Task implements UrsaRobot {
                 e.printStackTrace();
             }
         }
+    }
+
+    public String toString() {
+        return "DriveTask: " + currentMode + " " + arg + "\n";
     }
 }

@@ -9,6 +9,7 @@ public class SerialTask extends GroupTask {
         super();
     }
 
+	// Runs each task in sequence
     public void run() {
 		for (Task t : tasks) {
 			t.run();
@@ -16,6 +17,6 @@ public class SerialTask extends GroupTask {
 	}
 
 	public String toString() {
-		return "--SerialTask:\n" + super.toString();
+		return "SerialTask:\n" + super.toString();
 	}
 }

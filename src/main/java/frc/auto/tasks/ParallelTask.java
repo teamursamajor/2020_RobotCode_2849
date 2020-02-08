@@ -9,6 +9,7 @@ public class ParallelTask extends GroupTask {
 		super();
 	}
 	
+	// Initializes threads for each task and runs them all at once
 	public void run() {
 		for (Task t : tasks) {
 			t.initialize();
@@ -24,6 +25,6 @@ public class ParallelTask extends GroupTask {
 	}
 
 	public String toString() {
-		return "--ParallelTask:\n" + super.toString();
+		return "ParallelTask:\n" + super.toString();
 	}
 }

@@ -53,7 +53,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
     spinner = new Spinner();
     spinner.initialize("SpinnerThread");
 
-    // climb = new Climb();
+    climb = new Climb();
     // climb.initialize("ClimbThread");
 
     intake = new Intake();
@@ -96,7 +96,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     // System.out.println("Auto selected: " + m_autoSelected);
     try {
-      System.out.println(autoCompiler.buildAutoMode("Mode.auto").toString());
+      System.out.println(autoCompiler.buildAutoMode("/home/lvuser/automodes/Mode.auto").toString());
     } catch (Exception e) {
       e.printStackTrace();
     }

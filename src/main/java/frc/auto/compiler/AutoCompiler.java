@@ -11,12 +11,13 @@ import frc.auto.tokens.*;
 import frc.robot.*;
 
 /**
- * @author AlphaMale and Sheldon
+ * @author AlphaMale (inspired by Sheldon)
  * 
- * This is a compiler for the Auto Script language. It takes an Auto Script and interprets
- * tokens and arguments on each line as a set of tasks to be executed in sequence.
+ * This is a compiler for the Auto Script language. It takes an Auto
+ * Script file and interprets tokens and arguments on each line as a set
+ * of tasks to be executed in sequence.
  * 
- * Auto Script syntax is located on the team Google Drive.
+ * Auto Script syntax is located on the team's Google Drive.
  */
 public class AutoCompiler {
 
@@ -24,6 +25,13 @@ public class AutoCompiler {
 	private Intake intake;
 	private Outtake outtake;
 
+	/**
+	 * Constructor for the AutoCompiler.
+	 * Refers to active instances of relevant subsystems.
+	 * @param drive The active instance of Drive.
+	 * @param intake The active instance of Intake.
+	 * @param outtake The active instance of Outtake.
+	 */
 	public AutoCompiler(Drive drive, Intake intake, Outtake outtake) {
 		this.drive = drive;
 		this.intake = intake;
@@ -31,14 +39,15 @@ public class AutoCompiler {
 	}
 
 	/**
-	 * Interprets an ArrayList of tokens as an ordered set of tasks
+	 * Interprets an ArrayList of tokens as an ordered set of tasks.
 	 * 
-	 * @param tokenList An ArrayList of tokens (returned from {@link #tokenize()})
-	 * @param taskSet   A set of tasks to add tasks to
-	 * @return A complete set of tasks
+	 * @param tokenList An ArrayList of tokens (returned from {@link #tokenize()}).
+	 * @param taskSet   A set of tasks to add tasks to.
+	 * @return A complete set of tasks.
 	 */
 	@SuppressWarnings("unchecked")
 	public Task parseAuto(ArrayList<Token> tokenList, GroupTask taskSet) {
+		System.out.println("running with tokens " + tokenList);
 		if (tokenList.size() == 0) // If there are no tokens to go through, return an empty wait task
 			return new WaitTask(0);
 
@@ -46,7 +55,7 @@ public class AutoCompiler {
 		while (tokenList.size() > 0) {
 			Token t = tokenList.remove(0);
 			try {
-                switch (t.type) {
+				switch (t.type) {
 				case DRIVE:
 					if (tokenList.get(0).type == TokenType.NUMBER) { // expecting Number next
 						double distance = ((DataToken<Double>) tokenList.remove(0)).getValue();
@@ -68,7 +77,7 @@ public class AutoCompiler {
 						boolean intakeActive = ((DataToken<Boolean>) tokenList.remove(0)).getValue();
 						if (intakeActive)
 							taskSet.addTask(new IntakeTask(intake, IntakeMode.IN));
-						else 
+						else
 							taskSet.addTask(new IntakeTask(intake, IntakeMode.STOP));
 						break;
 					}
@@ -84,9 +93,12 @@ public class AutoCompiler {
 					break;
 
 				case EXECUTE:
+					System.out.println("EXECUTE");
 					if (tokenList.get(0).type == TokenType.STRING) { // expecting String next
+						System.out.println("test");
 						String scriptName = ((DataToken<String>) tokenList.remove(0)).getValue();
-						taskSet.addTask(buildAutoMode("/home/lvuser/automodes/" + scriptName.trim().replace(" ", "") + ".auto"));
+						taskSet.addTask(buildAutoMode(
+								"/home/lvuser/automodes/" + scriptName.trim().replace(" ", "") + ".auto"));
 						break;
 					}
 					throw new Exception(); // if there is not a String
@@ -155,25 +167,24 @@ public class AutoCompiler {
 					break;
 
 				case STRING:
-					throw new Exception(); // should never encounter standalone String
-					
+					throw new Exception(); // Should never encounter standalone String
+
 				case BOOLEAN:
-					throw new Exception(); // should never encounter standalone Boolean
-                }
-			} catch (Exception e) {
+					throw new Exception(); // Should never encounter standalone Boolean
+				}
+			} catch (Exception e) { // If there are any errors
 				e.printStackTrace();
 			}
 		}
-		System.out.println(taskSet);
 		return taskSet;
 	}
 
-    /**
+	/**
 	 * Builds a set of tasks based on the contents of an Auto Script.
 	 * 
-	 * @param filename The name of the auto script to reference
-	 * @return A set of tasks
-	 * @throws Exception
+	 * @param filename The name of the Auto Script file.
+	 * @return A serial set of tasks specified in the file.
+	 * @throws IOException if the file cannot be recognized
 	 */
 	public Task buildAutoMode(String filename) throws Exception {
 		try {

@@ -1,5 +1,6 @@
-print "hello"
-#execute "test"
+execute "test"
+execute "Test"
+execute "Hello"
 drive 10
 turn 90
 intake false

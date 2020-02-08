@@ -7,11 +7,15 @@ public class WaitTask extends Task {
 	
 	private long waitTime = 20;
 	
+	/**
+	 * Constructor for WaitTasks.
+	 * @param time The time to wait.
+	 */
 	public WaitTask(long time) {
 		waitTime = time;
 	}
 
-	@Override
+	// Thread sleeps for specified time (adds delay)
 	public void run() {
 		try {
 			Thread.sleep(waitTime);

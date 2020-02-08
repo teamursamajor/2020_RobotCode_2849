@@ -10,6 +10,8 @@ import java.util.regex.Pattern;
 import frc.auto.tokens.*;
 
 /**
+ * @author AlphaMale (inspired by Sheldon)
+ * 
  * A tokenizer for the Auto Script language.
  */
 public class AutoTokenizer implements TokenList {
@@ -128,7 +130,7 @@ public class AutoTokenizer implements TokenList {
         return matcher;
     }
 
-    // TODO temp code
+    // TODO remove temp code
     public static void main(String[] args) {
         try {
             ArrayList<Token> tokenList = tokenize("Mode.auto");
