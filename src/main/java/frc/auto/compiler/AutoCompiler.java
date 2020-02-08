@@ -7,6 +7,7 @@ import frc.auto.tasks.*;
 import frc.auto.tasks.DriveTask.DriveMode;
 import frc.auto.tasks.IntakeTask.IntakeMode;
 import frc.auto.tasks.OuttakeTask.OuttakeMode;
+import frc.auto.tasks.MusicTask.MusicMode;
 import frc.auto.tokens.*;
 import frc.robot.*;
 
@@ -24,6 +25,7 @@ public class AutoCompiler {
 	private Drive drive;
 	private Intake intake;
 	private Outtake outtake;
+	private MusicPlayer player;
 
 	/**
 	 * Constructor for the AutoCompiler.
@@ -31,11 +33,13 @@ public class AutoCompiler {
 	 * @param drive The active instance of Drive.
 	 * @param intake The active instance of Intake.
 	 * @param outtake The active instance of Outtake.
+	 * @param player The active instance of MusicPlayer.
 	 */
-	public AutoCompiler(Drive drive, Intake intake, Outtake outtake) {
+	public AutoCompiler(Drive drive, Intake intake, Outtake outtake, MusicPlayer player) {
 		this.drive = drive;
 		this.intake = intake;
 		this.outtake = outtake;
+		this.player = player;
 	}
 
 	/**
@@ -91,11 +95,26 @@ public class AutoCompiler {
 					else if (t.argument == 2)
 						taskSet.addTask(new OuttakeTask(outtake, OuttakeMode.STOP));
 					break;
+				
+				case MUSIC:
+					if (t.argument == 0) { // Loading song
+						if (tokenList.get(0).type == TokenType.STRING) { // expecting String next
+							String music = ((DataToken<String>) tokenList.remove(0)).getValue();
+							taskSet.addTask(new MusicTask(player, MusicMode.LOAD, "music/" + music.trim() + ".chrp"));
+							break;
+						}
+					} else if (t.argument == 1) { // Playing song
+						taskSet.addTask(new MusicTask(player, MusicMode.PLAY));
+					} else if (t.argument == 2) { // Pausing song
+						taskSet.addTask(new MusicTask(player, MusicMode.PAUSE));
+					} else { // Stopping song
+						taskSet.addTask(new MusicTask(player, MusicMode.STOP));
+					}
+					break;
 
 				case EXECUTE:
 					System.out.println("EXECUTE");
 					if (tokenList.get(0).type == TokenType.STRING) { // expecting String next
-						System.out.println("test");
 						String scriptName = ((DataToken<String>) tokenList.remove(0)).getValue();
 						taskSet.addTask(buildAutoMode(
 								"/home/lvuser/deploy/modes/" + scriptName.trim().replace(" ", "") + ".auto"));

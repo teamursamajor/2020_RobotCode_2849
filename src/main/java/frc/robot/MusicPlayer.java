@@ -5,17 +5,13 @@ import java.util.ArrayList;
 import com.ctre.phoenix.music.Orchestra;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import frc.auto.tasks.MusicTask;
+import frc.auto.tasks.MusicTask.MusicMode;
+
 /**
  * This class plays music from the Falcons.
  */
-public class MusicPlayer extends Subsystem<MusicPlayer.MusicMode> implements UrsaRobot {
-    
-    /**
-     * Modes for the Music Player.
-     */
-    public enum MusicMode {
-        PLAY, PAUSE, STOP
-    }
+public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaRobot {
     
     private Orchestra orchestra;
     private ArrayList<TalonFX> instruments;
@@ -24,8 +20,6 @@ public class MusicPlayer extends Subsystem<MusicPlayer.MusicMode> implements Urs
 
     /**
      * Constructor for the Music Player.
-     * Refers to Falcons 0 and 3 for playing music.
-     * Currently only plays All Star or Imperial March.
      */
     public MusicPlayer() {
         instruments = new ArrayList<TalonFX>();
@@ -58,6 +52,17 @@ public class MusicPlayer extends Subsystem<MusicPlayer.MusicMode> implements Urs
         case STOP:
             orchestra.stop();
             break;
+        case LOAD:
+            setMode(MusicMode.STOP);
+            break;
         }
+    }
+
+    /**
+     * Loads the desired song into the Music Player.
+     * @param song The song to load (file name).
+     */
+    public void loadSong(String song) {
+        orchestra.loadMusic(song);
     }
 }

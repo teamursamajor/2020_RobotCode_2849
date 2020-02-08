@@ -1,6 +1,9 @@
-execute "test"
 execute "Test"
-execute "Hello"
+print "Hello"
+music load "megalovania"
+music play
+music pause
+music stop
 drive 10
 turn 90
 intake false

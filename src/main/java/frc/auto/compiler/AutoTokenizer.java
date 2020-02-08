@@ -133,7 +133,7 @@ public class AutoTokenizer implements TokenList {
     // TODO remove temp code
     public static void main(String[] args) {
         try {
-            ArrayList<Token> tokenList = tokenize("Mode.auto");
+            ArrayList<Token> tokenList = tokenize("src/main/deploy/modes/Mode.auto");
             for (Token t : tokenList) {
                 System.out.println(t);
             }

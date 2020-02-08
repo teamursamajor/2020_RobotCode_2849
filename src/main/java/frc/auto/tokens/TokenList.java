@@ -12,6 +12,7 @@ public interface TokenList {
     Token OUTTAKE_TOKEN = new Token(TokenType.OUTTAKE, new String[] { "^\\s*outtake\\s*in", "^\\s*outtake\\s*out", "^\\s*outtake\\s*stop" });
     Token TURN_TOKEN = new Token(TokenType.TURN, new String[] { "^\\s*turn" });
     Token WAIT_TOKEN = new Token(TokenType.WAIT, new String[] { "^\\s*wait" });
+    Token MUSIC_TOKEN = new Token(TokenType.MUSIC, new String[] { "^\\s*music\\s*load", "^\\s*music\\s*play", "^\\s*music\\s*pause", "^\\s*music\\s*stop" });
 
     Token PARALLEL_TOKEN = new Token(TokenType.PARALLEL, new String[] { "^\\s*parallel\\s*\\{" });
     Token SERIAL_TOKEN = new Token(TokenType.SERIAL, new String[] { "^\\s*serial\\s*\\{" });
@@ -33,7 +34,7 @@ public interface TokenList {
     /**
      * List of all regular tokens to search through in order
      */
-    Token[] regularTokens = new Token[] { DRIVE_TOKEN, INTAKE_TOKEN, OUTTAKE_TOKEN, TURN_TOKEN, WAIT_TOKEN,
+    Token[] regularTokens = new Token[] { DRIVE_TOKEN, INTAKE_TOKEN, OUTTAKE_TOKEN, TURN_TOKEN, WAIT_TOKEN, MUSIC_TOKEN,
             PARALLEL_TOKEN, SERIAL_TOKEN, EXECUTE_TOKEN, PRINT_TOKEN, LPAREN_TOKEN, RPAREN_TOKEN, COMMA_TOKEN,
             PLUS_TOKEN, MINUS_TOKEN, MULTIPLY_TOKEN, DIVIDE_TOKEN, RBRACE_TOKEN };
 
