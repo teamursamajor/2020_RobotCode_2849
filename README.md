@@ -3,6 +3,10 @@ Welcome to Team Ursa Major's 2020 Programming GitHub Repository! This is where a
 
 *This README should now be fully updated for the 2020 season. Please contact Evan through GroupMe if anything is missing, needs clarification, or contains errors.*
 
+#### Auto Script Reference Information
+Follow the link below for information about Auto Scripts:
+https://docs.google.com/document/d/1P00qPTS9pwbwngfgIUNleynP2WHMgB0jEZ3sB7z-3S8/edit?usp=sharing
+
 #### Git Quick Reference for Team Members
 We are using VS Code this year instead of Eclipse. This will be our second year using it, as it has become the official FIRST IDE. This guide will cover how to go from nothing to setting up the entire work environment.
 
