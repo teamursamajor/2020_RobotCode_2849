@@ -25,7 +25,7 @@ public class AutoCompiler {
 	private Drive drive;
 	private Intake intake;
 	private Outtake outtake;
-	private MusicPlayer player;
+	private MusicPlayer musicPlayer;
 
 	/**
 	 * Constructor for the AutoCompiler.
@@ -33,13 +33,13 @@ public class AutoCompiler {
 	 * @param drive The active instance of Drive.
 	 * @param intake The active instance of Intake.
 	 * @param outtake The active instance of Outtake.
-	 * @param player The active instance of MusicPlayer.
+	 * @param musicPlayer The active instance of MusicPlayer.
 	 */
-	public AutoCompiler(Drive drive, Intake intake, Outtake outtake, MusicPlayer player) {
+	public AutoCompiler(Drive drive, Intake intake, Outtake outtake, MusicPlayer musicPlayer) {
 		this.drive = drive;
 		this.intake = intake;
 		this.outtake = outtake;
-		this.player = player;
+		this.musicPlayer = musicPlayer;
 	}
 
 	/**
@@ -97,18 +97,17 @@ public class AutoCompiler {
 					break;
 				
 				case MUSIC:
-					if (t.argument == 0) { // Loading song
+					if (t.argument == 1) { // Playing song
 						if (tokenList.get(0).type == TokenType.STRING) { // expecting String next
-							String music = ((DataToken<String>) tokenList.remove(0)).getValue();
-							taskSet.addTask(new MusicTask(player, MusicMode.LOAD, "music/" + music.trim() + ".chrp"));
-							break;
+							String song = ((DataToken<String>) tokenList.remove(0)).getValue();
+							taskSet.addTask(new MusicTask(musicPlayer, MusicMode.PLAY, "music/" + song.trim() + ".chrp"));
+						} else {
+							taskSet.addTask(new MusicTask(musicPlayer, MusicMode.PLAY));
 						}
-					} else if (t.argument == 1) { // Playing song
-						taskSet.addTask(new MusicTask(player, MusicMode.PLAY));
 					} else if (t.argument == 2) { // Pausing song
-						taskSet.addTask(new MusicTask(player, MusicMode.PAUSE));
+						taskSet.addTask(new MusicTask(musicPlayer, MusicMode.PAUSE));
 					} else { // Stopping song
-						taskSet.addTask(new MusicTask(player, MusicMode.STOP));
+						taskSet.addTask(new MusicTask(musicPlayer, MusicMode.STOP));
 					}
 					break;
 
@@ -117,7 +116,7 @@ public class AutoCompiler {
 					if (tokenList.get(0).type == TokenType.STRING) { // expecting String next
 						String scriptName = ((DataToken<String>) tokenList.remove(0)).getValue();
 						taskSet.addTask(buildAutoMode(
-								"/home/lvuser/deploy/modes/" + scriptName.trim().replace(" ", "") + ".auto"));
+								"/home/lvuser/deploy/scripts/" + scriptName.trim().replace(" ", "") + ".auto"));
 						break;
 					}
 					throw new Exception(); // if there is not a String

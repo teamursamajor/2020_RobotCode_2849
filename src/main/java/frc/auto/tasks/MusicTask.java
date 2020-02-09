@@ -11,19 +11,19 @@ public class MusicTask extends Task {
      * Modes for the Music Player.
      */
     public enum MusicMode {
-        LOAD, PLAY, PAUSE, STOP
+        PLAY, PAUSE, STOP
     }
     
     private long runTime = 1000;
-    private MusicPlayer player;
+    private MusicPlayer musicPlayer;
     private MusicMode mode;
     private String song;
 
     /**
      * Constructor for MusicTasks with a song to load.
      */
-    public MusicTask(MusicPlayer player, MusicMode mode, String song) {
-        this.player = player;
+    public MusicTask(MusicPlayer musicPlayer, MusicMode mode, String song) {
+        this.musicPlayer = musicPlayer;
         this.mode = mode;
         this.song = song;
     }
@@ -31,10 +31,9 @@ public class MusicTask extends Task {
     /**
      * General constructor for MusicTasks.
      */
-    public MusicTask(MusicPlayer player, MusicMode mode) {
-        this.player = player;
+    public MusicTask(MusicPlayer musicPlayer, MusicMode mode) {
+        this.musicPlayer = musicPlayer;
         this.mode = mode;
-        song = "";
     }
     
     public void run() {
@@ -43,10 +42,10 @@ public class MusicTask extends Task {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
         }
-        player.setMode(mode);
-        if (mode == MusicMode.LOAD) {
-            player.loadSong(song);
+        if (song != null) {
+            musicPlayer.loadSong(song);
         }
+        musicPlayer.setMode(mode);
     }
 
     public String toString() {

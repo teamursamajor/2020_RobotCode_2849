@@ -34,7 +34,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
   private Outtake outtake;
   private Climb climb;
   private AutoCompiler autoCompiler;
-  private MusicPlayer player;
+  private MusicPlayer musicPlayer;
 
   // private int testCounter;
 
@@ -63,10 +63,10 @@ public class Robot extends TimedRobot implements UrsaRobot {
     outtake = new Outtake();
     outtake.initialize("OuttakeThread");
 
-    player = new MusicPlayer();
-    player.initialize("MusicThread");
+    musicPlayer = new MusicPlayer();
+    musicPlayer.initialize("MusicThread");
 
-    autoCompiler = new AutoCompiler(drive, intake, outtake, player);
+    autoCompiler = new AutoCompiler(drive, intake, outtake, musicPlayer);
   }
 
   /**
@@ -99,8 +99,10 @@ public class Robot extends TimedRobot implements UrsaRobot {
     // m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     // System.out.println("Auto selected: " + m_autoSelected);
+
+    // TODO add proper auto selector
     try {
-      autoCompiler.buildAutoMode("/home/lvuser/deploy/modes/Test1.auto").run();
+      autoCompiler.buildAutoMode("/home/lvuser/deploy/scripts/Test1.auto").run();
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -141,7 +143,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
     intake.readControls();
     outtake.readControls();
     spinner.readControls();
-    player.readControls();
+    musicPlayer.readControls();
   }
 
   // private boolean test1 = false, test2 = false, test3 = false;

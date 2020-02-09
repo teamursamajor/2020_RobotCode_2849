@@ -118,6 +118,72 @@ public class AutoTokenizer implements TokenList {
         return tokenList;
     }
 
+    // TODO work on this mess
+    // @SuppressWarnings("unchecked")
+    // private static ArrayList<Token> condense(ArrayList<Token> tokenList) {
+    //     ArrayList<Token> newList = new ArrayList<Token>();
+    //     newList.add(tokenList.get(0));
+
+    //     for (int i = 1; i < tokenList.size(); i++) {
+    //         if (tokenList.get(i).type == TokenType.MINUS) {
+    //             if (tokenList.get(i+1).type == TokenType.NUMBER) {
+    //                 if (tokenList.get(i-1).type == TokenType.NUMBER) {
+    //                     DataToken<Double> num1 = (DataToken<Double>) tokenList.get(i-1);
+    //                     DataToken<Double> num2 = (DataToken<Double>) tokenList.get(i+1);
+    //                     newList.add(NUMBER_TOKEN.newInstance(num1.getValue()-num2.getValue()));
+    //                     i++;
+    //                     continue;
+    //                 } else {
+    //                     DataToken<Double> newNum = (DataToken<Double>) tokenList.get(i+1);
+    //                     newNum = newNum.newInstance(-newNum.getValue());
+    //                     newList.add(newNum);
+    //                     i++;
+    //                     continue;
+    //                 }
+    //             }
+    //         } else if (tokenList.get(i).type == TokenType.PLUS) {
+    //             if (tokenList.get(i+1).type == TokenType.NUMBER) {
+    //                 if (tokenList.get(i-1).type == TokenType.NUMBER) {
+    //                     DataToken<Double> num1 = (DataToken<Double>) tokenList.get(i-1);
+    //                     DataToken<Double> num2 = (DataToken<Double>) tokenList.get(i+1);
+    //                     newList.add(NUMBER_TOKEN.newInstance(num1.getValue()+num2.getValue()));
+    //                     i++;
+    //                     continue;
+    //                 }
+    //             }
+    //         } else if (tokenList.get(i).type == TokenType.MULTIPLY) {
+    //             if (tokenList.get(i+1).type == TokenType.NUMBER) {
+    //                 if (tokenList.get(i-1).type == TokenType.NUMBER) {
+    //                     DataToken<Double> num1 = (DataToken<Double>) tokenList.get(i-1);
+    //                     DataToken<Double> num2 = (DataToken<Double>) tokenList.get(i+1);
+    //                     newList.add(NUMBER_TOKEN.newInstance(num1.getValue()*num2.getValue()));
+    //                     i++;
+    //                     continue;
+    //                 }
+    //             }
+    //         } else if (tokenList.get(i).type == TokenType.DIVIDE) {
+    //             if (tokenList.get(i+1).type == TokenType.NUMBER) {
+    //                 if (tokenList.get(i-1).type == TokenType.NUMBER) {
+    //                     DataToken<Double> num1 = (DataToken<Double>) tokenList.get(i-1);
+    //                     DataToken<Double> num2 = (DataToken<Double>) tokenList.get(i+1);
+    //                     newList.add(NUMBER_TOKEN.newInstance(num1.getValue()/num2.getValue()));
+    //                     i++;
+    //                     continue;
+    //                 }
+    //             }
+    //         } else if (tokenList.get(i).type == TokenType.NUMBER) {
+    //             if (tokenList.get(i+1).type != TokenType.PLUS
+    //              && tokenList.get(i+1).type != TokenType.MINUS
+    //              && tokenList.get(i+1).type != TokenType.MULTIPLY
+    //              && tokenList.get(i+1).type != TokenType.DIVIDE)
+    //             newList.add(tokenList.get(i));
+    //         } else {
+    //             newList.add(tokenList.get(i));
+    //         }
+    //     }
+    //     return newList;
+    // }
+
     /**
      * Checks for a given regex pattern in a given line.
      * @param line The line to check
@@ -126,14 +192,14 @@ public class AutoTokenizer implements TokenList {
      */
     private static Matcher match(String line, String regex) {
         Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(line);
+        Matcher matcher = pattern.matcher(line.toLowerCase()); // toLowerCase makes it ignore case
         return matcher;
     }
 
     // TODO remove temp code
     public static void main(String[] args) {
         try {
-            ArrayList<Token> tokenList = tokenize("src/main/deploy/modes/Mode.auto");
+            ArrayList<Token> tokenList = tokenize("src/main/deploy/scripts/Test1.auto");
             for (Token t : tokenList) {
                 System.out.println(t);
             }

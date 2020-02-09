@@ -51,9 +51,6 @@ public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaR
         case STOP:
             orchestra.stop();
             break;
-        case LOAD:
-            setMode(MusicMode.STOP);
-            break;
         }
     }
 

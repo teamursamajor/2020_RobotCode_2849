@@ -1,8 +1,8 @@
 execute "Test"
 print "Hello"
-music load "megalovania"
+music pLaY "megalovania"
 music play
-music pause
+MusiC pause
 music stop
 drive 10
 turn 90
