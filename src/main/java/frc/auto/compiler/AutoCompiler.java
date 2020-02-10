@@ -112,7 +112,6 @@ public class AutoCompiler {
 					break;
 
 				case EXECUTE:
-					System.out.println("EXECUTE");
 					if (tokenList.get(0).type == TokenType.STRING) { // expecting String next
 						String scriptName = ((DataToken<String>) tokenList.remove(0)).getValue();
 						taskSet.addTask(buildAutoMode(
