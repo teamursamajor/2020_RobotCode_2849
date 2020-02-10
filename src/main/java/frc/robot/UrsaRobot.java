@@ -43,7 +43,10 @@ public interface UrsaRobot {
 
 	// Tells encoder the value of each tick. Must be set in the corresponding file
 	// TODO adapt for Falcon sensors!!!
-	public static final double INCHES_PER_TICK = 7.2d * Math.PI / 2048.0d;
+	// 7.2 is wheel diameter
+	// 2048 is units per revolution
+	// 12.75 is gear ratio
+	public static final double INCHES_PER_TICK = 7.2d * Math.PI / 2048.0d / 12.75d;
 	public static final double CLIMB_INCHES_PER_TICK = 5;
 
 	// TODO check if these are correct (should be bc drivetrain didn't change but can't hurt to try)

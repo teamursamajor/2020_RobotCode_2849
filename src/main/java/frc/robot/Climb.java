@@ -65,6 +65,7 @@ public class Climb extends Subsystem<Climb.ClimbMode> implements UrsaRobot {
             // servo2.set(0);
             motor1.set(-1);
             motor2.set(-1);
+            
             break;
         case DOWN:
             // servo1.set(0);
