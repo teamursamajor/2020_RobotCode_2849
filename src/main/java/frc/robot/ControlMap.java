@@ -34,6 +34,12 @@ public class ControlMap {
         // Climb
         map.put("climb_up", XboxController.POV_UP);
         map.put("climb_down", XboxController.POV_DOWN);
-        // TODO Pressing these two controls together cancels climb.
+        // Note: Pressing these two controls together cancels climb.
+
+        // Music
+        map.put("music_play", XboxController.BUTTON_START);
+        map.put("music_pause", XboxController.BUTTON_BACK);
+
+
     }
 }

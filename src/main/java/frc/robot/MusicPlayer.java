@@ -33,9 +33,9 @@ public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaR
 
     @Override
     public void readControls() {
-        if (xbox.getSingleButtonPress(XboxController.BUTTON_START))
+        if (xbox.getSingleButtonPress(controls.map.get("music_play")))
             setMode(MusicMode.PLAY);
-        if (xbox.getSingleButtonPress(XboxController.BUTTON_BACK))
+        if (xbox.getSingleButtonPress(controls.map.get("music_pause")))
             setMode(MusicMode.PAUSE);
     }
 
