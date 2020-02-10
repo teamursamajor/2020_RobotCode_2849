@@ -102,7 +102,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
 
     // TODO add proper auto selector
     try {
-      autoCompiler.buildAutoMode("/home/lvuser/deploy/scripts/Test1.auto").run();
+      autoCompiler.buildAutoMode("/home/lvuser/deploy/scripts/Test1.auto").initialize();
     } catch (Exception e) {
       e.printStackTrace();
     }
