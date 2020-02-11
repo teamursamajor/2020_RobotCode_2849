@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.auto.tasks.DriveTask;
 import frc.auto.tasks.DriveTask.DriveMode;
@@ -23,7 +24,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	 * instantiated at any time.
 	 */
 	public Drive() {
-		setMode(DriveMode.AUTO_DRIVE);
+		setMode(DriveMode.DRIVE_STICKS);
 
 		mFrontLeft = new WPI_TalonSRX(DRIVE_FRONT_LEFT);
 		mRearLeft = new WPI_TalonSRX(DRIVE_BACK_LEFT);
@@ -35,6 +36,11 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 		mFrontRight.configFactoryDefault();
 		mRearRight.configFactoryDefault();
 
+		mFrontLeft.setNeutralMode(NeutralMode.Brake);
+		mRearLeft.setNeutralMode(NeutralMode.Brake);
+		mFrontRight.setNeutralMode(NeutralMode.Brake);
+		mRearRight.setNeutralMode(NeutralMode.Brake);
+		
 		resetEncoders();
 
 		// TODO maybe use??
@@ -58,8 +64,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 		updateStateInfo();
 		final DriveTask.DriveOrder driveOrder = subsystemMode.callLoop();
 
-		System.out.println("Left sensor: " + getLeftDistance());
-		System.out.println("Right sensor: " + getRightDistance());
+		// System.out.println("Left s%sensor: " + mFrontRight.getSelectedSensorPosition());
 
 		/*
 		 * These currently only set power based on percentage. In the future, we will
@@ -78,8 +83,8 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 		mRearLeft.set(-driveOrder.leftPower);
 		mRearRight.set(driveOrder.rightPower);
 
-		System.out.println("Left power: " + driveOrder.leftPower);
-		System.out.println("Right power: " + driveOrder.rightPower);
+		// System.out.println("Left power: " + driveOrder.leftPower);
+		// System.out.println("Right power: " + driveOrder.rightPower);
 	}
 
 	/**
@@ -122,6 +127,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	 * @return Fixed heading from the NavX always between 0 and 360
 	 */
 	public double getHeading() {
+		System.out.println("curr angle: " + ahrs.getAngle());
 		double angle = ahrs.getAngle();
 		angle = fixHeading(angle);
 		return angle;
