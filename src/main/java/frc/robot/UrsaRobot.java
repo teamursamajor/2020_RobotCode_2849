@@ -19,7 +19,7 @@ public interface UrsaRobot {
 	public static final int DRIVE_FRONT_LEFT = 0, DRIVE_BACK_LEFT = 1;
 	public static final int DRIVE_FRONT_RIGHT = 2, DRIVE_BACK_RIGHT = 3;
 
-	public static final int SPINNER = 9, OUTTAKE = 4, BELT = 3;
+	public static final int SPINNER = 5, OUTTAKE = 4, BELT = 3;
 	
 	public static final int CLIMB_FRONT = 5, CLIMB_BACK = 10;
 	public static final int INTAKE_MOTOR = 2;

@@ -105,7 +105,8 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
 
         switch (subsystemMode) {
         case SPIN:
-            spinMotor.set(0.20);
+            System.out.println("should be spinning");
+            spinMotor.set(0.38);
             System.out.println(getColor());
             // spinSlices(25);
             // if (controlPower < maxPower && controlPower > minPower) {
