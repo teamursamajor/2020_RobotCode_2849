@@ -97,14 +97,14 @@ public class AutoCompiler {
 					break;
 				
 				case MUSIC:
-					if (t.argument == 1) { // Playing song
+					if (t.argument == 0) { // Playing song
 						if (tokenList.get(0).type == TokenType.STRING) { // expecting String next
 							String song = ((DataToken<String>) tokenList.remove(0)).getValue();
 							taskSet.addTask(new MusicTask(musicPlayer, MusicMode.PLAY, "music/" + song.trim() + ".chrp"));
 						} else {
 							taskSet.addTask(new MusicTask(musicPlayer, MusicMode.PLAY));
 						}
-					} else if (t.argument == 2) { // Pausing song
+					} else if (t.argument == 1) { // Pausing song
 						taskSet.addTask(new MusicTask(musicPlayer, MusicMode.PAUSE));
 					} else { // Stopping song
 						taskSet.addTask(new MusicTask(musicPlayer, MusicMode.STOP));
