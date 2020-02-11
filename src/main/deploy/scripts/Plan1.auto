@@ -1,0 +1,16 @@
+
+# all angles are in reference to picture of field board.
+# TODO: 
+# Test how NavX measures angles and change them accordingly
+# Test outtake modes. See how long it takes to deposit cells
+# Test encoder values and inch ratios
+# Allow drive command to take negative distances or adjust auto file.
+
+
+drive -120
+outtake in
+outtake stop
+turn 0 
+drive 72
+turn 90
+drive 620

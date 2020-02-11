@@ -59,7 +59,7 @@ public class DriveTask extends Task implements UrsaRobot {
             double driveTolerance = 3.0;
 
             double kdDrive = 0; // Derivative coefficient for PID controller
-            double kpDrive = 1.0 / 25.0; // Proportional coefficient for PID controller
+            double kpDrive = 1.0 / 50.0; // Proportional coefficient for PID controller
             double minimumPower = 0.25;
             double maximumPower = 1.0;
 
@@ -68,15 +68,19 @@ public class DriveTask extends Task implements UrsaRobot {
 
             // If we are within the driveTolerance of the desiredLocation, stop
             if (Math.abs(desiredLocation - currentDistance) <= driveTolerance) {
+                System.out.println("stopping at pos " + currentDistance);
                 driving = false;
                 return new DriveOrder(0.0, 0.0);
             }
 
+            System.out.println("current dist: " + currentDistance + ", left pos: " + DriveState.leftPos + ", right pos: " + DriveState.rightPos);
             // If moving forward, everything is normal
             if (direction > 0) {
                 leftOutputPower = kpDrive * (desiredLocation - DriveState.leftPos) + kdDrive * DriveState.leftVelocity;
+                leftOutputPower *= -1.0;
                 rightOutputPower = kpDrive * (desiredLocation - DriveState.rightPos)
                         + kdDrive * DriveState.rightVelocity;
+                rightOutputPower *= -1.0;
             }
 
             // If moving backwards, find our error term minus velocity term
@@ -88,11 +92,11 @@ public class DriveTask extends Task implements UrsaRobot {
 
                 leftOutputPower = kpDrive * (DriveState.leftPos - desiredLocation)
                         + kdDrive * (-1 * DriveState.leftVelocity);
-                leftOutputPower *= -1.0;
+                // leftOutputPower *= -1.0;
 
                 rightOutputPower = kpDrive * (DriveState.rightPos - desiredLocation)
                         + kdDrive * (-1 * DriveState.rightVelocity);
-                rightOutputPower *= -1.0;
+                // rightOutputPower *= -1.0;
             }
 
             if (leftOutputPower == 0 && rightOutputPower == 0) {
@@ -208,7 +212,7 @@ public class DriveTask extends Task implements UrsaRobot {
                 driving = false;
                 return new DriveOrder(0.0, 0.0);
             }
-
+            System.out.println("current heading: " + DriveState.currentHeading);
             if (newAngle < 0 && Math.abs(newAngle) > 180)
                 newAngle += 360;
 
@@ -218,10 +222,14 @@ public class DriveTask extends Task implements UrsaRobot {
             // if we're turning right use leftVelocity, if we're turning left use rightVelocity
             double velocity = (DriveState.leftVelocity > 0) ? DriveState.leftVelocity : DriveState.rightVelocity;
 
+            @SuppressWarnings("unused")
             double outputPower = turningKp * newAngle + turningKd * (velocity / UrsaRobot.robotRadius);
+            
+            // TODO temporary; uncomment below
+            return new DriveOrder(0, 0);
 
-            return new DriveOrder(1 * (Math.signum(newAngle) * outputPower),
-                    -1 * (Math.signum(newAngle)) * outputPower);
+            // return new DriveOrder(1 * (Math.signum(newAngle) * outputPower),
+            //         -1 * (Math.signum(newAngle)) * outputPower);
         }
     }
 
