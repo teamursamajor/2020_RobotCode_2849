@@ -17,8 +17,11 @@ public class WaitTask extends Task {
 
 	// Thread sleeps for specified time (adds delay)
 	public void run() {
+		System.out.println("waiting " + waitTime);
 		try {
+			System.out.println("Waiting ...");
 			Thread.sleep(waitTime);
+			System.out.println("Done waiting");
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

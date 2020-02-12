@@ -4,13 +4,12 @@
 # Test how NavX measures angles and change them accordingly
 # Test outtake modes. See how long it takes to deposit cells
 # Test encoder values and inch ratios
-# Allow drive command to take negative distances or adjust auto file.
-
 
 drive -120
 outtake in
+wait 3
 outtake stop
-turn 0 
+turn 0
 drive 72
 turn 90
 drive 620

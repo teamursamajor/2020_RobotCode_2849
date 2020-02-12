@@ -127,9 +127,10 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	 * @return Fixed heading from the NavX always between 0 and 360
 	 */
 	public double getHeading() {
-		System.out.println("curr angle: " + ahrs.getAngle());
+		// System.out.println("curr angle: " + ahrs.getAngle());
 		double angle = ahrs.getAngle();
 		angle = fixHeading(angle);
+		// System.out.println("heading: " + angle);
 		return angle;
 	}
 

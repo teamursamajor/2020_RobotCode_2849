@@ -18,6 +18,9 @@ public class DriveTask extends Task implements UrsaRobot {
     private static double limit = 0.2;
     private static double previousX = 0;
     private static double previousY = 0;
+    private static int counter = 0;
+    private static int countLimit = 10;
+    private static boolean limited = false;
 
     /*
      * Modes for Drive.
@@ -54,6 +57,8 @@ public class DriveTask extends Task implements UrsaRobot {
          * @return A DriveOrder object containing the new left and right powers
          */
         private DriveOrder autoCalculator() {
+            if (limited)
+                counter++;
             double leftOutputPower = 0.0, rightOutputPower = 0.0;
             double currentDistance = DriveState.averagePos;
             double driveTolerance = 3.0;
@@ -61,13 +66,13 @@ public class DriveTask extends Task implements UrsaRobot {
             double kdDrive = 0; // Derivative coefficient for PID controller
             double kpDrive = 1.0 / 50.0; // Proportional coefficient for PID controller
             double minimumPower = 0.25;
-            double maximumPower = 1.0;
+            double maximumPower = 0.75;
 
             // if (driving)
-            // System.out.println("distance left: " + Math.abs(desiredLocation - currentDistance));
+            System.out.println("distance left: " + Math.abs(desiredLocation - currentDistance));
 
             // If we are within the driveTolerance of the desiredLocation, stop
-            if (Math.abs(desiredLocation - currentDistance) <= driveTolerance) {
+            if (counter > countLimit || Math.abs(desiredLocation - currentDistance) <= driveTolerance) {
                 System.out.println("stopping at pos " + currentDistance);
                 driving = false;
                 return new DriveOrder(0.0, 0.0);
@@ -120,7 +125,7 @@ public class DriveTask extends Task implements UrsaRobot {
                 rightOutputPower = Math.signum(rightOutputPower) * maximumPower;
             }
             
-            System.out.println(currentDistance);
+            // System.out.println(currentDistance);
             System.out.println(driving + " " + leftOutputPower + " " + rightOutputPower);
             return new DriveOrder(leftOutputPower, rightOutputPower);
         }

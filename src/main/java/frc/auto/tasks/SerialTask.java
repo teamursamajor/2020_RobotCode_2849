@@ -12,7 +12,7 @@ public class SerialTask extends GroupTask {
 	// Runs each task in sequence
     public void run() {
 		for (Task t : tasks) {
-			t.run();
+			t.initialize();
 		}
 	}
 

@@ -16,12 +16,15 @@ public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaR
     private Orchestra orchestra;
     private ArrayList<TalonFX> instruments;
     private String music;
+    // private TalonFX talon1, talon2, talon3, talon4;
 
     /**
      * Constructor for the Music Player.
      */
     public MusicPlayer() {
         instruments = new ArrayList<TalonFX>();
+        // talon1 = new TalonFX(0);
+        
         instruments.add(new TalonFX(0));
         instruments.add(new TalonFX(1));
         instruments.add(new TalonFX(2));
