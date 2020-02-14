@@ -3,7 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Spark;
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
@@ -30,11 +30,11 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
     private int slicesToSpin;
 
     // control loop stuff
-    final double goodKP = 0.02;
-    double controlPower = 0.26;
+    final double goodKP = 0.005;
+    double controlPower = 0.20;
     int sliceThreshold = 19;
-    double minPower = .19;
-    double maxPower = .4;
+    double minPower = .15;
+    double maxPower = .22;
 
     // Color Sensor Utilities
     private static final I2C.Port i2cPort = I2C.Port.kOnboard;
@@ -73,6 +73,7 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
     }
 
     public void runSubsystem() throws InterruptedException {
+        System.out.println(System.currentTimeMillis());
         /*
          * Matches the color the color sensor is seeing to the closest
          * of four possible colors.
@@ -80,9 +81,9 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
         Color detectedColor = colorSensor.getColor();
         ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
 
-        // SmartDashboard.putNumber("Red", detectedColor.red);
-        // SmartDashboard.putNumber("Green", detectedColor.green);
-        // SmartDashboard.putNumber("Blue", detectedColor.blue);
+        SmartDashboard.putNumber("Red", detectedColor.red);
+        SmartDashboard.putNumber("Green", detectedColor.green);
+        SmartDashboard.putNumber("Blue", detectedColor.blue);
 
         if (match.color == kBlueTarget)
             color = 'B';
@@ -98,6 +99,8 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
          */
         gameData = DriverStation.getInstance().getGameSpecificMessage();
 
+        SmartDashboard.putString("Color", color + "");
+
         if (gameData.length() > 0) // If we've gotten a color to check for
             goal = gameData.charAt(0); // Store in goal
         else
@@ -105,10 +108,14 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
 
         switch (subsystemMode) {
         case SPIN:
-            System.out.println("should be spinning");
-            spinMotor.set(0.38);
-            System.out.println(getColor());
-            // spinSlices(25);
+            // System.out.println("should be spinning");
+            
+            // System.out.println(getColor());
+            // System.out.println(System.currentTimeMillis());
+            spinMotor.set(.18);
+            spinSlices(25);
+            
+
             // if (controlPower < maxPower && controlPower > minPower) {
             //     // System.out.println("good job. The power is " + controlPower);
             //     spinMotor.set(controlPower);
@@ -179,17 +186,18 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
      * @param slices the number of slices to spin
      */
     public void spinSlices(int slices) {
+        System.out.println("slices seen: " + colorCounter);
         if (colorCounter < slices) {
             if (color != previousColor)
                 sameColor = 0;
             else {
                 sameColor++; // increments each time we see the same color
-                if (sameColor == 5) { // threshold for counting a new color
+                if (sameColor == 20) { // threshold for counting a new color
                     colorCounter++;
-                    // System.out.println(color + " color change at " + colorCounter);
+                    System.out.println(color + " color change at " + colorCounter);
                     if (colorCounter >= sliceThreshold) { // starts PID once it exceeds the slice threshold
                         controlPower = (goodKP * (slices - colorCounter) + .12);
-                        // System.out.println(controlPower);
+                        System.out.println("control power" + controlPower);
                     }
                 }
             }

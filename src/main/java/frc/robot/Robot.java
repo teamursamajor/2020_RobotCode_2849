@@ -28,13 +28,13 @@ public class Robot extends TimedRobot implements UrsaRobot {
   // private String m_autoSelected;
   // private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  private Drive drive;
+  // private Drive drive;
   private Spinner spinner;
-  private Intake intake;
-  private Outtake outtake;
-  private Climb climb;
-  private AutoCompiler autoCompiler;
-  private MusicPlayer musicPlayer;
+  // private Intake intake;
+  // private Outtake outtake;
+  // private Climb climb;
+  // private AutoCompiler autoCompiler;
+  // private MusicPlayer musicPlayer;
 
   // private int testCounter;
 
@@ -66,7 +66,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
     // musicPlayer = new MusicPlayer();
     // musicPlayer.initialize("MusicThread");
 
-    autoCompiler = new AutoCompiler(drive, intake, outtake, musicPlayer);
+    //autoCompiler = new AutoCompiler(drive, intake, outtake, musicPlayer);
   }
 
   /**
@@ -101,11 +101,11 @@ public class Robot extends TimedRobot implements UrsaRobot {
     // System.out.println("Auto selected: " + m_autoSelected);
 
     // TODO add proper auto selector
-    try {
-      autoCompiler.buildAutoMode("/home/lvuser/deploy/scripts/Test1.auto").initialize();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    // try {
+    //   autoCompiler.buildAutoMode("/home/lvuser/deploy/scripts/Test1.auto").initialize();
+    // } catch (Exception e) {
+    //   e.printStackTrace();
+    // }
   }
 
   /**
