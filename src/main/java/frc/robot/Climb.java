@@ -1,9 +1,9 @@
 package frc.robot;
 
-// import edu.wpi.first.wpilibj.Servo;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.first.wpilibj.DigitalInput;
+// import edu.wpi.first.wpilibj.DigitalInput;
 
 /**
  * This class operates the Climb mechanism.
@@ -15,9 +15,8 @@ public class Climb extends Subsystem<Climb.ClimbMode> implements UrsaRobot {
     }
 
     private WPI_TalonSRX motor1, motor2;
-    // private Servo servo1, servo2;
 
-    private DigitalInput limitSwitch;
+    // private DigitalInput limitSwitch;
 
     private int distanceToGo = 5;
 
@@ -28,13 +27,12 @@ public class Climb extends Subsystem<Climb.ClimbMode> implements UrsaRobot {
     public Climb() {    
         motor1 = new WPI_TalonSRX(CLIMB_FRONT);
         motor2 = new WPI_TalonSRX(CLIMB_BACK);
-        // servo1 = new Servo(SERVO_PORT_1);
-        // servo2 = new Servo(SERVO_PORT_2);
-
-        limitSwitch = new DigitalInput(CLIMB_SWITCH_PORT);
-        // TODO remove encoder -- refer to only one motor
-        // climbEncoder.setDistancePerPulse(CLIMB_INCHES_PER_TICK);
-        // climbEncoder.reset();
+        // limitSwitch = new DigitalInput(CLIMB_SWITCH_PORT);
+        motor1.configFactoryDefault();
+        motor2.configFactoryDefault();
+        motor1.setNeutralMode(NeutralMode.Brake);
+        motor2.setNeutralMode(NeutralMode.Brake);
+        setMode(ClimbMode.STOP);
     }
 
     @Override
@@ -43,42 +41,34 @@ public class Climb extends Subsystem<Climb.ClimbMode> implements UrsaRobot {
             setMode(ClimbMode.UP);
         } else if (xbox.getDPad(controls.map.get("climb_down"))) {
             setMode(ClimbMode.DOWN);
-        } else
+        } else 
             setMode(ClimbMode.STOP);
-        // Stops climb if both up and down are pressed
-        if (xbox.getDPad(controls.map.get("climb_up")) && xbox.getDPad(controls.map.get("climb_down")))
-            setMode(ClimbMode.STOP); 
     }
 
     @Override
     public void runSubsystem() throws InterruptedException {
+        // System.out.println("running " + subsystemMode);
         // Stop if climb got to right height (limit switch pressed) or encoder says
         // we've gone correct distance
-        if (limitSwitch.get() || motor1.getSelectedSensorPosition() * CLIMB_INCHES_PER_TICK >= distanceToGo)
-            setMode(ClimbMode.STOP);
-
-        // System.out.println(servo1.get() + " " + servo2.get());
+        // if (limitSwitch.get() || motor1.getSelectedSensorPosition() * CLIMB_INCHES_PER_TICK >= distanceToGo)
+        //     setMode(ClimbMode.STOP);
 
         switch (subsystemMode) {
         case UP:
-            // servo1.set(0.420);
-            // servo2.set(0);
+            System.out.println("should move up");
             motor1.set(-1);
             motor2.set(-1);
-            
             break;
         case DOWN:
-            // servo1.set(0);
-            // servo2.set(0.69);
+            System.out.println("should move down");
             motor1.set(1);
             motor2.set(1);
             break;
         case STOP:
+            // System.out.println("stop");
             motor1.set(0.0);
             motor2.set(0.0);
             break;
         }
     }
-
-    
 }

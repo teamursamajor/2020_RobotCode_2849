@@ -1,2 +1,3 @@
-wait 1
-drive 10
+drive 50
+wait 10
+drive -100

@@ -14,11 +14,6 @@ public abstract class Task extends Thread {
     public Task() {
     }
 
-    public void initialize() {
-		Thread t = new Thread(this);
-        t.start();
-	}
-
     public abstract void run();
     
     public abstract String toString();

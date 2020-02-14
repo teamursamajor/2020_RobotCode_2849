@@ -24,7 +24,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	 * instantiated at any time.
 	 */
 	public Drive() {
-		setMode(DriveMode.DRIVE_STICKS);
+		setMode(DriveMode.STOP);
 
 		mFrontLeft = new WPI_TalonSRX(DRIVE_FRONT_LEFT);
 		mRearLeft = new WPI_TalonSRX(DRIVE_BACK_LEFT);

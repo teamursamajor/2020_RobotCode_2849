@@ -55,7 +55,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
     spinner.initialize("SpinnerThread");
 
     climb = new Climb();
-    // climb.initialize("ClimbThread");
+    climb.initialize("ClimbThread");
 
     intake = new Intake();
     intake.initialize("IntakeThread");
@@ -64,7 +64,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
     outtake.initialize("OuttakeThread");
 
     musicPlayer = new MusicPlayer();
-    musicPlayer.initialize("MusicThread");
+    // musicPlayer.initialize("MusicThread");
 
     autoCompiler = new AutoCompiler(drive, intake, outtake, musicPlayer);
   }
@@ -102,7 +102,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
 
     // TODO add proper auto selector
     try {
-      autoCompiler.buildAutoMode("/home/lvuser/deploy/scripts/Test1.auto").initialize();
+      autoCompiler.buildAutoMode("/home/lvuser/deploy/scripts/Test1.auto").start();
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -143,7 +143,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
     intake.readControls();
     outtake.readControls();
     spinner.readControls();
-    musicPlayer.readControls();
+    // musicPlayer.readControls();
   }
 
   // private boolean test1 = false, test2 = false, test3 = false;
