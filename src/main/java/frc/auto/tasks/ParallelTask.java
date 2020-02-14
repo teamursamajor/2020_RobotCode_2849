@@ -12,7 +12,7 @@ public class ParallelTask extends GroupTask {
 	// Initializes threads for each task and runs them all at once
 	public void run() {
 		for (Task t : tasks) {
-			t.initialize();
+			t.start();
 		}
 		
 		for (Task t : tasks) {

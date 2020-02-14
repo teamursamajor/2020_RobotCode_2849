@@ -21,7 +21,7 @@ public interface UrsaRobot {
 
 	public static final int SPINNER = 1, OUTTAKE = 4, BELT = 3;
 	
-	public static final int CLIMB_FRONT = 5, CLIMB_BACK = 10;
+	public static final int CLIMB_FRONT = 4, CLIMB_BACK = 5;
 	public static final int INTAKE_MOTOR = 2;
 
 	// Encoders and Sensors Ports

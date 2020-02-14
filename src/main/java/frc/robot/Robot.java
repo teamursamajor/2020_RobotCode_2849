@@ -66,7 +66,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
     // musicPlayer = new MusicPlayer();
     // musicPlayer.initialize("MusicThread");
 
-    //autoCompiler = new AutoCompiler(drive, intake, outtake, musicPlayer);
+    // autoCompiler = new AutoCompiler(drive, intake, outtake, musicPlayer);
   }
 
   /**
@@ -102,7 +102,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
 
     // TODO add proper auto selector
     // try {
-    //   autoCompiler.buildAutoMode("/home/lvuser/deploy/scripts/Test1.auto").initialize();
+    //   autoCompiler.buildAutoMode("/home/lvuser/deploy/scripts/Test1.auto").start();
     // } catch (Exception e) {
     //   e.printStackTrace();
     // }

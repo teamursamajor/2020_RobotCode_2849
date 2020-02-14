@@ -22,6 +22,10 @@ public class DriveTask extends Task implements UrsaRobot {
     private static int countLimit = 10;
     private static boolean limited = false;
 
+    private DriveMode mode;
+    private Drive drive;
+    private double arg;
+
     /*
      * Modes for Drive.
      * AUTO_DRIVE is for autonomous driving to a certain distance.
@@ -29,7 +33,7 @@ public class DriveTask extends Task implements UrsaRobot {
      * DRIVE_STICKS is for manual control.
      */
     public enum DriveMode {
-        AUTO_DRIVE, TURN, DRIVE_STICKS;
+        AUTO_DRIVE, TURN, DRIVE_STICKS, STOP;
 
         /**
          * This method takes the current Drive state and iterates the control loop then
@@ -46,6 +50,8 @@ public class DriveTask extends Task implements UrsaRobot {
                 return turnTo();
             case DRIVE_STICKS:
                 return sticksBox();
+            case STOP:
+                return new DriveOrder(0.0, 0.0);
             }
             return new DriveOrder(0.0, 0.0);
         }
@@ -275,9 +281,6 @@ public class DriveTask extends Task implements UrsaRobot {
     private static double desiredLocation = 0.0, startDistance = 0.0, direction = 1.0, desiredAngle = 0.0;
     public static boolean driving = false;
 
-    private DriveMode currentMode;
-    private double arg;
-
     /**
      * Used to set the DriveMode and run drive autonomously with AUTO_DRIVE, TURN,
      * or PATH
@@ -289,36 +292,33 @@ public class DriveTask extends Task implements UrsaRobot {
      * @param drive    Instance of Drive
      * @param mode     The DriveMode that this Task is being used for
      */
-    public DriveTask(double argument, Drive drive, DriveMode mode) {
-        currentMode = mode;
-        arg = argument;
+    public DriveTask(double arg, Drive drive, DriveMode mode) {
+        this.mode = mode;
+        this.arg = arg;
+        this.drive = drive;
 
         switch (mode) {
         case AUTO_DRIVE:
-            double desiredDistance = argument;
+            double desiredDistance = arg;
             direction = Math.signum(desiredDistance); // Moving Forwards: 1, Moving Backwards: -1
             startDistance = DriveState.averagePos;
             desiredLocation = startDistance + desiredDistance;
-            driving = true;
-            drive.setMode(DriveMode.AUTO_DRIVE);
-            // Thread t = new Thread("DriveTask");
-            // t.start();
             break;
         case TURN:
-            desiredAngle = argument;
-            driving = true;
-            drive.setMode(DriveMode.TURN);
-            // Thread turnThread = new Thread("TurnTask");
-            // turnThread.start();
+            desiredAngle = arg;
             break;
         case DRIVE_STICKS:
             System.out.println(
                     "The DriveTask constructor was incorrectly used during auto with the DRIVE_STICKS parameter");
             break;
+        case STOP:
+            break;
         }
     }
 
     public void run() {
+        driving = true;
+        drive.setMode(mode);
         while (driving) {
             try {
                 Thread.sleep(20);
@@ -329,6 +329,6 @@ public class DriveTask extends Task implements UrsaRobot {
     }
 
     public String toString() {
-        return "DriveTask: " + currentMode + " " + arg + "\n";
+        return "DriveTask: " + mode + " " + arg + "\n";
     }
 }
