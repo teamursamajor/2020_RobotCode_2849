@@ -55,16 +55,16 @@ public class Robot extends TimedRobot implements UrsaRobot {
     drive.initialize("DriveThread");
 
     spinner = new Spinner();
-    // spinner.initialize("SpinnerThread");
+    spinner.initialize("SpinnerThread");
 
     climb = new Climb();
     climb.initialize("ClimbThread");
 
     intake = new Intake();
-    // intake.initialize("IntakeThread");
+    intake.initialize("IntakeThread");
 
     outtake = new Outtake();
-    // outtake.initialize("OuttakeThread");
+    outtake.initialize("OuttakeThread");
 
     musicPlayer = new MusicPlayer();
     musicPlayer.initialize("MusicThread");
@@ -146,9 +146,9 @@ public class Robot extends TimedRobot implements UrsaRobot {
   @Override
   public void teleopPeriodic() {
     climb.readControls();
-    // intake.readControls();
-    // outtake.readControls();
-    spinner.readControls();
+    intake.readControls();
+    outtake.readControls();
+    // spinner.readControls();
     musicPlayer.readControls();
     vision.readControls();
   }

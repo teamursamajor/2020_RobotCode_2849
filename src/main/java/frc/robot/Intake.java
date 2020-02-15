@@ -20,7 +20,7 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
      * Only one Intake object should be instantiated at any time.
      */
     public Intake() {
-        intakeMotor = new Spark(INTAKE_MOTOR);
+        intakeMotor = new Spark(INTAKE);
         beltMotor = new Spark(BELT);
         lineSensor = new DigitalInput(LINE_SENSOR_PORT);
         deltaLineSensor = false;

@@ -14,7 +14,7 @@ public class Climb extends Subsystem<Climb.ClimbMode> implements UrsaRobot {
         UP, DOWN, STOP;
     }
 
-    private WPI_TalonSRX motor1, motor2;
+    private WPI_TalonSRX mLeft, mRight;
     // private DigitalInput limitSwitch;
     // private int distanceToGo = 5;
 
@@ -25,13 +25,13 @@ public class Climb extends Subsystem<Climb.ClimbMode> implements UrsaRobot {
      * instantiated at any time.
      */
     public Climb() {    
-        motor1 = new WPI_TalonSRX(CLIMB_FRONT);
-        motor2 = new WPI_TalonSRX(CLIMB_BACK);
+        mLeft = new WPI_TalonSRX(CLIMB_LEFT);
+        mRight = new WPI_TalonSRX(CLIMB_RIGHT);
         // limitSwitch = new DigitalInput(CLIMB_SWITCH_PORT);
-        motor1.configFactoryDefault();
-        motor2.configFactoryDefault();
-        motor1.setNeutralMode(NeutralMode.Brake);
-        motor2.setNeutralMode(NeutralMode.Brake);
+        mLeft.configFactoryDefault();
+        mRight.configFactoryDefault();
+        mLeft.setNeutralMode(NeutralMode.Brake);
+        mRight.setNeutralMode(NeutralMode.Brake);
         setMode(ClimbMode.STOP);
     }
 
@@ -50,24 +50,24 @@ public class Climb extends Subsystem<Climb.ClimbMode> implements UrsaRobot {
         // System.out.println("running " + subsystemMode);
         // Stop if climb got to right height (limit switch pressed) or encoder says
         // we've gone correct distance
-        // if (limitSwitch.get() || motor1.getSelectedSensorPosition() * CLIMB_INCHES_PER_TICK >= distanceToGo)
+        // if (limitSwitch.get() || mLeft.getSelectedSensorPosition() * CLIMB_INCHES_PER_TICK >= distanceToGo)
         //     setMode(ClimbMode.STOP);
 
         switch (subsystemMode) {
         case UP:
             climbing = true;
-            motor1.set(-1);
-            motor2.set(-1);
+            mLeft.set(-1);
+            mRight.set(-1);
             break;
         case DOWN:
             climbing = true;
-            motor1.set(1);
-            motor2.set(1);
+            mLeft.set(1);
+            mRight.set(1);
             break;
         case STOP:
             climbing = false;
-            motor1.stopMotor();
-            motor2.stopMotor();
+            mLeft.stopMotor();
+            mRight.stopMotor();
             break;
         }
     }

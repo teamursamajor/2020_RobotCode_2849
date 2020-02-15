@@ -58,7 +58,7 @@ public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaR
     public void runSubsystem() throws InterruptedException {
         // Selects song from SmartDashboard
         current = musicList.getSelected();
-        if (current != previous)
+        if (!current.equals(previous))
             orchestra.loadMusic(current);
         previous = current;
 
