@@ -18,7 +18,7 @@ public class Climb extends Subsystem<Climb.ClimbMode> implements UrsaRobot {
 
     // private DigitalInput limitSwitch;
 
-    private int distanceToGo = 5;
+    // private int distanceToGo = 5;
 
     /**
      * Constructor for the Climb mechanism. Only one Climb object should be

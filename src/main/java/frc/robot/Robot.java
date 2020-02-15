@@ -28,13 +28,13 @@ public class Robot extends TimedRobot implements UrsaRobot {
   // private String m_autoSelected;
   // private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  // private Drive drive;
+  private Drive drive;
   private Spinner spinner;
-  // private Intake intake;
-  // private Outtake outtake;
-  // private Climb climb;
-  // private AutoCompiler autoCompiler;
-  // private MusicPlayer musicPlayer;
+  private Intake intake;
+  private Outtake outtake;
+  private Climb climb;
+  private AutoCompiler autoCompiler;
+  private MusicPlayer musicPlayer;
 
   // private int testCounter;
 
@@ -48,25 +48,25 @@ public class Robot extends TimedRobot implements UrsaRobot {
     // m_chooser.addOption("My Auto", kCustomAuto);
     // SmartDashboard.putData("Auto choices", m_chooser);
 
-    // drive = new Drive();
-    // drive.initialize("DriveThread");
+    drive = new Drive();
+    drive.initialize("DriveThread");
 
     spinner = new Spinner();
     spinner.initialize("SpinnerThread");
 
-    // climb = new Climb();
-    // climb.initialize("ClimbThread");
+    climb = new Climb();
+    climb.initialize("ClimbThread");
 
-    // intake = new Intake();
-    // intake.initialize("IntakeThread");
+    intake = new Intake();
+    intake.initialize("IntakeThread");
 
-    // outtake = new Outtake();
-    // outtake.initialize("OuttakeThread");
+    outtake = new Outtake();
+    outtake.initialize("OuttakeThread");
 
-    // musicPlayer = new MusicPlayer();
-    // musicPlayer.initialize("MusicThread");
+    musicPlayer = new MusicPlayer();
+    musicPlayer.initialize("MusicThread");
 
-    // autoCompiler = new AutoCompiler(drive, intake, outtake, musicPlayer);
+    autoCompiler = new AutoCompiler(drive, intake, outtake, musicPlayer);
   }
 
   /**
@@ -101,11 +101,11 @@ public class Robot extends TimedRobot implements UrsaRobot {
     // System.out.println("Auto selected: " + m_autoSelected);
 
     // TODO add proper auto selector
-    // try {
-    //   autoCompiler.buildAutoMode("/home/lvuser/deploy/scripts/Test1.auto").start();
-    // } catch (Exception e) {
-    //   e.printStackTrace();
-    // }
+    try {
+      autoCompiler.buildAutoMode("/home/lvuser/deploy/scripts/Test1.auto").start();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   /**
@@ -130,7 +130,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
    */
   @Override
   public void teleopInit() {
-    // drive.setMode(DriveMode.DRIVE_STICKS);
+    drive.setMode(DriveMode.DRIVE_STICKS);
   }
 
   /**
@@ -139,11 +139,11 @@ public class Robot extends TimedRobot implements UrsaRobot {
    */
   @Override
   public void teleopPeriodic() {
-    // climb.readControls();
-    // intake.readControls();
-    // outtake.readControls();
+    climb.readControls();
+    intake.readControls();
+    outtake.readControls();
     spinner.readControls();
-    // musicPlayer.readControls();
+    musicPlayer.readControls();
   }
 
   // private boolean test1 = false, test2 = false, test3 = false;

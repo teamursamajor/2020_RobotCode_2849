@@ -23,18 +23,18 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
     private Spark spinMotor;
     private String gameData;
     private char color, goal, previousColor;
-
-    private int sameColor = 0, colorCounter = 0;
+    private long currentTime, startTime;
+    // private int sameColor = 0, colorCounter = 0;
 
     // for storing slices to spin
     private int slicesToSpin;
 
     // control loop stuff
-    final double goodKP = 0.005;
-    double controlPower = 0.20;
-    int sliceThreshold = 19;
-    double minPower = .15;
-    double maxPower = .22;
+    // final double goodKP = 0.005;
+    // double controlPower = 0.20;
+    // int sliceThreshold = 20;
+    // double minPower = 0.15;
+    // double maxPower = 0.21;
 
     // Color Sensor Utilities
     private static final I2C.Port i2cPort = I2C.Port.kOnboard;
@@ -66,14 +66,16 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
             // Chooses SPIN unless there is a color to detect
             setMode(getGoal() == ' ' ? SpinnerMode.SPIN : SpinnerMode.DETECT);
             if (getMode() == SpinnerMode.DETECT)
-                getSlicesToSpin(getColor(), offsetColor(getGoal(), 2));
+                getSlicesToSpin(color, offsetColor(goal, 2));
+            else
+                startTime = System.currentTimeMillis();
         }
         if (xbox.getSingleButtonPress(controls.map.get("spinner_stop")))
             setMode(SpinnerMode.STOP);
     }
 
     public void runSubsystem() throws InterruptedException {
-        System.out.println(System.currentTimeMillis());
+        currentTime = System.currentTimeMillis();
         /*
          * Matches the color the color sensor is seeing to the closest
          * of four possible colors.
@@ -108,104 +110,76 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
 
         switch (subsystemMode) {
         case SPIN:
-            // System.out.println("should be spinning");
-            
-            // System.out.println(getColor());
-            // System.out.println(System.currentTimeMillis());
-            spinMotor.set(.18);
-            spinSlices(25);
-            
-
-            // if (controlPower < maxPower && controlPower > minPower) {
-            //     // System.out.println("good job. The power is " + controlPower);
+            // spinSlices(26);
+            // if (controlPower < maxPower && controlPower > minPower)
             //     spinMotor.set(controlPower);
-            // } else {
-            //     // System.out.println("You Done Goofed. The power is " + controlPower);
+            // else
             //     spinMotor.set(minPower);
-            // }
-            // if (currentTime - startTime < 20000)
-            // spinMotor.set(1.0);
-            // // positive = CCW
-            // // negative = CW
-            // else {
-            // running = false;
-            // }
+            if (currentTime - startTime < 3000)
+                spinMotor.set(0.27);
+            else
+                setMode(SpinnerMode.STOP);
             break;
         case DETECT:
-            // TODO maybe move this back to spinSlices?
+            // TODO add better PID control here. this is where it's really crucial
             int slices = 0;
             float direction = Math.signum(slicesToSpin);
             int threshold = Math.abs(slicesToSpin) - 1;
-            double spinPower = .20 * direction;
-            
-            // System.out.println(threshold);
+            double spinPower = .17  * direction;
 
             if (color != previousColor)
                 slices++;
-            if (slices >= threshold) {
-                spinPower = .17 * direction;
-                // System.out.println(spinPower);
-            }
-            if (color == offsetColor(goal, 2))
+            if (slices >= threshold)
+                spinPower = .18 * direction;
+            if (correctColor())
                 setMode(SpinnerMode.STOP);
-            
+
             spinMotor.set(spinPower);
             previousColor = color;
-
             break;
-            
-            /* TODO remove
-            //Logic for which direction to spin, 1 = CW, -1 = CCW
-            int dir = colToNum(goal)-colToNum(color);
-            if (Math.abs(dir % 2) == 0) dir = 1;
-            else if (dir == -3 || dir == 3) dir /= -3; //Normalize edge case
-
-            spinMotor.set(dir * 0.26);
-            if (color == goal)
-                running = false;
-            break;
-            */
         case STOP:
             spinMotor.set(0.0);
-            controlPower = 0.26;
-            colorCounter = sameColor = 0;
-            // The next 5 lines of code are every important.
+            // controlPower = 0.20;
+            // colorCounter = sameColor = 0;
+            // The next 4 lines of code are every important.
             // Do not delete
             boolean didEpsteinKillHimself = false;
-            if (didEpsteinKillHimself == true)
-            {
+            if (didEpsteinKillHimself == true) {
                 System.out.println("If you are reading this, you are in an alternate universe where Jeffrey Epstein did, in fact, kill himself.");
             }
             break;
         }
     }
 
-    /**
-     * Spins a given amount of slices and counts color changes
-     * TODO make this return the desired power and calculate threshold/KP stuff here
-     * @param slices the number of slices to spin
-     */
-    public void spinSlices(int slices) {
-        System.out.println("slices seen: " + colorCounter);
-        if (colorCounter < slices) {
-            if (color != previousColor)
-                sameColor = 0;
-            else {
-                sameColor++; // increments each time we see the same color
-                if (sameColor == 20) { // threshold for counting a new color
-                    colorCounter++;
-                    System.out.println(color + " color change at " + colorCounter);
-                    if (colorCounter >= sliceThreshold) { // starts PID once it exceeds the slice threshold
-                        controlPower = (goodKP * (slices - colorCounter) + .12);
-                        System.out.println("control power" + controlPower);
-                    }
-                }
-            }
-            previousColor = color;
-        } else { // if it's seen the right color enough times
-            setMode(SpinnerMode.STOP);
-        }
-    }
+    // /**
+    //  * Spins a given amount of slices and counts color changes
+    //  * TODO make this return the desired power and calculate threshold/KP stuff here
+    //  * @param slices the number of slices to spin
+    //  */
+    // public void spinSlices(int slices) {
+    //     // System.out.println(sameColor);
+    //     if (colorCounter < slices) {
+    //         if (color != previousColor) {
+    //             // System.out.println("different color");
+    //             sameColor = 0;
+    //         } else {
+    //             // System.out.println("sees same color");
+    //             if (sameColor < 7)
+    //                 sameColor++; // increments each time we see the same color
+    //             if (sameColor == 5) { // threshold for counting a new color
+    //                 colorCounter++;
+    //                 System.out.println(color + " color change at slice " + colorCounter);
+    //                 if (colorCounter >= sliceThreshold) { // starts PID once it exceeds the slice threshold
+    //                     controlPower = (goodKP * (slices - colorCounter) + 0.15);
+    //                     // System.out.println("control power" + controlPower);
+    //                 }
+    //             }
+    //         }
+    //         previousColor = color;
+    //     } else { // if it's seen the right color enough times
+    //         setMode(SpinnerMode.STOP);
+    //     }
+    // }
 
     /**
      * Calculates the number of slices to spin given the current and goal color.
@@ -232,7 +206,7 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
      * Returns true if the current color matches with the goal color >:)
      */
     public boolean correctColor() {
-        return goal == color;
+        return goal == offsetColor(color, 2);
     }
 
     /**
