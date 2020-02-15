@@ -52,16 +52,16 @@ public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaR
             setMode(MusicMode.PLAY);
         if (xbox.getSingleButtonPress(controls.map.get("music_pause")))
             setMode(MusicMode.PAUSE);
-    }
 
-    @Override
-    public void runSubsystem() throws InterruptedException {
-        // Selects song from SmartDashboard
+        // Selects song from SmartDashboard if Teleop is enabled
         current = musicList.getSelected();
         if (!current.equals(previous))
             orchestra.loadMusic(current);
         previous = current;
+    }
 
+    @Override
+    public void runSubsystem() throws InterruptedException {
         switch (subsystemMode) {
         case PLAY:
             orchestra.play();
