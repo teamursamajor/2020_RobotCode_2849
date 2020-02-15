@@ -7,9 +7,9 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.SPI;
 
 /**
-* This interface contains all of the used ports on the robot as well as constants
-* involving encoders and the robot.
-*/
+ * This interface contains all of the used ports on the robot as well as constants
+ * involving encoders and the robot.
+ */
 public interface UrsaRobot {
 	// Arcade vs Tank drive
 	public static boolean isArcadeDrive = true;
@@ -23,8 +23,7 @@ public interface UrsaRobot {
 	public static final int SPINNER = 1, INTAKE = 2, BELT = 3, OUTTAKE = 4;
 
 	// Sensor Ports
-	public static final int LINE_SENSOR_PORT = 5;
-	public static final int CLIMB_SWITCH_PORT = 7;
+	public static final int LINE_SENSOR_PORT = 5, CLIMB_SWITCH_PORT = 7;
 	
 	public static final int CONTROLLER_PORT = 0;
 
