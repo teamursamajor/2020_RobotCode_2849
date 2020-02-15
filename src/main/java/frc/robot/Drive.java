@@ -13,15 +13,19 @@ import frc.auto.tasks.DriveTask.DriveMode;
  * getRightRate()</li>
  * <li><b>Heading:</b> uses degrees as a measurement</li>
  * </ul>
+ * It also implements control modes for driving a distance, turning to an angle,
+ * and operating the robot via joysticks.
  */
 public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 
-	// public static Spark mFrontLeft, mFrontRight, mRearLeft, mRearRight;
 	public static WPI_TalonSRX mFrontLeft, mFrontRight, mRearLeft, mRearRight;
 
+	// for drive sticks acceleration limit
+	private double speedX = 0, speedY = 0, limit = 0.05, previousX = 0, previousY = 0;
+	
+	// for auto drive
 	private double desiredLocation = 0.0, startDistance = 0.0, direction = 1.0, desiredAngle = 0.0;
-	private double speedX = 0, speedY = 0, limit = 0.2, previousX = 0, previousY = 0;
-    private int counter = 0, countLimit = 10;
+	private int counter = 0, countLimit = 10;
     private boolean limited = false;
 
 	/**
@@ -47,6 +51,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 		mRearRight.setNeutralMode(NeutralMode.Brake);
 		
 		resetEncoders();
+		resetNavx();
 	}
 
 	/**
@@ -67,9 +72,6 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 		mFrontRight.set(driveOrder.rightPower);
 		mRearLeft.set(-driveOrder.leftPower);
 		mRearRight.set(driveOrder.rightPower);
-
-		// System.out.println("Left power: " + driveOrder.leftPower);
-		// System.out.println("Right power: " + driveOrder.rightPower);
 	}
 
 	/**
@@ -82,11 +84,6 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	public void updateStateInfo() {
 		final double leftDistance = getLeftDistance();
 		final double rightDistance = getRightDistance();
-		// System.out.println("left encoder: " + leftDistance);
-		// System.out.println("right encoder: " + rightDistance);
-		// System.out.println("avg pos: " + (leftDistance + rightDistance) / 2);
-
-		// System.out.println(leftDistance + " " + rightDistance);
 
 		// Calculate robot velocity
 		// For underclassmen, delta means "change in"
@@ -432,6 +429,12 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
         return new DriveOrder(leftSpeed, rightSpeed);
     }
 
+	/**
+	 * Iterates the auto turn control loop and calculates the new powers for
+     * Drive to turn to a specific angle.
+     * 
+     * @return A DriveOrder object containing the new left and right powers
+	 */
     private DriveOrder turnTo() {
         double newAngle = desiredAngle - DriveState.currentHeading;
         double angleTolerance = 5;
@@ -449,11 +452,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
         // if we're turning right use leftVelocity, if we're turning left use rightVelocity
         double velocity = (DriveState.leftVelocity > 0) ? DriveState.leftVelocity : DriveState.rightVelocity;
 
-        @SuppressWarnings("unused")
         double outputPower = turningKp * newAngle + turningKd * (velocity / UrsaRobot.robotRadius);
-        
-        // TODO temporary; uncomment below
-        // return new DriveOrder(0, 0);
 
         return new DriveOrder(1 * (Math.signum(newAngle) * outputPower),
                 -1 * (Math.signum(newAngle)) * outputPower);

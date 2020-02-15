@@ -28,6 +28,7 @@ public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaR
         // TODO figure out what's up with falcon modes for music
         instruments.add(new TalonFX(4));
         instruments.add(new TalonFX(5));
+        
         // instruments.add(new TalonFX(2));
         // instruments.add(new TalonFX(3));
         music = "music/imperial.chrp";
