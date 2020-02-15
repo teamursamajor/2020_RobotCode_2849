@@ -24,8 +24,6 @@ public interface UrsaRobot {
 
 	// Sensor Ports
 	public static final int LINE_SENSOR_PORT = 5, CLIMB_SWITCH_PORT = 7;
-	
-	public static final int CONTROLLER_PORT = 0;
 
 	// Tells encoder the value of each tick. Must be set in the corresponding file
 	public static final double INCHES_PER_TICK = 7.2d * Math.PI / 2048.0d / 12.75d;
@@ -38,11 +36,8 @@ public interface UrsaRobot {
 	public static final double ROBOT_WIDTH_FEET = ROBOT_WIDTH_INCHES / 12.0;
 	public static final double ROBOT_DEPTH_FEET = ROBOT_WIDTH_FEET / 12.0;
 
-	// Radius of the robot
+	// TODO check radius of the robot -- important for auto turning
 	public static final double robotRadius = 15;
-
-	// Path settings in inches/second and inches^2/second
-	public static final double MAX_VELOCITY = 160, MAX_ACCELERATION = 80; 
 
 	// Nav-X
 	AHRS ahrs = new AHRS(SPI.Port.kMXP);
@@ -50,17 +45,14 @@ public interface UrsaRobot {
 	// Limelight
 	NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
-	// right side multiplier
-	double rightSideMultiplier = 1.62;
-
 	// Xbox Controller
 	XboxController xbox = new XboxController(0);
 
 	// Control Map
 	ControlMap controls = new ControlMap();
 	
-	// RIP summonSatan() and SickoMode Time of Death: 6:57 PM on April 2nd, 201
+	// RIP summonSatan() and SickoMode Time of Death: 6:57 PM on April 2nd, 2019
 	
-	// Did I Axe?
+	// Did I axe?
 	public static boolean didIAxe = false;
 }
