@@ -24,11 +24,13 @@ public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaR
     public MusicPlayer() {
         instruments = new ArrayList<TalonFX>();
         
+        // TODO make way to use inactive motors
+        // TODO figure out what's up with falcon modes for music
         instruments.add(new TalonFX(4));
         instruments.add(new TalonFX(5));
         // instruments.add(new TalonFX(2));
         // instruments.add(new TalonFX(3));
-        music = "music/megalovania.chrp";
+        music = "music/imperial.chrp";
         orchestra = new Orchestra(instruments, music);
         setMode(MusicMode.STOP);
     }

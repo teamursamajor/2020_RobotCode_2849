@@ -7,15 +7,27 @@ META:
 * Incorporate Logger for debug/error info
 * Move subsystem mode enums to subsystem classes? Or keep in modes?
 
+VISION:
+* Write code to switch camera depending on drive motor power
+* Test out switching pipelines
+* Set up cameras for forward, backward, and climb movement
+
+MUSIC:
+* Test music in auto
+* If driving, use climb Falcons
+* If climbing, use drive Falcons
+* Get more songs
+
 SPINNER:
 * Comment/reorganize class
+* Test/refine detecting colors
+* Calibrate colors for actual wheel at USRA
 
 AUTOCOMPILER:
 * Add math operation/paretheses/comma support
 * Use Logger to log errors in parsing when throwing exceptions
 * Test AutoCompiler with generating basic tasks
 * Use AutoCompiler to design auto modes
-  - Maybe use Pathfinder/Pathweaver instead
 * Make script syntax and class documentation when all's said and done
 
 DRIVETRAIN:
