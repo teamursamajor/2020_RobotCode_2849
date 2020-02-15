@@ -18,6 +18,11 @@ MUSIC:
 * If climbing, use drive Falcons
 * Get more songs
 
+LEDs:
+* Reference 2018 code
+* Add ways to set LED depending on active task
+* Complete class
+
 SPINNER:
 * Comment/reorganize class
 * Test/refine detecting colors
@@ -31,8 +36,7 @@ AUTOCOMPILER:
 * Make script syntax and class documentation when all's said and done
 
 DRIVETRAIN:
-* Look into how Falcons work and modify Drive code in accordance
-* Figure out how to do motion profiling
+* Motion profiling?
 * Test automatic turning, driving, etc. with limited acceleration
 
 CLIMBER:
@@ -40,7 +44,7 @@ CLIMBER:
 
 INTAKE/OUTTAKE:
 * Test and refine system
+* GET LINE SENSOR ON!!!
 
 EXTRA:
-* Figure out if we should use Pixy instead, and if so, how to use it
 * Get LEDs working so we look cool
