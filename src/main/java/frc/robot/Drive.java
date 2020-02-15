@@ -47,17 +47,6 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 		mRearRight.setNeutralMode(NeutralMode.Brake);
 		
 		resetEncoders();
-
-		// TODO maybe use??
-		// mRearRight.follow(mFrontRight);
-		// mRearLeft.follow(mFrontLeft);
-
-		// TODO remove all of these
-		// leftEncoder.setDistancePerPulse(INCHES_PER_TICK);
-		// rightEncoder.setDistancePerPulse(INCHES_PER_TICK);
-		// rightEncoder.setReverseDirection(true);
-		// leftEncoder.reset();
-		// rightEncoder.reset();
 	}
 
 	/**
@@ -267,7 +256,11 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 		}
     }
 
-	public void setArg(DriveMode mode, double arg) {
+	/**
+	 * Used for DriveTasks to communicate information
+	 * about starting a task to Drive.
+	 */
+	public void setTask(DriveMode mode, double arg) {
 		switch (mode) {
 		case AUTO_DRIVE:
 			double desiredDistance = arg;
@@ -376,9 +369,6 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
         double leftSpeed, rightSpeed, leftStickY, rightStickX;
         if (isArcadeDrive) {
             // Arcade Drive
-            // leftStickY = xbox.getSquaredAxis(XboxController.AXIS_LEFTSTICK_Y);
-            // rightStickX = -xbox.getSquaredAxis(XboxController.AXIS_RIGHTSTICK_X);
-
             leftStickY = xbox.getAxis(XboxController.AXIS_LEFTSTICK_Y);
             rightStickX = -xbox.getAxis(XboxController.AXIS_RIGHTSTICK_X);
 
@@ -414,9 +404,6 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
             }
         } else {
             // Tank Drive
-            // leftSpeed = xbox.getSquaredAxis(XboxController.AXIS_LEFTSTICK_Y);
-            // rightSpeed = -xbox.getSquaredAxis(XboxController.AXIS_RIGHTSTICK_Y);
-
             leftSpeed = xbox.getAxis(XboxController.AXIS_LEFTSTICK_Y);
             rightSpeed = -xbox.getAxis(XboxController.AXIS_RIGHTSTICK_Y);
 
@@ -466,10 +453,10 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
         double outputPower = turningKp * newAngle + turningKd * (velocity / UrsaRobot.robotRadius);
         
         // TODO temporary; uncomment below
-        return new DriveOrder(0, 0);
+        // return new DriveOrder(0, 0);
 
-        // return new DriveOrder(1 * (Math.signum(newAngle) * outputPower),
-        //         -1 * (Math.signum(newAngle)) * outputPower);
+        return new DriveOrder(1 * (Math.signum(newAngle) * outputPower),
+                -1 * (Math.signum(newAngle)) * outputPower);
     }
 
     /**
@@ -481,8 +468,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
         public static double averagePos = 0.0, currentHeading = 0.0;
         public static long stateTime = System.currentTimeMillis();
 
-        public static void updateState(double leftVelocity, double rightVelocity, double leftPos, double rightPos,
-                double currentHeading) {
+        public static void updateState(double leftVelocity, double rightVelocity, double leftPos, double rightPos, double currentHeading) {
             DriveState.leftVelocity = leftVelocity;
             DriveState.rightVelocity = rightVelocity;
             DriveState.leftPos = leftPos;

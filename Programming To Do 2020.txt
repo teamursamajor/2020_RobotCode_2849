@@ -1,17 +1,14 @@
 ### PROGRAMMING TO DO 2020 ###
 
 META:
-* Get Falcon/PDP firmware on competition RoboRIO
 * Give members opportunities to code/learn/work independently
 * Make sure people understand Java, how to debug stuff, working with WPILib
 * Document code so we know what stuff does
 * Incorporate Logger for debug/error info
 * Move subsystem mode enums to subsystem classes? Or keep in modes?
-* Make a MusicTask. Music in auto 2020
 
 SPINNER:
 * Comment/reorganize class
-* Test and refine system with new motor
 
 AUTOCOMPILER:
 * Add math operation/paretheses/comma support
@@ -23,17 +20,15 @@ AUTOCOMPILER:
 
 DRIVETRAIN:
 * Look into how Falcons work and modify Drive code in accordance
-* FIGURE OUT WHY ACCELERATION LIMIT CODE DOESN'T WORK!!!!
 * Figure out how to do motion profiling
 * Test automatic turning, driving, etc. with limited acceleration
 
 CLIMBER:
-* Work out design details with Falcons
+* Test and refine system
 
 INTAKE/OUTTAKE:
 * Test and refine system
 
 EXTRA:
-* Figure out if we need Limelight, and if so, how to use it
 * Figure out if we should use Pixy instead, and if so, how to use it
 * Get LEDs working so we look cool

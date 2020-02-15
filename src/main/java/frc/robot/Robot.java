@@ -8,6 +8,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+// import edu.wpi.cscore.UsbCamera;
+// import edu.wpi.first.cameraserver.CameraServer;
 // import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.DriverStation;
@@ -64,7 +66,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
     // outtake.initialize("OuttakeThread");
 
     musicPlayer = new MusicPlayer();
-    musicPlayer.initialize("MusicThread");
+    // musicPlayer.initialize("MusicThread");
 
     autoCompiler = new AutoCompiler(drive, intake, outtake, musicPlayer);
   }

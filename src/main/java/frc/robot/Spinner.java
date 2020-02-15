@@ -3,7 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
@@ -92,9 +92,9 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
         Color detectedColor = colorSensor.getColor();
         ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
 
-        SmartDashboard.putNumber("Red", detectedColor.red);
-        SmartDashboard.putNumber("Green", detectedColor.green);
-        SmartDashboard.putNumber("Blue", detectedColor.blue);
+        // SmartDashboard.putNumber("Red", detectedColor.red);
+        // SmartDashboard.putNumber("Green", detectedColor.green);
+        // SmartDashboard.putNumber("Blue", detectedColor.blue);
 
         if (match.color == kBlueTarget)
             color = 'B';
@@ -110,7 +110,7 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
          */
         gameData = DriverStation.getInstance().getGameSpecificMessage();
 
-        SmartDashboard.putString("Color", color + "");
+        // SmartDashboard.putString("Color", color + "");
 
         if (gameData.length() > 0) // If we've gotten a color to check for
             goal = gameData.charAt(0); // Store in goal
@@ -139,7 +139,7 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
             if (color != previousColor)
                 slices++;
             if (slices >= threshold)
-                spinPower = .18 * direction;
+                spinPower = .19 * direction;
             if (correctColor())
                 setMode(SpinnerMode.STOP);
 

@@ -43,7 +43,7 @@ public class DriveTask extends Task {
     }
 
     public void run() {
-        drive.setArg(mode, arg);
+        drive.setTask(mode, arg);
         while (drive.getMode() != DriveMode.STOP) {
             try {
                 Thread.sleep(20);
