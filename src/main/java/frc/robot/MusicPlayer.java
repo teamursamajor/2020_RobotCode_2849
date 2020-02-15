@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import com.ctre.phoenix.music.Orchestra;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import frc.auto.tasks.MusicTask;
 import frc.auto.tasks.MusicTask.MusicMode;
 
@@ -15,24 +18,31 @@ public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaR
     
     private Orchestra orchestra;
     private ArrayList<TalonFX> instruments;
-    private String music;
-    // private TalonFX talon1, talon2, talon3, talon4;
-
+    private String current, previous;
+    private SendableChooser<String> musicList = new SendableChooser<String>();
+    
     /**
      * Constructor for the Music Player.
      */
     public MusicPlayer() {
+        // should be smart enough to only use what instruments it can
+        // TODO test
+        // if not use Drive.driving and Climb.climbing
         instruments = new ArrayList<TalonFX>();
-        
-        // TODO make way to use inactive motors
-        // TODO figure out what's up with falcon modes for music
+        instruments.add(new TalonFX(0));
+        instruments.add(new TalonFX(1));
+        instruments.add(new TalonFX(2));
+        instruments.add(new TalonFX(3));
         instruments.add(new TalonFX(4));
         instruments.add(new TalonFX(5));
-        
-        // instruments.add(new TalonFX(2));
-        // instruments.add(new TalonFX(3));
-        music = "music/imperial.chrp";
-        orchestra = new Orchestra(instruments, music);
+        orchestra = new Orchestra(instruments);
+
+        // musicList.setDefaultOption("Select music...", "");
+        musicList.setDefaultOption("Imperial March", "music/imperial.chrp");
+        musicList.addOption("Megalovania", "music/megalovania.chrp");
+        musicList.addOption("All Star", "music/allstar.chrp");
+        SmartDashboard.putData("Music List", musicList);
+
         setMode(MusicMode.STOP);
     }
 
@@ -46,6 +56,12 @@ public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaR
 
     @Override
     public void runSubsystem() throws InterruptedException {
+        // Selects song from SmartDashboard
+        current = musicList.getSelected();
+        if (current != previous)
+            orchestra.loadMusic(current);
+        previous = current;
+
         switch (subsystemMode) {
         case PLAY:
             orchestra.play();

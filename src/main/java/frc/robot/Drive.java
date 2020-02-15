@@ -19,6 +19,7 @@ import frc.auto.tasks.DriveTask.DriveMode;
 public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 
 	public static WPI_TalonSRX mFrontLeft, mFrontRight, mRearLeft, mRearRight;
+	public static boolean driving;
 
 	// for drive sticks acceleration limit
 	private double speedX = 0, speedY = 0, limit = 0.05, previousX = 0, previousY = 0;
@@ -68,10 +69,16 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 		 * use different control modes. These would be set through the method
 		 * .set(ControlMode mode, double value)
 		 */
-		mFrontLeft.set(-driveOrder.leftPower);
-		mFrontRight.set(driveOrder.rightPower);
-		mRearLeft.set(-driveOrder.leftPower);
-		mRearRight.set(driveOrder.rightPower);
+		if (driveOrder.leftPower != 0 && driveOrder.rightPower != 0) {
+			driving = true;
+			mFrontLeft.set(-driveOrder.leftPower);
+			mFrontRight.set(driveOrder.rightPower);
+			mRearLeft.set(-driveOrder.leftPower);
+			mRearRight.set(driveOrder.rightPower);
+		} else {
+			driving = false;
+			stop();
+		}
 	}
 
 	/**

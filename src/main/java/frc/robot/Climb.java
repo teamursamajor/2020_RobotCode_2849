@@ -15,10 +15,10 @@ public class Climb extends Subsystem<Climb.ClimbMode> implements UrsaRobot {
     }
 
     private WPI_TalonSRX motor1, motor2;
-
     // private DigitalInput limitSwitch;
-
     // private int distanceToGo = 5;
+
+    public static boolean climbing;
 
     /**
      * Constructor for the Climb mechanism. Only one Climb object should be
@@ -55,16 +55,19 @@ public class Climb extends Subsystem<Climb.ClimbMode> implements UrsaRobot {
 
         switch (subsystemMode) {
         case UP:
+            climbing = true;
             motor1.set(-1);
             motor2.set(-1);
             break;
         case DOWN:
+            climbing = true;
             motor1.set(1);
             motor2.set(1);
             break;
         case STOP:
-            motor1.set(0.0);
-            motor2.set(0.0);
+            climbing = false;
+            motor1.stopMotor();
+            motor2.stopMotor();
             break;
         }
     }
