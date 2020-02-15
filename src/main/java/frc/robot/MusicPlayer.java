@@ -41,6 +41,16 @@ public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaR
         musicList.setDefaultOption("Imperial March", "music/imperial.chrp");
         musicList.addOption("Megalovania", "music/megalovania.chrp");
         musicList.addOption("All Star", "music/allstar.chrp");
+        musicList.addOption("Blackbird", "music/blackbird.chrp");
+        musicList.addOption("Bobomb Battlefield", "music/bobomb.chrp");
+        musicList.addOption("Bohemian Rhapsody", "music/bohemianrhapsody.chrp");
+        musicList.addOption("Cotton Eye Joe", "music/cottoneyejoe.chrp");
+        musicList.addOption("Giorno's Theme", "music/giorno.chrp");
+        musicList.addOption("Renai Circulation", "music/renaicirculation.chrp");
+        musicList.addOption("Rick Roll", "music/rickroll.chrp");
+        musicList.addOption("Seinfeld Theme", "music/seinfeld.chrp");
+        musicList.addOption("Take On Me", "music/takeonme.chrp");
+        musicList.addOption("Your Reality", "music/yourreality.chrp");
         SmartDashboard.putData("Music List", musicList);
 
         setMode(MusicMode.STOP);
