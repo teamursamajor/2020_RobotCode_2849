@@ -17,24 +17,24 @@ import edu.wpi.first.wpilibj.util.Color;
 public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot {
 
     public enum SpinnerMode {
-        SPIN, DETECT, STOP;
+        SPIN, DETECT, LEFT, RIGHT, STOP;
     }
 
     private Spark spinMotor;
     private String gameData;
     private char color, goal, previousColor;
-    private long currentTime, startTime;
-    // private int sameColor = 0, colorCounter = 0;
+    // private long currentTime, startTime;
+    private int sameColor = 0, colorCounter = 0;
 
     // for storing slices to spin
     private int slicesToSpin;
 
     // control loop stuff
-    // final double goodKP = 0.005;
-    // double controlPower = 0.20;
-    // int sliceThreshold = 20;
-    // double minPower = 0.15;
-    // double maxPower = 0.21;
+    final double goodKP = 0.005;
+    double controlPower = 0.20;
+    int sliceThreshold = 20;
+    double minPower = 0.15;
+    double maxPower = 0.21;
 
     // Color Sensor Utilities
     private static final I2C.Port i2cPort = I2C.Port.kOnboard;
@@ -67,15 +67,24 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
             setMode(getGoal() == ' ' ? SpinnerMode.SPIN : SpinnerMode.DETECT);
             if (getMode() == SpinnerMode.DETECT)
                 getSlicesToSpin(color, offsetColor(goal, 2));
-            else
-                startTime = System.currentTimeMillis();
+            // else
+                // startTime = System.currentTimeMillis();
         }
+
+        if (xbox.getDPad(controls.map.get("spinner_left"))) {
+            setMode(SpinnerMode.LEFT);
+        } else if (xbox.getDPad(controls.map.get("spinner_right"))) {
+            setMode(SpinnerMode.RIGHT);
+        } else if (subsystemMode == SpinnerMode.LEFT || subsystemMode == SpinnerMode.RIGHT) {
+            setMode(SpinnerMode.STOP);
+        }
+
         if (xbox.getSingleButtonPress(controls.map.get("spinner_stop")))
             setMode(SpinnerMode.STOP);
     }
 
     public void runSubsystem() throws InterruptedException {
-        currentTime = System.currentTimeMillis();
+        // currentTime = System.currentTimeMillis();
         /*
          * Matches the color the color sensor is seeing to the closest
          * of four possible colors.
@@ -110,15 +119,15 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
 
         switch (subsystemMode) {
         case SPIN:
-            // spinSlices(26);
-            // if (controlPower < maxPower && controlPower > minPower)
-            //     spinMotor.set(controlPower);
-            // else
-            //     spinMotor.set(minPower);
-            if (currentTime - startTime < 3000)
-                spinMotor.set(0.27);
+            spinSlices(26);
+            if (controlPower < maxPower && controlPower > minPower)
+                spinMotor.set(controlPower);
             else
-                setMode(SpinnerMode.STOP);
+                spinMotor.set(minPower);
+            // if (currentTime - startTime < 3000)
+            //     spinMotor.set(0.27);
+            // else
+            //     setMode(SpinnerMode.STOP);
             break;
         case DETECT:
             // TODO add better PID control here. this is where it's really crucial
@@ -137,10 +146,16 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
             spinMotor.set(spinPower);
             previousColor = color;
             break;
+        case LEFT:
+            spinMotor.set(0.18);
+            break;
+        case RIGHT:
+            spinMotor.set(-0.18);
+            break;
         case STOP:
             spinMotor.set(0.0);
-            // controlPower = 0.20;
-            // colorCounter = sameColor = 0;
+            controlPower = 0.20;
+            colorCounter = sameColor = 0;
             // The next 4 lines of code are every important.
             // Do not delete
             boolean didEpsteinKillHimself = false;
@@ -151,35 +166,35 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
         }
     }
 
-    // /**
-    //  * Spins a given amount of slices and counts color changes
-    //  * TODO make this return the desired power and calculate threshold/KP stuff here
-    //  * @param slices the number of slices to spin
-    //  */
-    // public void spinSlices(int slices) {
-    //     // System.out.println(sameColor);
-    //     if (colorCounter < slices) {
-    //         if (color != previousColor) {
-    //             // System.out.println("different color");
-    //             sameColor = 0;
-    //         } else {
-    //             // System.out.println("sees same color");
-    //             if (sameColor < 7)
-    //                 sameColor++; // increments each time we see the same color
-    //             if (sameColor == 5) { // threshold for counting a new color
-    //                 colorCounter++;
-    //                 System.out.println(color + " color change at slice " + colorCounter);
-    //                 if (colorCounter >= sliceThreshold) { // starts PID once it exceeds the slice threshold
-    //                     controlPower = (goodKP * (slices - colorCounter) + 0.15);
-    //                     // System.out.println("control power" + controlPower);
-    //                 }
-    //             }
-    //         }
-    //         previousColor = color;
-    //     } else { // if it's seen the right color enough times
-    //         setMode(SpinnerMode.STOP);
-    //     }
-    // }
+    /**
+     * Spins a given amount of slices and counts color changes
+     * TODO make this return the desired power and calculate threshold/KP stuff here
+     * @param slices the number of slices to spin
+     */
+    public void spinSlices(int slices) {
+        if (colorCounter < slices) {
+            if (color != previousColor) {
+                // System.out.println("different color");
+                sameColor = 0;
+            } else {
+                // System.out.println("sees same color");
+                if (sameColor < 7) {
+                    sameColor++; // increments each time we see the same color
+                    // System.out.println("seen same color " + sameColor + " times");
+                } if (sameColor == 5) { // threshold for counting a new color
+                    colorCounter++;
+                    System.out.println(color + " color change at slice " + colorCounter);
+                    if (colorCounter >= sliceThreshold) { // starts PID once it exceeds the slice threshold
+                        controlPower = (goodKP * (slices - colorCounter) + 0.15);
+                        // System.out.println("control power" + controlPower);
+                    }
+                }
+            }
+            previousColor = color;
+        } else { // if it's seen the right color enough times
+            setMode(SpinnerMode.STOP);
+        }
+    }
 
     /**
      * Calculates the number of slices to spin given the current and goal color.

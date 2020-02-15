@@ -26,16 +26,15 @@ public class IntakeTask extends Task implements UrsaRobot {
     public IntakeTask(Intake intake, IntakeMode mode) {
         this.intake = intake;
         this.mode = mode;
-        intake.setMode(mode);
     }
 
     public void run() {
+        intake.setMode(mode);
         try {
             Thread.sleep(runTime);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        intake.setMode(mode);
     }
 
     public String toString() {

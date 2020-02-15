@@ -28,16 +28,15 @@ public class OuttakeTask extends Task implements UrsaRobot {
     public OuttakeTask(Outtake outtake, OuttakeMode mode) {
         this.outtake = outtake;
         this.mode = mode;
-        outtake.setMode(mode);
     }
 
     public void run() {
+        outtake.setMode(mode);
         try {
             Thread.sleep(runTime);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        outtake.setMode(mode);
     }
 
     public String toString() {

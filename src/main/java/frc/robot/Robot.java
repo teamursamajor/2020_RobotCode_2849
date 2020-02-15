@@ -49,19 +49,19 @@ public class Robot extends TimedRobot implements UrsaRobot {
     // SmartDashboard.putData("Auto choices", m_chooser);
 
     drive = new Drive();
-    drive.initialize("DriveThread");
+    // drive.initialize("DriveThread");
 
     spinner = new Spinner();
     spinner.initialize("SpinnerThread");
 
     climb = new Climb();
-    climb.initialize("ClimbThread");
+    // climb.initialize("ClimbThread");
 
     intake = new Intake();
-    intake.initialize("IntakeThread");
+    // intake.initialize("IntakeThread");
 
     outtake = new Outtake();
-    outtake.initialize("OuttakeThread");
+    // outtake.initialize("OuttakeThread");
 
     musicPlayer = new MusicPlayer();
     musicPlayer.initialize("MusicThread");
