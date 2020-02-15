@@ -45,6 +45,3 @@ CLIMBER:
 INTAKE/OUTTAKE:
 * Test and refine system
 * GET LINE SENSOR ON!!!
-
-EXTRA:
-* Get LEDs working so we look cool
