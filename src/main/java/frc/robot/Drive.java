@@ -16,13 +16,14 @@ import frc.auto.tasks.DriveTask.DriveMode;
  * It also implements control modes for driving a distance, turning to an angle,
  * and operating the robot via joysticks.
  * TODO get rid of drivestate and use getRate() for velocity
+ * TODO make motors/methods not static
  */
 public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 
 	public static WPI_TalonFX mFrontLeft, mFrontRight, mRearLeft, mRearRight;
 	public static boolean driving = false;
 	
-	// For autonomous
+	/** For autonomous */
 	private double desiredLocation = 0.0, startDistance = 0.0, direction = 1.0, desiredAngle = 0.0;
 
 	/**
@@ -132,11 +133,9 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	 * @return Heading between 0 and 360
 	 */
 	public double fixHeading(double heading) {
-		// System.out.println("start heading: " + heading);
 		heading %= 360;
 		while (heading < 0)
 			heading += 360;
-		// System.out.println("final heading: " + heading);
 		return heading;
 	}
 
@@ -322,6 +321,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
         // If moving backwards, find our error term minus velocity term
         else if (direction < 0) {
 
+			// TODO remove; it doesn't need to do this anymore
             // This treats moving backwards as if it were moving forwards by flipping the
             // sign of our error. Then we reaccount for our flipped error by multiplying by
             // -1 once our calculations are complete
