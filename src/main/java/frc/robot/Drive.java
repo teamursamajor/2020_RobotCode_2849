@@ -257,7 +257,6 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
         case AUTO_DRIVE:
             return autoCalculator();
 		case TURN:
-			System.out.println("call turn");
             return turnTo();
         case DRIVE_STICKS:
             return sticksBox();
@@ -279,10 +278,9 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 			desiredLocation = startDistance + desiredDistance;
 			break;
 		case TURN:
-			System.out.println("turn mode with arg " + arg);
 			desiredAngle = fixHeading(arg);
-			desiredAngle += getHeading(); // makes it turn by angle; TODO test
-			desiredAngle = turnAmount(desiredAngle); // supposedly optimizes turning; TODO test
+			// desiredAngle += getHeading(); // makes it turn by angle; TODO test
+			// desiredAngle = turnAmount(desiredAngle); // supposedly optimizes turning; TODO test
 			break;
 		case DRIVE_STICKS:
 			break;
@@ -415,11 +413,14 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
     private DriveOrder turnTo() {
 		System.out.println("turning to " + desiredAngle);
 		System.out.println("current heading: " + DriveState.currentHeading);
-        double newAngle = desiredAngle - DriveState.currentHeading;
+		double newAngle = desiredAngle - DriveState.currentHeading;
+		// TODO test this: should make it turn "by" an angle and optimize that angle
+		// double newAngle = desiredAngle + DriveState.currentHeading;
+		// newAngle = turnAmount(fixHeading(newAngle));
         double angleTolerance = 5;
         
-        if (newAngle < 0 && Math.abs(newAngle) > 180)
-			newAngle += 360;
+        // if (newAngle < 0 && Math.abs(newAngle) > 180)
+		// 	newAngle += 360;
 		
 		if (Math.abs(newAngle) < angleTolerance) {
             setMode(DriveMode.STOP);
@@ -468,8 +469,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
      */
     public static class DriveState {
         public static double leftVelocity = 0.0, rightVelocity = 0.0, leftPos = 0.0, rightPos = 0.0;
-		public static double averagePos = 0.0, 
-		currentHeading = 0.0;
+		public static double averagePos = 0.0, currentHeading = 0.0;
         public static long stateTime = System.currentTimeMillis();
 
         public static void updateState(double leftVelocity, double rightVelocity, double leftPos, double rightPos, double currentHeading) {
@@ -484,7 +484,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
     }
 
     /**
-     * This is returned by the DriveTask and holds values for the new left and right
+     * This is returned by DriveTask methods and holds values for the new left and right
      * powers to be set by Drive
      */
     public static class DriveOrder {
