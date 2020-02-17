@@ -66,8 +66,10 @@ public class Climb extends Subsystem<Climb.ClimbMode> implements UrsaRobot {
             break;
         case STOP:
             climbing = false;
-            mLeft.stopMotor();
-            mRight.stopMotor();
+            if (!MusicPlayer.playing) {
+                mLeft.stopMotor();
+                mRight.stopMotor();
+            }
             break;
         }
     }

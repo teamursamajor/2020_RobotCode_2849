@@ -17,9 +17,11 @@ import frc.auto.tasks.MusicTask.MusicMode;
 public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaRobot {
     
     private Orchestra orchestra;
-    private ArrayList<TalonFX> instruments;
+    private ArrayList<TalonFX> climbMotors, driveMotors;
     private String current, previous;
     private SendableChooser<String> musicList = new SendableChooser<String>();
+
+    public static boolean playing;
     
     /**
      * Constructor for the Music Player.
@@ -28,14 +30,17 @@ public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaR
         // should be smart enough to only use what instruments it can
         // TODO test
         // if not use Drive.driving and Climb.climbing
-        instruments = new ArrayList<TalonFX>();
-        instruments.add(new TalonFX(0));
-        instruments.add(new TalonFX(1));
-        instruments.add(new TalonFX(2));
-        instruments.add(new TalonFX(3));
-        instruments.add(new TalonFX(4));
-        instruments.add(new TalonFX(5));
-        orchestra = new Orchestra(instruments);
+        driveMotors = new ArrayList<TalonFX>();
+        driveMotors.add(new TalonFX(0));
+        driveMotors.add(new TalonFX(1));
+        driveMotors.add(new TalonFX(2));
+        driveMotors.add(new TalonFX(3));
+
+        climbMotors = new ArrayList<TalonFX>();
+        climbMotors.add(new TalonFX(4));
+        climbMotors.add(new TalonFX(5));
+
+        orchestra = new Orchestra(climbMotors);
 
         // musicList.setDefaultOption("Select music...", "");
         musicList.setDefaultOption("Imperial March", "music/imperial.chrp");
@@ -58,9 +63,14 @@ public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaR
 
     @Override
     public void readControls() {
-        if (xbox.getSingleButtonPress(controls.map.get("music_play")))
+        if (xbox.getSingleButtonPress(controls.map.get("music_play"))) {
+            if (Drive.driving && !Climb.climbing) {
+                orchestra = new Orchestra(climbMotors, current);
+            } else if (!Drive.driving && Climb.climbing) {
+                orchestra = new Orchestra(driveMotors, current);
+            }
             setMode(MusicMode.PLAY);
-        if (xbox.getSingleButtonPress(controls.map.get("music_pause")))
+        } if (xbox.getSingleButtonPress(controls.map.get("music_pause")))
             setMode(MusicMode.PAUSE);
 
         // Selects song from SmartDashboard if Teleop is enabled
@@ -74,12 +84,18 @@ public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaR
     public void runSubsystem() throws InterruptedException {
         switch (subsystemMode) {
         case PLAY:
+            playing = true;
             orchestra.play();
+            // if not playing when it should be, player was interrupted
+            if (!orchestra.isPlaying())
+                setMode(MusicMode.PAUSE);
             break;
         case PAUSE:
+            playing = false;
             orchestra.pause();
             break;
         case STOP:
+            playing = false;
             orchestra.stop();
             break;
         }
