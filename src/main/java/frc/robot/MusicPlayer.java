@@ -86,7 +86,7 @@ public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaR
         case PLAY:
             playing = true;
             orchestra.play();
-            // if not playing when it should be, player was interrupted
+            // If not playing when it should be, player was interrupted
             if (!orchestra.isPlaying())
                 setMode(MusicMode.PAUSE);
             break;
