@@ -33,13 +33,13 @@ public class Outtake extends Subsystem<OuttakeTask.OuttakeMode> implements UrsaR
     public void runSubsystem() throws InterruptedException {
         switch (subsystemMode) {
         case OUT:
-            outtakeMotor.set(-0.25); // Releases outtake
+            outtakeMotor.set(-0.15); // Releases outtake
             break;
         case IN:
             outtakeMotor.set(0.25); // Restores outtake
             break;
         case STOP:
-            outtakeMotor.set(0.0);
+            outtakeMotor.stopMotor();
             break;
         }
     }

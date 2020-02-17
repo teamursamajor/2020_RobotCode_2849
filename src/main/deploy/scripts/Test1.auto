@@ -1,3 +1,18 @@
-drive 50
-wait 10
-drive -100
+drive -20
+outtake out
+wait 0.1
+outtake stop
+wait 5
+outtake in
+wait 0.1
+outtake stop
+drive 20
+#parallel {
+#    serial {
+#        outtake in
+#        outtake 0.1
+#        outtake stop
+#    }
+#    drive 40
+#}
+music play "megalovania"

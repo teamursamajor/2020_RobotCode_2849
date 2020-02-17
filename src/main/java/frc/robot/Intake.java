@@ -58,7 +58,7 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
         // Controlling the power of the motors based on the subsystem mode
         switch (subsystemMode) {
         case IN:
-            intakeMotor.set(-0.50);
+            intakeMotor.set(-0.70);
             beltMotor.set(0.55);
             break;
         case STOP:

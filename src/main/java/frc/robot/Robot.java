@@ -37,7 +37,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
   private Climb climb;
   private AutoCompiler autoCompiler;
   private MusicPlayer musicPlayer;
-  private Vision vision;
+  // private Vision vision;
 
   // private int testCounter;
 
@@ -69,7 +69,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
     musicPlayer = new MusicPlayer();
     musicPlayer.initialize("MusicThread");
 
-    vision = new Vision();
+    // vision = new Vision();
     // vision.initialize("VisionThread");
 
     autoCompiler = new AutoCompiler(drive, intake, outtake, musicPlayer);
@@ -106,6 +106,9 @@ public class Robot extends TimedRobot implements UrsaRobot {
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     // System.out.println("Auto selected: " + m_autoSelected);
 
+    drive.resetEncoders();
+    drive.resetNavx();
+    
     // TODO add proper auto selector
     try {
       autoCompiler.buildAutoMode("/home/lvuser/deploy/scripts/Test1.auto").start();
@@ -149,8 +152,8 @@ public class Robot extends TimedRobot implements UrsaRobot {
     intake.readControls();
     outtake.readControls();
     // spinner.readControls();
-    musicPlayer.readControls();
-    vision.readControls();
+    // musicPlayer.readControls();
+    // vision.readControls();
   }
 
   // private boolean test1 = false, test2 = false, test3 = false;
