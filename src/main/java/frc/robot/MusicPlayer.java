@@ -27,9 +27,6 @@ public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaR
      * Constructor for the Music Player.
      */
     public MusicPlayer() {
-        // should be smart enough to only use what instruments it can
-        // TODO test
-        // if not use Drive.driving and Climb.climbing
         driveMotors = new ArrayList<TalonFX>();
         driveMotors.add(new TalonFX(0));
         driveMotors.add(new TalonFX(1));
@@ -42,7 +39,6 @@ public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaR
 
         orchestra = new Orchestra(climbMotors);
 
-        // musicList.setDefaultOption("Select music...", "");
         musicList.setDefaultOption("Imperial March", "music/imperial.chrp");
         musicList.addOption("Megalovania", "music/megalovania.chrp");
         musicList.addOption("All Star", "music/allstar.chrp");
@@ -56,6 +52,9 @@ public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaR
         musicList.addOption("Seinfeld Theme", "music/seinfeld.chrp");
         musicList.addOption("Take On Me", "music/takeonme.chrp");
         musicList.addOption("Your Reality", "music/yourreality.chrp");
+        musicList.addOption("Crab Rave", "music/crabrave.chrp");
+        musicList.addOption("Despacito", "music/despacito.chrp");
+        musicList.addOption("Russian Anthem", "music/russia.chrp");
         SmartDashboard.putData("Music List", musicList);
 
         setMode(MusicMode.STOP);
