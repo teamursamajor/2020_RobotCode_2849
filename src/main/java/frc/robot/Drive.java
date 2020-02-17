@@ -19,7 +19,7 @@ import frc.auto.tasks.DriveTask.DriveMode;
 public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 
 	public static WPI_TalonFX mFrontLeft, mFrontRight, mRearLeft, mRearRight;
-	public static boolean driving;
+	public static boolean driving = false;
 	
 	// For autonomous
 	private double desiredLocation = 0.0, startDistance = 0.0, direction = 1.0, desiredAngle = 0.0;

@@ -21,7 +21,7 @@ public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaR
     private String current, previous;
     private SendableChooser<String> musicList = new SendableChooser<String>();
 
-    public static boolean playing;
+    public static boolean playing = false;
     
     /**
      * Constructor for the Music Player.
