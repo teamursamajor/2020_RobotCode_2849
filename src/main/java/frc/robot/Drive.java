@@ -78,8 +78,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 			setRightPower(driveOrder.rightPower);
 		} else {
 			driving = false;
-			if (!MusicPlayer.playing)
-				stop();
+			stop();
 		}
 	}
 
