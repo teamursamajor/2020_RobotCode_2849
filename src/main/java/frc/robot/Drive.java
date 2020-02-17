@@ -72,10 +72,8 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 		 */
 		if (driveOrder.leftPower != 0 && driveOrder.rightPower != 0) {
 			driving = true;
-			mFrontLeft.set(-driveOrder.leftPower);
-			mFrontRight.set(driveOrder.rightPower);
-			mRearLeft.set(-driveOrder.leftPower);
-			mRearRight.set(driveOrder.rightPower);
+			setLeftPower(driveOrder.leftPower);
+			setRightPower(driveOrder.rightPower);
 		} else {
 			driving = false;
 			if (!MusicPlayer.playing)
@@ -104,10 +102,6 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 		final double rightDeltaPos = rightDistance - DriveState.rightPos;
 		final double rightVelocity = (rightDeltaPos / deltaTime);
 
-		// double averageDeltaPos = (leftDeltaPos + rightDeltaPos) / 2.0;
-		// if (Math.abs(averageDeltaPos) <= 1 || deltaTime <= 5) // TODO change 1
-		// return;
-
 		DriveState.updateState(leftVelocity, rightVelocity, leftDistance, rightDistance, getHeading());
 	}
 
@@ -118,10 +112,8 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	 * @return Fixed heading from the NavX always between 0 and 360
 	 */
 	public double getHeading() {
-		// System.out.println("curr angle: " + ahrs.getAngle());
 		double angle = ahrs.getAngle();
 		angle = fixHeading(angle);
-		// System.out.println("heading: " + angle);
 		return angle;
 	}
 
@@ -180,7 +172,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	}
 
 	/**
-	 * Resets the current encoder distance to zero
+	 * Resets the current encoder distance to zero.
 	 */
 	public void resetEncoders() {
 		mFrontLeft.setSelectedSensorPosition(0);
@@ -212,7 +204,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 
 	/**
 	 * Sets all drive motors to the same power. Accounts for the flip between the
-	 * left and right sides
+	 * left and right sides.
 	 * 
 	 * @param power the power the motors get set to
 	 */
@@ -223,22 +215,22 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 
 	/**
 	 * Sets the front and back left motors.
-	 *
+	 * 
 	 * @param power the power the motor is set to
 	 */
 	public static void setLeftPower(final double power) {
-		mFrontLeft.set(power);
-		mRearLeft.set(power);
+		mFrontLeft.set(-power);
+		mRearLeft.set(-power);
 	}
 
 	/**
 	 * Sets the front and back right motors.
-	 *
+	 * 
 	 * @param power the power the motor is set to.
 	 */
 	public static void setRightPower(final double power) {
-		mFrontRight.set(-power);
-		mRearRight.set(-power);
+		mFrontRight.set(power);
+		mRearRight.set(power);
 	}
 
 	@Override
@@ -247,8 +239,8 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	}
 
 	/**
-     * This method takes the current Drive state and iterates the control loop then
-     * returns the next drive order for Drive to use
+     * This method takes the current drive state and iterates the control loop, then
+     * returns the next drive order for Drive to use.
      * 
      * @return DriveOrder containing the left and right powers
      */
@@ -347,6 +339,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
             return new DriveOrder(0.0, 0.0);
         }
 
+		// Adjusts powers to minimum/maximum bounds
         if (Math.abs(leftOutputPower) < minimumPower) {
             leftOutputPower = Math.signum(leftOutputPower) * minimumPower;
         }
@@ -363,22 +356,19 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
             rightOutputPower = Math.signum(rightOutputPower) * maximumPower;
         }
         
-        // System.out.println(currentDistance);
         System.out.println(leftOutputPower + " " + rightOutputPower);
         return new DriveOrder(leftOutputPower, rightOutputPower);
     }
 
     /**
      * "Iterates" the DriveSticks control loop. This is called a Box because it just
-     * takes in the DriveState and returns the Xbox controller axis values. It is
-     * not actually calculating anything.
+     * returns the Xbox controller axis values. It is not actually calculating anything.
      * 
      * @return DriveOrder containing the values from the XboxController
      */
     private DriveOrder sticksBox() {
         double leftSpeed, rightSpeed, leftStickY, rightStickX;
-        if (isArcadeDrive) {
-            // Arcade Drive
+        if (isArcadeDrive) { // Arcade Drive
             leftStickY = xbox.getAxis(XboxController.AXIS_LEFTSTICK_Y);
             rightStickX = -xbox.getAxis(XboxController.AXIS_RIGHTSTICK_X);
 
@@ -395,8 +385,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
                 leftSpeed /= -min;
                 rightSpeed /= -min;
             }
-        } else {
-            // Tank Drive
+        } else { // Tank Drive
             leftSpeed = xbox.getAxis(XboxController.AXIS_LEFTSTICK_Y);
             rightSpeed = -xbox.getAxis(XboxController.AXIS_RIGHTSTICK_Y);
         }
@@ -412,15 +401,15 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	 */
     private DriveOrder turnTo() {
 		System.out.println("turning to " + desiredAngle);
-		System.out.println("current heading: " + DriveState.currentHeading);
-		double newAngle = desiredAngle - DriveState.currentHeading;
+		System.out.println("current heading: " + getHeading());
+		double newAngle = desiredAngle - getHeading();
 		// TODO test this: should make it turn "by" an angle and optimize that angle
-		// double newAngle = desiredAngle + DriveState.currentHeading;
+		// double newAngle = desiredAngle + getHeading();
 		// newAngle = turnAmount(fixHeading(newAngle));
         double angleTolerance = 5;
         
-        // if (newAngle < 0 && Math.abs(newAngle) > 180)
-		// 	newAngle += 360;
+        if (newAngle < 0 && Math.abs(newAngle) > 180)
+			newAngle += 360;
 		
 		if (Math.abs(newAngle) < angleTolerance) {
             setMode(DriveMode.STOP);
@@ -433,7 +422,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
         // if we're turning right use leftVelocity, if we're turning left use rightVelocity
         double velocity = (DriveState.leftVelocity > 0) ? DriveState.leftVelocity : DriveState.rightVelocity;
 
-        double outputPower = turningKp * newAngle + turningKd * (velocity / UrsaRobot.robotRadius);
+        double outputPower = turningKp * newAngle + turningKd * (velocity / robotRadius);
 
 		if (Math.abs(outputPower) > 0.5) {
 			outputPower = 0.5 * Math.signum(outputPower);
@@ -444,6 +433,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	}
 
 	/**
+	 * TODO UNTESTED FROM 2018
 	 * Determines what angle to turn by and which direction depending on which
 	 * is most optimal.
 	 * Positive output = clockwise
@@ -464,7 +454,8 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	}
 	
     /**
-     * This holds information about the current state of the robot. It holds values
+     * TODO remove??
+	 * This holds information about the current state of the robot. It holds values
      * for power, velocity, and position for both the left and right side.
      */
     public static class DriveState {
