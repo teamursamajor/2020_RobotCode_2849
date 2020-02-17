@@ -65,9 +65,9 @@ public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaR
     public void readControls() {
         if (xbox.getSingleButtonPress(controls.map.get("music_play"))) {
             if (Drive.driving && !Climb.climbing) {
-                orchestra = new Orchestra(climbMotors, current);
+                orchestra = new Orchestra(climbMotors);
             } else if (!Drive.driving && Climb.climbing) {
-                orchestra = new Orchestra(driveMotors, current);
+                orchestra = new Orchestra(driveMotors);
             }
             setMode(MusicMode.PLAY);
         } if (xbox.getSingleButtonPress(controls.map.get("music_pause")))
