@@ -81,6 +81,4 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
     public int getCount() {
         return numOfCells;
     }
-
-    
 }

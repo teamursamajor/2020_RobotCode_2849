@@ -55,6 +55,7 @@ public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaR
         musicList.addOption("Crab Rave", "music/crabrave.chrp");
         musicList.addOption("Despacito", "music/despacito.chrp");
         musicList.addOption("Russian Anthem", "music/russia.chrp");
+        musicList.addOption("Mos Eisley Cantina", "music/cantina.chrp");
         SmartDashboard.putData("Music List", musicList);
 
         setMode(MusicMode.STOP);

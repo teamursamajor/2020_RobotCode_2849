@@ -28,8 +28,8 @@ public class Outtake extends Subsystem<OuttakeTask.OuttakeMode> implements UrsaR
             setMode(OuttakeMode.IN);
         } else
             setMode(OuttakeMode.STOP);
-
     }
+
     public void runSubsystem() throws InterruptedException {
         switch (subsystemMode) {
         case OUT:
