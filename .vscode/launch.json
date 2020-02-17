@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodeLens (Launch) - TeachingJoseph",
+      "request": "launch",
+      "mainClass": "frc.robot.TeachingJoseph",
+      "projectName": "2020_RobotCode_2849"
+    },
+    {
+      "type": "java",
       "name": "CodeLens (Launch) - AutoTokenizer",
       "request": "launch",
       "mainClass": "frc.auto.compiler.AutoTokenizer",

@@ -17,27 +17,28 @@ import frc.auto.tasks.MusicTask.MusicMode;
 public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaRobot {
     
     private Orchestra orchestra;
-    private ArrayList<TalonFX> instruments;
+    private ArrayList<TalonFX> climbMotors, driveMotors;
     private String current, previous;
     private SendableChooser<String> musicList = new SendableChooser<String>();
+
+    public static boolean playing = false;
     
     /**
      * Constructor for the Music Player.
      */
     public MusicPlayer() {
-        // should be smart enough to only use what instruments it can
-        // TODO test
-        // if not use Drive.driving and Climb.climbing
-        instruments = new ArrayList<TalonFX>();
-        instruments.add(new TalonFX(0));
-        instruments.add(new TalonFX(1));
-        instruments.add(new TalonFX(2));
-        instruments.add(new TalonFX(3));
-        instruments.add(new TalonFX(4));
-        instruments.add(new TalonFX(5));
-        orchestra = new Orchestra(instruments);
+        driveMotors = new ArrayList<TalonFX>();
+        driveMotors.add(new TalonFX(0));
+        driveMotors.add(new TalonFX(1));
+        driveMotors.add(new TalonFX(2));
+        driveMotors.add(new TalonFX(3));
 
-        // musicList.setDefaultOption("Select music...", "");
+        climbMotors = new ArrayList<TalonFX>();
+        climbMotors.add(new TalonFX(4));
+        climbMotors.add(new TalonFX(5));
+
+        orchestra = new Orchestra(climbMotors);
+
         musicList.setDefaultOption("Imperial March", "music/imperial.chrp");
         musicList.addOption("Megalovania", "music/megalovania.chrp");
         musicList.addOption("All Star", "music/allstar.chrp");
@@ -51,6 +52,10 @@ public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaR
         musicList.addOption("Seinfeld Theme", "music/seinfeld.chrp");
         musicList.addOption("Take On Me", "music/takeonme.chrp");
         musicList.addOption("Your Reality", "music/yourreality.chrp");
+        musicList.addOption("Crab Rave", "music/crabrave.chrp");
+        musicList.addOption("Despacito", "music/despacito.chrp");
+        musicList.addOption("Russian Anthem", "music/russia.chrp");
+        musicList.addOption("Mos Eisley Cantina", "music/cantina.chrp");
         SmartDashboard.putData("Music List", musicList);
 
         setMode(MusicMode.STOP);
@@ -58,9 +63,14 @@ public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaR
 
     @Override
     public void readControls() {
-        if (xbox.getSingleButtonPress(controls.map.get("music_play")))
+        if (xbox.getSingleButtonPress(controls.map.get("music_play"))) {
+            if (Drive.driving && !Climb.climbing) {
+                orchestra = new Orchestra(climbMotors);
+            } else if (!Drive.driving && Climb.climbing) {
+                orchestra = new Orchestra(driveMotors);
+            }
             setMode(MusicMode.PLAY);
-        if (xbox.getSingleButtonPress(controls.map.get("music_pause")))
+        } if (xbox.getSingleButtonPress(controls.map.get("music_pause")))
             setMode(MusicMode.PAUSE);
 
         // Selects song from SmartDashboard if Teleop is enabled
@@ -74,12 +84,18 @@ public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaR
     public void runSubsystem() throws InterruptedException {
         switch (subsystemMode) {
         case PLAY:
+            playing = true;
             orchestra.play();
+            // If not playing when it should be, player was interrupted
+            if (!orchestra.isPlaying())
+                setMode(MusicMode.PAUSE);
             break;
         case PAUSE:
+            playing = false;
             orchestra.pause();
             break;
         case STOP:
+            playing = false;
             orchestra.stop();
             break;
         }
