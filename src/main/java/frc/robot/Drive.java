@@ -15,6 +15,7 @@ import frc.auto.tasks.DriveTask.DriveMode;
  * </ul>
  * It also implements control modes for driving a distance, turning to an angle,
  * and operating the robot via joysticks.
+ * TODO get rid of drivestate and use getRate() for velocity
  */
 public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 
@@ -63,7 +64,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	 */
 	public void runSubsystem() {
 		updateStateInfo();
-		DriveOrder driveOrder = callLoop(subsystemMode);
+		DriveOrder driveOrder = callLoop();
 
 		/*
 		 * These currently only set power based on percentage. In the future, we may
@@ -244,8 +245,8 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
      * 
      * @return DriveOrder containing the left and right powers
      */
-    public DriveOrder callLoop(DriveMode mode) {
-        switch (mode) {
+    public DriveOrder callLoop() {
+        switch (subsystemMode) {
         case AUTO_DRIVE:
             return autoCalculator();
 		case TURN:
