@@ -3,7 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Spark;
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
@@ -28,6 +28,8 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
 
     // for storing slices to spin
     private int slicesToSpin;
+
+    private long currentTime;
 
     // control loop stuff
     final double goodKP = 0.005;
@@ -84,17 +86,20 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
     }
 
     public void runSubsystem() throws InterruptedException {
-        // currentTime = System.currentTimeMillis();
+        currentTime = System.currentTimeMillis();
         /*
          * Matches the color the color sensor is seeing to the closest
          * of four possible colors.
          */
         Color detectedColor = colorSensor.getColor();
         ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
-
-        // SmartDashboard.putNumber("Red", detectedColor.red);
-        // SmartDashboard.putNumber("Green", detectedColor.green);
-        // SmartDashboard.putNumber("Blue", detectedColor.blue);
+       
+        if (System.currentTimeMillis() - currentTime > 10) {
+            System.out.println("BAD");
+        }
+        SmartDashboard.putNumber("Red", detectedColor.red);
+        SmartDashboard.putNumber("Green", detectedColor.green);
+        SmartDashboard.putNumber("Blue", detectedColor.blue);
 
         if (match.color == kBlueTarget)
             color = 'B';
