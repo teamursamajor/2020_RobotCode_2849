@@ -111,8 +111,8 @@ public class AutoTokenizer implements TokenList {
                 if (!matchedToken) // If there are more tokens to match, move to a new line.
                     break;
             }
-            if (!matchedAny) // If the line failed to match a single token
-                throw new Exception();
+            if (!matchedAny) // If the line failed to match a single token, move to a new line.
+                break;
         }
         buff.close();
         return tokenList;

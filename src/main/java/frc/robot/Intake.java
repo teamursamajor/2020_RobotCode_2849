@@ -65,6 +65,9 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
             intakeMotor.set(0.0);
             beltMotor.set(0.0);
             break;
+        case RELEASE:
+            intakeMotor.set(0.2);
+            break;
         }
     }
 

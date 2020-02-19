@@ -1,18 +1,23 @@
-drive -20
-outtake out
-wait 0.1
-outtake stop
+intake :D #this line releases the intake mechanism
+drive -100
 wait 5
-outtake in
-wait 0.1
-outtake stop
-drive 20
+drive 100
+intake true
+intake false
+
+#outtake out
+#wait 0.1
+#outtake stop
+#wait 5
+#outtake in
+#wait 0.1
+#outtake stop
+#drive 20
 #parallel {
 #    serial {
 #        outtake in
-#        outtake 0.1
+#        wait 0.1
 #        outtake stop
 #    }
 #    drive 40
 #}
-music play "megalovania"

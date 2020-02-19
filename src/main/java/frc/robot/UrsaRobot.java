@@ -26,7 +26,8 @@ public interface UrsaRobot {
 	public static final int LINE_SENSOR_PORT = 5, CLIMB_SWITCH_PORT = 7;
 
 	// Tells encoder the value of each tick. Must be set in the corresponding file
-	public static final double INCHES_PER_TICK = 7.2d * Math.PI / 2048.0d / 12.75d;
+	public static final double GEAR_RATIO = 4.0d; // TODO change?
+	public static final double INCHES_PER_TICK = 7.2d * Math.PI / 4096.0d / GEAR_RATIO;
 	public static final double CLIMB_INCHES_PER_TICK = 5;
 
 	// TODO check if these are correct (should be bc drivetrain didn't change but can't hurt to try)

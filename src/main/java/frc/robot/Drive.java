@@ -43,10 +43,10 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 		mFrontRight.configFactoryDefault();
 		mRearRight.configFactoryDefault();
 
-		mFrontLeft.setNeutralMode(NeutralMode.Coast);
-		mRearLeft.setNeutralMode(NeutralMode.Coast);
-		mFrontRight.setNeutralMode(NeutralMode.Coast);
-		mRearRight.setNeutralMode(NeutralMode.Coast);
+		mFrontLeft.setNeutralMode(NeutralMode.Brake);
+		mRearLeft.setNeutralMode(NeutralMode.Brake);
+		mFrontRight.setNeutralMode(NeutralMode.Brake);
+		mRearRight.setNeutralMode(NeutralMode.Brake);
 		
 		// TODO test with different intervals + closedloopramps?
 		mFrontLeft.configOpenloopRamp(5);
@@ -290,11 +290,11 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
     private DriveOrder autoCalculator() {
         double leftOutputPower = 0.0, rightOutputPower = 0.0;
         double currentDistance = DriveState.averagePos;
-        double driveTolerance = 3.0;
+        double driveTolerance = 1.0;
 
         double kdDrive = 0; // Derivative coefficient for PID controller
-        double kpDrive = 1.0 / 50.0; // Proportional coefficient for PID controller
-        double minimumPower = 0.25;
+        double kpDrive = 1.0 / 100.0; // Proportional coefficient for PID controller
+        double minimumPower = 0.15;
         double maximumPower = 0.75;
 
         // if (driving)
@@ -356,7 +356,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
             rightOutputPower = Math.signum(rightOutputPower) * maximumPower;
         }
         
-        System.out.println(leftOutputPower + " " + rightOutputPower);
+        System.out.println("power: " + leftOutputPower + " " + rightOutputPower);
         return new DriveOrder(leftOutputPower, rightOutputPower);
     }
 

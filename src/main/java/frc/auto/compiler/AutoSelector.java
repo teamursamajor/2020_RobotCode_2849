@@ -35,8 +35,6 @@ public class AutoSelector {
 		File autoDirectory = new File("/home/lvuser/automodes/");
 		if (autoDirectory.isDirectory()) {
 			autoFiles = autoDirectory.listFiles((File dir, String name) -> {
-				// Regex check for files matching our naming syntax
-				// TODO change LMR123 to LR1234
 				return name.matches("/[LMR][12](hatch|cargo)[LMR][123].*\\.auto/gi");
 			});
 		} else {
@@ -113,25 +111,6 @@ public class AutoSelector {
 		// TODO make a new selector for this based on what bay we want to go to
 		String mode = " ";
 
-		// TODO update
-		// switch (switchPos + scalePos) {
-		// case "LL":
-		// mode = autoPrefs[0];
-		// break;
-		// case "LR":
-		// mode = autoPrefs[1];
-		// break;
-		// case "RL":
-		// mode = autoPrefs[2];
-		// break;
-		// case "RR":
-		// mode = autoPrefs[3];
-		// break;
-		// default:
-		// mode = "path_drive";
-		// break;
-		// }
-
 		// TODO for potential future use
 		// String oppSide =
 		// DriverStation.getInstance().getGameSpecificMessage().substring(2);
@@ -140,10 +119,10 @@ public class AutoSelector {
 
 		for (File f : autoFiles) {
 			if (f.getName().matches(regex)) {
-				return "/home/lvuser/automodes/" + f.getName();
+				return "/home/lvuser/deploy/scripts/" + f.getName();
 			}
 		}
 		// TODO make a default auto mode
-		return "/home/lvuser/automodes/default.auto";
+		return "/home/lvuser/deploy/scripts/default.auto";
 	}
 }

@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.DriverStation;
 import frc.auto.compiler.AutoCompiler;
+import frc.auto.compiler.AutoSelector;
 
 import frc.auto.tasks.DriveTask.DriveMode;
 
@@ -36,8 +37,9 @@ public class Robot extends TimedRobot implements UrsaRobot {
   private Outtake outtake;
   private Climb climb;
   private AutoCompiler autoCompiler;
+  private AutoSelector autoSelector;
   private MusicPlayer musicPlayer;
-  // private Vision vision;
+   private Vision vision;
 
   // private int testCounter;
 
@@ -67,12 +69,14 @@ public class Robot extends TimedRobot implements UrsaRobot {
     outtake.initialize("OuttakeThread");
 
     musicPlayer = new MusicPlayer();
-    musicPlayer.initialize("MusicThread");
+    // musicPlayer.initialize("MusicThread");
 
-    // vision = new Vision();
-    // vision.initialize("VisionThread");
+     vision = new Vision();
+     vision.initialize("VisionThread");
 
     autoCompiler = new AutoCompiler(drive, intake, outtake, musicPlayer);
+
+    autoSelector = new AutoSelector();
   }
 
   /**
@@ -153,7 +157,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
     outtake.readControls();
     // spinner.readControls();
     // musicPlayer.readControls();
-    // vision.readControls();
+    vision.readControls();
   }
 
   // private boolean test1 = false, test2 = false, test3 = false;

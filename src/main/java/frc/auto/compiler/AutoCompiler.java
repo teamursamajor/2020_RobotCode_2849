@@ -84,8 +84,10 @@ public class AutoCompiler {
 						else
 							taskSet.addTask(new IntakeTask(intake, IntakeMode.STOP));
 						break;
+					} else { // defaults to release if no Boolean specified
+						taskSet.addTask(new IntakeTask(intake, IntakeMode.RELEASE));
+						break;
 					}
-					throw new Exception(); // if there is not a Boolean
 
 				case OUTTAKE: // can only be one of three arguments
 					if (t.argument == 0)

@@ -11,7 +11,7 @@ public class IntakeTask extends Task implements UrsaRobot {
      * Modes for Intake.
      */
     public enum IntakeMode {
-        IN, STOP;
+        IN, STOP, RELEASE;
     }
 
     private long runTime = 1000;
