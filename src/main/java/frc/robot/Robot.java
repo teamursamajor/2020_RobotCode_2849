@@ -26,10 +26,6 @@ import frc.auto.tasks.DriveTask.DriveMode;
  * project.
  */
 public class Robot extends TimedRobot implements UrsaRobot {
-  // private static final String kDefaultAuto = "Default";
-  // private static final String kCustomAuto = "My Auto";
-  // private String m_autoSelected;
-  // private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   private Drive drive;
   private Spinner spinner;
@@ -39,9 +35,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
   private AutoCompiler autoCompiler;
   private AutoSelector autoSelector;
   private MusicPlayer musicPlayer;
-   private Vision vision;
-
-  // private int testCounter;
+  private Vision vision;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -49,10 +43,6 @@ public class Robot extends TimedRobot implements UrsaRobot {
    */
   @Override
   public void robotInit() {
-    // m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    // m_chooser.addOption("My Auto", kCustomAuto);
-    // SmartDashboard.putData("Auto choices", m_chooser);
-
     drive = new Drive();
     drive.initialize("DriveThread");
 
@@ -71,8 +61,8 @@ public class Robot extends TimedRobot implements UrsaRobot {
     musicPlayer = new MusicPlayer();
     // musicPlayer.initialize("MusicThread");
 
-     vision = new Vision();
-     vision.initialize("VisionThread");
+    vision = new Vision();
+    vision.initialize("VisionThread");
 
     autoCompiler = new AutoCompiler(drive, intake, outtake, musicPlayer);
 
@@ -83,7 +73,6 @@ public class Robot extends TimedRobot implements UrsaRobot {
    * This function is called every robot packet, no matter the mode. Use this for
    * items like diagnostics that you want ran during disabled, autonomous,
    * teleoperated and test.
-   *
    * <p>
    * This runs after the mode specific periodic functions, but before LiveWindow
    * and SmartDashboard integrated updating.
@@ -93,29 +82,21 @@ public class Robot extends TimedRobot implements UrsaRobot {
   }
 
   /**
-   * This autonomous (along with the chooser code above) shows how to select
-   * between different autonomous modes using the dashboard. The sendable chooser
-   * code works with the Java SmartDashboard. If you prefer the LabVIEW Dashboard,
-   * remove all of the chooser code and uncomment the getString line to get the
-   * auto name from the text box below the Gyro
-   *
-   * <p>
-   * You can add additional auto modes by adding additional comparisons to the
-   * switch structure below with additional strings. If using the SendableChooser
-   * make sure to add them to the chooser code above as well.
+   * This function is run when autonomous mode is first started up and should be
+   * used for any autonomous initialization code.
    */
   @Override
   public void autonomousInit() {
-    // m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    // System.out.println("Auto selected: " + m_autoSelected);
-
     drive.resetEncoders();
     drive.resetNavx();
     
-    // TODO add proper auto selector
+    String autoMode = autoSelector.pickAutoMode(autoSelector.getStartingPosition(), 
+      autoSelector.getAutoPrefs(), autoSelector.findAutoFiles());
+    // TODO remove; for manual testing
+    autoMode = "home/lvuser/deploy/scripts/Test1.auto";
+
     try {
-      autoCompiler.buildAutoMode("/home/lvuser/deploy/scripts/Test1.auto").start();
+      autoCompiler.buildAutoMode(autoMode).start();
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -126,15 +107,6 @@ public class Robot extends TimedRobot implements UrsaRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    // switch (m_autoSelected) {
-    // case kCustomAuto:
-    // // Put custom auto code here
-    // break;
-    // case kDefaultAuto:
-    // default:
-    // // Put default auto code here
-    // break;
-    // }
   }
 
   /**
@@ -155,44 +127,29 @@ public class Robot extends TimedRobot implements UrsaRobot {
     climb.readControls();
     intake.readControls();
     outtake.readControls();
-    // spinner.readControls();
+    spinner.readControls();
     // musicPlayer.readControls();
     vision.readControls();
   }
-
-  // private boolean test1 = false, test2 = false, test3 = false;
 
   /**
    * This function is called periodically during test mode.
    */
   @Override
   public void testPeriodic() {
-    // TODO uncomment if testing automodes w/o auto code
-
-    // // System.out.println("test periodic running");
-    // if (!DriveTask.driving && xbox.getSingleButtonPress(XboxController.BUTTON_B)){
-    //   testCounter++;
-    // }
-
-    // if (!test1 && testCounter == 1) {
-    //   DriveTask task1 = new DriveTask(14, drive, DriveMode.AUTO_DRIVE);
-    //   test1 = true;
-    // }
-    // if (!test2 && testCounter == 2) {
-    //   DriveTask task2 = new DriveTask(90, drive, DriveMode.TURN);
-    //   test2 = true;
-    // }
-    // if (!test3 && testCounter == 3) {
-    //   DriveTask task3 = new DriveTask(12, drive, DriveMode.AUTO_DRIVE);
-    //   DriveTask task4 = new DriveTask(30, drive, DriveMode.TURN);
-    //   test3 = true;
-    // }
   }
 
+  /**
+   * This function is called whenever a mode is disabled.
+   */
   @Override
   public void disabledInit() {
   }
 
+  /**
+   * This function prints a jet plane.
+   * @author Jetplane
+   */
   public static void jetPlane() {
     System.out.println("   ____       _");
     System.out.println(" |__\\_\\_o,___/ \\");

@@ -30,12 +30,18 @@ public class AutoSelector {
 		sendAutoModes(findAutoModes());
 	}
 
+	/**
+	 * Searches through auto script file directory for valid auto modes.
+	 * @return All valid auto scripts.
+	 */
 	public File[] findAutoFiles() {
 		File[] autoFiles;
-		File autoDirectory = new File("/home/lvuser/automodes/");
+		File autoDirectory = new File("/home/lvuser/deploy/scripts/");
 		if (autoDirectory.isDirectory()) {
 			autoFiles = autoDirectory.listFiles((File dir, String name) -> {
-				return name.matches("/[LMR][12](hatch|cargo)[LMR][123].*\\.auto/gi");
+				// TODO make proper naming convention
+				return name.matches("\\w*\\.auto");
+				// return name.matches("/[LMR][12](hatch|cargo)[LMR][123].*\\.auto/gi");
 			});
 		} else {
 			autoFiles = null;
@@ -43,6 +49,10 @@ public class AutoSelector {
 		return autoFiles;
 	}
 
+	/**
+	 * TODO update this entire thing
+	 * @return
+	 */
 	public String[] findAutoModes() {
 		String[] names;
 		File[] autoFiles = findAutoFiles();
@@ -58,7 +68,10 @@ public class AutoSelector {
 		return names;
 	}
 
-	// TODO update this entire thing
+	/**
+	 * TODO update this entire thing
+	 * @param names
+	 */
 	public void sendAutoModes(String[] names) {
 		autoList.get(0).setDefaultOption("Select LL auto", "LL");
 		autoList.get(1).setDefaultOption("Select LR auto", "LR");
@@ -91,38 +104,29 @@ public class AutoSelector {
 		return startingPosition.getSelected();
 	}
 
-	// TODO Adapt this when we need it
+	// TODO ADAPT THIS FOR 2020!
 	/**
-	 * Gets the switch/scale side from the FMS, and finds an Auto Mode file which
-	 * finds robot's position and switch/scale ownership and performs the highest
-	 * task in the ranked list of tasks from the SmartDashboard that matches the
-	 * current setup.
+	 * Finds an Auto Script which performs the highest task in the ranked list of tasks
+	 * from the SmartDashboard that matches the current setup.
 	 * 
-	 * @param robotPos  The hab platform our robot starts on. L1/2, M1, R1/2.
-	 * @param piece     The game piece our robot is holding. Cargo or Hatch.
-	 * @param piecePos  The bay side we want to go to. L1/2/3/4 or R1/2/3/4.
+	 * @param robotPos  The hab platform our robot starts on. L1/2, M1, R1/2. // TODO reconsider
 	 * @param autoPrefs String array of ranked Auto Modes
 	 * @param autoFiles File array of all files in the AutoModes folder
 	 * @return String name of the auto file to run
 	 */
-	public String pickAutoMode(String robotPos, String piece, String piecePos, String[] autoPrefs, File[] autoFiles) {
-		// Gets the ownership information from the FMS
+	public String pickAutoMode(String robotPos, String[] autoPrefs, File[] autoFiles) {
+		// TODO make a new selector for this based on what we want to do
+		// String mode = " ";
 
-		// TODO make a new selector for this based on what bay we want to go to
-		String mode = " ";
-
-		// TODO for potential future use
-		// String oppSide =
-		// DriverStation.getInstance().getGameSpecificMessage().substring(2);
-
-		String regex = "/(" + robotPos + ")(" + piece + ")(" + piecePos + ")(" + mode + "(.auto)/gi";
+		// String regex = "/(" + robotPos + ")(" + mode + "(.auto)/gi";
+		String regex = "\\w*\\.auto";
 
 		for (File f : autoFiles) {
 			if (f.getName().matches(regex)) {
 				return "/home/lvuser/deploy/scripts/" + f.getName();
 			}
 		}
-		// TODO make a default auto mode
+		
 		return "/home/lvuser/deploy/scripts/default.auto";
 	}
 }
