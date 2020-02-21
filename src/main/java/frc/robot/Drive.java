@@ -19,11 +19,13 @@ import frc.auto.tasks.DriveTask.DriveMode;
 public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 
 	public WPI_TalonFX mFrontLeft, mFrontRight, mRearLeft, mRearRight;
-	public static boolean driving = false;
+	private double leftPower, rightPower;
 
 	/** For autonomous */
 	private double averagePos = 0.0, desiredLocation = 0.0, startDistance = 0.0, direction = 1.0, desiredAngle = 0.0;
 
+	public static boolean driving = false;
+	
 	/**
 	 * Constructor for the Drive subsystem. Only one Drive object should be
 	 * instantiated at any time.
@@ -65,17 +67,27 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 		// Calculates average position for use in autonomous
 		averagePos = (getLeftDistance() + getRightDistance()) / 2.0;
 
-		DriveOrder driveOrder = callLoop();
+		switch (subsystemMode) {
+		case AUTO_DRIVE:
+			autoCalculator();
+		case TURN:
+			turnTo();
+		case DRIVE_STICKS:
+			sticksBox();
+		case STOP:
+			leftPower = 0.0;
+			rightPower = 0.0;
+		}
 
 		/*
 		 * These currently only set power based on percentage. In the future, we may
 		 * use different control modes. These would be set through the method
 		 * .set(ControlMode mode, double value)
 		 */
-		if (driveOrder.leftPower != 0 && driveOrder.rightPower != 0) {
+		if (leftPower != 0 && rightPower != 0) {
 			driving = true;
-			setLeftPower(driveOrder.leftPower);
-			setRightPower(driveOrder.rightPower);
+			setLeftPower(leftPower);
+			setRightPower(rightPower);
 		} else {
 			driving = false;
 			stop();
@@ -219,18 +231,9 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
      * 
      * @return DriveOrder containing the left and right powers
      */
-    public DriveOrder callLoop() {
-        switch (subsystemMode) {
-        case AUTO_DRIVE:
-            return autoCalculator();
-		case TURN:
-            return turnTo();
-        case DRIVE_STICKS:
-            return sticksBox();
-        default:
-			return new DriveOrder(0.0, 0.0);
-		}
-    }
+    // public DriveOrder callLoop() {
+        
+    // }
 
 	/**
 	 * Used for DriveTasks to communicate pertinent information to Drive about 
@@ -260,10 +263,8 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	/**
      * "Iterates" the DriveSticks control loop. This is called a Box because it just
      * returns the Xbox controller axis values. It is not actually calculating anything.
-     * 
-     * @return DriveOrder containing the values from the XboxController
      */
-    private DriveOrder sticksBox() {
+    private void sticksBox() {
 		double leftSpeed, rightSpeed, leftStickY, rightStickX;
         if (isArcadeDrive) { // Arcade Drive
             leftStickY = xbox.getAxis(XboxController.AXIS_LEFTSTICK_Y);
@@ -287,16 +288,16 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
             rightSpeed = -xbox.getAxis(XboxController.AXIS_RIGHTSTICK_Y);
         }
 		
-        return new DriveOrder(leftSpeed, rightSpeed);
+		leftPower = leftSpeed;
+		rightPower = rightSpeed;
 	}
 	
     /**
      * Iterates the regular auto control loop and calculates the new powers for
      * Drive.
-     * 
-     * @return A DriveOrder object containing the new left and right powers
+
      */
-    private DriveOrder autoCalculator() {
+    private void autoCalculator() {
         double leftOutputPower = 0.0, rightOutputPower = 0.0;
         double currentDistance = averagePos;
         double driveTolerance = 1.0;
@@ -313,7 +314,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
         if (Math.abs(desiredLocation - currentDistance) <= driveTolerance) {
             System.out.println("stopping at pos " + currentDistance);
             setMode(DriveMode.STOP);
-            return new DriveOrder(0.0, 0.0);
+			return;
         }
 
         System.out.println("current dist: " + currentDistance + ", left pos: " + getLeftDistance() + ", right pos: " + getRightDistance());
@@ -338,7 +339,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 		// If our output power after calculation is 0, stop
         if (leftOutputPower == 0 && rightOutputPower == 0) {
             setMode(DriveMode.STOP);
-            return new DriveOrder(0.0, 0.0);
+			return;
         }
 
 		// Adjusts powers to minimum/maximum bounds
@@ -359,16 +360,15 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
         }
         
         System.out.println("power: " + leftOutputPower + " " + rightOutputPower);
-        return new DriveOrder(leftOutputPower, rightOutputPower);
+		leftPower = leftOutputPower;
+		rightPower = rightOutputPower;
     }
 
 	/**
 	 * Iterates the auto turn control loop and calculates the new powers for
      * Drive to turn to a specific angle.
-     * 
-     * @return A DriveOrder object containing the new left and right powers
 	 */
-    private DriveOrder turnTo() {
+    private void turnTo() {
 		System.out.println("turning to " + desiredAngle);
 		System.out.println("current heading: " + getHeading());
 		double newAngle = desiredAngle - getHeading();
@@ -385,7 +385,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 		// If we are within the angleTolerance of the desired angle, stop
 		if (Math.abs(newAngle) < angleTolerance) {
             setMode(DriveMode.STOP);
-            return new DriveOrder(0.0, 0.0);
+			return;
         }
 
         double turningKp = 1.0 / 80.0;
@@ -402,7 +402,8 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 			outputPower = maximumPower * Math.signum(outputPower);
 		}
 
-        return new DriveOrder(Math.signum(newAngle)*outputPower, -Math.signum(newAngle)*outputPower);
+		leftPower = Math.signum(newAngle)*outputPower;
+		rightPower = -Math.signum(newAngle)*outputPower;
 	}
 
 	/**
@@ -424,19 +425,6 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 		else if (turnAmount < -180)
 			turnAmount = 360 + (turnAmount % 360);
 		return -turnAmount;
-	}
-
-    /**
-     * This is returned by DriveTask methods and holds values for the new left and right
-     * powers to be set by Drive
-     */
-    public static class DriveOrder {
-        public double leftPower = 0.0, rightPower = 0.0;
-
-        public DriveOrder(double leftPower, double rightPower) {
-            this.leftPower = leftPower;
-            this.rightPower = rightPower;
-        }
 	}
 	
 }
