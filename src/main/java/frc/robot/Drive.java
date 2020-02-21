@@ -11,20 +11,18 @@ import frc.auto.tasks.DriveTask.DriveMode;
  * <ul>
  * <li><b>Encoders:</b> getLeftDistance(), getRightDistance(), getLeftRate(),
  * getRightRate()</li>
- * <li><b>Heading:</b> uses degrees as a measurement</li>
+ * <li><b>Heading:</b> getHeading(), getRawHeading()</li>
  * </ul>
  * It also implements control modes for driving a distance, turning to an angle,
  * and operating the robot via joysticks.
- * TODO get rid of drivestate and use getRate() for velocity
- * TODO make motors/methods not static
  */
 public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 
-	public static WPI_TalonFX mFrontLeft, mFrontRight, mRearLeft, mRearRight;
+	public WPI_TalonFX mFrontLeft, mFrontRight, mRearLeft, mRearRight;
 	public static boolean driving = false;
-	
+
 	/** For autonomous */
-	private double desiredLocation = 0.0, startDistance = 0.0, direction = 1.0, desiredAngle = 0.0;
+	private double averagePos = 0.0, desiredLocation = 0.0, startDistance = 0.0, direction = 1.0, desiredAngle = 0.0;
 
 	/**
 	 * Constructor for the Drive subsystem. Only one Drive object should be
@@ -64,7 +62,9 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	 * results
 	 */
 	public void runSubsystem() {
-		updateStateInfo();
+		// Calculates average position for use in autonomous
+		averagePos = (getLeftDistance() + getRightDistance()) / 2.0;
+
 		DriveOrder driveOrder = callLoop();
 
 		/*
@@ -80,30 +80,6 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 			driving = false;
 			stop();
 		}
-	}
-
-	/**
-	 * Updates the following:
-	 * <ul>
-	 * <li>left/right velocity</li>
-	 * <li>left/right distance traveled</li>
-	 * <li>the current heading of the robot</li>
-	 */
-	public void updateStateInfo() {
-		final double leftDistance = getLeftDistance();
-		final double rightDistance = getRightDistance();
-
-		// Calculate robot velocity
-		// For underclassmen, delta means "change in"
-		final double deltaTime = System.currentTimeMillis() - DriveState.stateTime;
-
-		final double leftDeltaPos = leftDistance - DriveState.leftPos;
-		final double leftVelocity = (leftDeltaPos / deltaTime);
-
-		final double rightDeltaPos = rightDistance - DriveState.rightPos;
-		final double rightVelocity = (rightDeltaPos / deltaTime);
-
-		DriveState.updateState(leftVelocity, rightVelocity, leftDistance, rightDistance, getHeading());
 	}
 
 	/**
@@ -194,7 +170,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	 * Stops all four motors. Remember that robot will still have forward momentum
 	 * and slide slightly.
 	 */
-	public static void stop() {
+	public void stop() {
 		mFrontLeft.stopMotor();
 		mFrontRight.stopMotor();
 		mRearLeft.stopMotor();
@@ -207,7 +183,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	 * 
 	 * @param power the power the motors get set to
 	 */
-	public static void setPower(final double power) {
+	public void setPower(final double power) {
 		setRightPower(power);
 		setLeftPower(power);
 	}
@@ -217,7 +193,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	 * 
 	 * @param power the power the motor is set to
 	 */
-	public static void setLeftPower(final double power) {
+	public void setLeftPower(final double power) {
 		mFrontLeft.set(-power);
 		mRearLeft.set(-power);
 	}
@@ -227,7 +203,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	 * 
 	 * @param power the power the motor is set to.
 	 */
-	public static void setRightPower(final double power) {
+	public void setRightPower(final double power) {
 		mFrontRight.set(power);
 		mRearRight.set(power);
 	}
@@ -238,8 +214,8 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	}
 
 	/**
-     * This method takes the current drive state and iterates the control loop, then
-     * returns the next drive order for Drive to use.
+     * This method takes the current DriveMode and iterates the appropriate control loop,
+	 * then returns the next DriveOrder for Drive to use.
      * 
      * @return DriveOrder containing the left and right powers
      */
@@ -257,15 +233,15 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
     }
 
 	/**
-	 * Used for DriveTasks to communicate information to Drive
-	 * about starting a certain auto task.
+	 * Used for DriveTasks to communicate pertinent information to Drive about 
+	 * starting a certain auto task.
 	 */
 	public void setTask(DriveMode mode, double arg) {
 		switch (mode) {
 		case AUTO_DRIVE:
 			double desiredDistance = arg;
 			direction = Math.signum(desiredDistance); // Moving Forwards: 1, Moving Backwards: -1
-			startDistance = DriveState.averagePos;
+			startDistance = averagePos;
 			desiredLocation = startDistance + desiredDistance;
 			break;
 		case TURN:
@@ -281,15 +257,48 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 		setMode(mode);
 	}
 
+	/**
+     * "Iterates" the DriveSticks control loop. This is called a Box because it just
+     * returns the Xbox controller axis values. It is not actually calculating anything.
+     * 
+     * @return DriveOrder containing the values from the XboxController
+     */
+    private DriveOrder sticksBox() {
+		double leftSpeed, rightSpeed, leftStickY, rightStickX;
+        if (isArcadeDrive) { // Arcade Drive
+            leftStickY = xbox.getAxis(XboxController.AXIS_LEFTSTICK_Y);
+            rightStickX = -xbox.getAxis(XboxController.AXIS_RIGHTSTICK_X);
+
+            leftSpeed = leftStickY + rightStickX;
+            rightSpeed = leftStickY - rightStickX;
+
+            double max = Math.max(leftSpeed, rightSpeed); // the greater of the two values
+            double min = Math.min(leftSpeed, rightSpeed); // the lesser of the two values
+
+            if (max > 1) {
+                leftSpeed /= max;
+                rightSpeed /= max;
+            } else if (min < -1) {
+                leftSpeed /= -min;
+                rightSpeed /= -min;
+            }
+        } else { // Tank Drive
+            leftSpeed = xbox.getAxis(XboxController.AXIS_LEFTSTICK_Y);
+            rightSpeed = -xbox.getAxis(XboxController.AXIS_RIGHTSTICK_Y);
+        }
+		
+        return new DriveOrder(leftSpeed, rightSpeed);
+	}
+	
     /**
      * Iterates the regular auto control loop and calculates the new powers for
-     * Drive
+     * Drive.
      * 
      * @return A DriveOrder object containing the new left and right powers
      */
     private DriveOrder autoCalculator() {
         double leftOutputPower = 0.0, rightOutputPower = 0.0;
-        double currentDistance = DriveState.averagePos;
+        double currentDistance = averagePos;
         double driveTolerance = 1.0;
 
         double kdDrive = 0; // Derivative coefficient for PID controller
@@ -307,33 +316,26 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
             return new DriveOrder(0.0, 0.0);
         }
 
-        System.out.println("current dist: " + currentDistance + ", left pos: " + DriveState.leftPos + ", right pos: " + DriveState.rightPos);
+        System.out.println("current dist: " + currentDistance + ", left pos: " + getLeftDistance() + ", right pos: " + getRightDistance());
         // If moving forward, everything is normal
         if (direction > 0) {
-            leftOutputPower = kpDrive * (desiredLocation - DriveState.leftPos) + kdDrive * DriveState.leftVelocity;
+            leftOutputPower = kpDrive * (desiredLocation - getLeftDistance()) + kdDrive * getLeftRate();
             leftOutputPower *= -1.0;
-            rightOutputPower = kpDrive * (desiredLocation - DriveState.rightPos)
-                    + kdDrive * DriveState.rightVelocity;
+            rightOutputPower = kpDrive * (desiredLocation - getRightDistance())
+                    + kdDrive * getRightRate();
             rightOutputPower *= -1.0;
         }
 
         // If moving backwards, find our error term minus velocity term
         else if (direction < 0) {
-
-			// TODO remove; it doesn't need to do this anymore
-            // This treats moving backwards as if it were moving forwards by flipping the
-            // sign of our error. Then we reaccount for our flipped error by multiplying by
-            // -1 once our calculations are complete
-
-            leftOutputPower = kpDrive * (DriveState.leftPos - desiredLocation)
-                    + kdDrive * (-1 * DriveState.leftVelocity);
-            // leftOutputPower *= -1.0;
-
-            rightOutputPower = kpDrive * (DriveState.rightPos - desiredLocation)
-                    + kdDrive * (-1 * DriveState.rightVelocity);
-            // rightOutputPower *= -1.0;
+            // This treats moving backwards like moving forwards by flipping the sign of our error.
+            leftOutputPower = kpDrive * (getLeftDistance() - desiredLocation)
+                    + kdDrive * (-1 * getLeftRate());
+            rightOutputPower = kpDrive * (getRightDistance() - desiredLocation)
+                    + kdDrive * (-1 * getRightRate());
         }
 
+		// If our output power after calculation is 0, stop
         if (leftOutputPower == 0 && rightOutputPower == 0) {
             setMode(DriveMode.STOP);
             return new DriveOrder(0.0, 0.0);
@@ -360,39 +362,6 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
         return new DriveOrder(leftOutputPower, rightOutputPower);
     }
 
-    /**
-     * "Iterates" the DriveSticks control loop. This is called a Box because it just
-     * returns the Xbox controller axis values. It is not actually calculating anything.
-     * 
-     * @return DriveOrder containing the values from the XboxController
-     */
-    private DriveOrder sticksBox() {
-        double leftSpeed, rightSpeed, leftStickY, rightStickX;
-        if (isArcadeDrive) { // Arcade Drive
-            leftStickY = xbox.getAxis(XboxController.AXIS_LEFTSTICK_Y);
-            rightStickX = -xbox.getAxis(XboxController.AXIS_RIGHTSTICK_X);
-
-            leftSpeed = leftStickY + rightStickX;
-            rightSpeed = leftStickY - rightStickX;
-
-            double max = Math.max(leftSpeed, rightSpeed); // the greater of the two values
-            double min = Math.min(leftSpeed, rightSpeed); // the lesser of the two values
-
-            if (max > 1) {
-                leftSpeed /= max;
-                rightSpeed /= max;
-            } else if (min < -1) {
-                leftSpeed /= -min;
-                rightSpeed /= -min;
-            }
-        } else { // Tank Drive
-            leftSpeed = xbox.getAxis(XboxController.AXIS_LEFTSTICK_Y);
-            rightSpeed = -xbox.getAxis(XboxController.AXIS_RIGHTSTICK_Y);
-        }
-
-        return new DriveOrder(leftSpeed, rightSpeed);
-    }
-
 	/**
 	 * Iterates the auto turn control loop and calculates the new powers for
      * Drive to turn to a specific angle.
@@ -407,29 +376,33 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 		// double newAngle = desiredAngle + getHeading();
 		// newAngle = turnAmount(fixHeading(newAngle));
         double angleTolerance = 5;
-        
+		
+		// Adjusts angle if it's less than -180
+		// TODO still necessary?
         if (newAngle < 0 && Math.abs(newAngle) > 180)
 			newAngle += 360;
 		
+		// If we are within the angleTolerance of the desired angle, stop
 		if (Math.abs(newAngle) < angleTolerance) {
             setMode(DriveMode.STOP);
             return new DriveOrder(0.0, 0.0);
         }
 
         double turningKp = 1.0 / 80.0;
-        double turningKd = 0.0;
+		double turningKd = 0.0;
+		double maximumPower = 0.5;
 
-        // if we're turning right use leftVelocity, if we're turning left use rightVelocity
-        double velocity = (DriveState.leftVelocity > 0) ? DriveState.leftVelocity : DriveState.rightVelocity;
+        // If we're turning right, use leftVelocity; if we're turning left, use rightVelocity
+        double velocity = getLeftRate() > 0 ? getLeftRate() : getRightRate();
 
         double outputPower = turningKp * newAngle + turningKd * (velocity / robotRadius);
 
-		if (Math.abs(outputPower) > 0.5) {
-			outputPower = 0.5 * Math.signum(outputPower);
+		// Caps output power at maximum
+		if (Math.abs(outputPower) > maximumPower) {
+			outputPower = maximumPower * Math.signum(outputPower);
 		}
 
-        return new DriveOrder(1 * (Math.signum(newAngle) * outputPower),
-                -1 * (Math.signum(newAngle)) * outputPower);
+        return new DriveOrder(Math.signum(newAngle)*outputPower, -Math.signum(newAngle)*outputPower);
 	}
 
 	/**
@@ -452,27 +425,6 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 			turnAmount = 360 + (turnAmount % 360);
 		return -turnAmount;
 	}
-	
-    /**
-     * TODO remove??
-	 * This holds information about the current state of the robot. It holds values
-     * for power, velocity, and position for both the left and right side.
-     */
-    public static class DriveState {
-        public static double leftVelocity = 0.0, rightVelocity = 0.0, leftPos = 0.0, rightPos = 0.0;
-		public static double averagePos = 0.0, currentHeading = 0.0;
-        public static long stateTime = System.currentTimeMillis();
-
-        public static void updateState(double leftVelocity, double rightVelocity, double leftPos, double rightPos, double currentHeading) {
-            DriveState.leftVelocity = leftVelocity;
-            DriveState.rightVelocity = rightVelocity;
-            DriveState.leftPos = leftPos;
-            DriveState.rightPos = rightPos;
-            DriveState.averagePos = (leftPos + rightPos) / 2.0;
-            DriveState.currentHeading = currentHeading;
-            stateTime = System.currentTimeMillis();
-        }
-    }
 
     /**
      * This is returned by DriveTask methods and holds values for the new left and right
@@ -485,5 +437,6 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
             this.leftPower = leftPower;
             this.rightPower = rightPower;
         }
-    }
+	}
+	
 }
