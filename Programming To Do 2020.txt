@@ -4,11 +4,42 @@ META:
 * Give members opportunities to code/learn/work independently
 * Make sure people understand Java, how to debug stuff, working with WPILib
 * Document code so we know what stuff does
-* Incorporate Logger for debug/error info
-    - see if it still works lol
 
-VISION:
-* Refine system and camera placement
+LOGGER:
+* Incorporate for debug/error info in testing auto
+* See if it still works alone
+* Debug selector??
+
+AUTOSELECTOR:
+* Make working Auto Selector interface in SmartDashboard
+* Come up with logical naming convention
+* Document class
+
+AUTOCOMPILER:
+* Use Logger to log errors in parsing when throwing exceptions
+* Design and organize auto scripts!
+* Add math operation/paretheses/comma support? (ok maybe next year)
+
+DRIVETRAIN:
+* Motion profiling?
+* Test automatic turning, driving, etc. with limited acceleration
+* Refine acceleration limit
+* Figure out why turning backwards is weird for Nico
+
+CLIMBER:
+* Distance limit?
+* Limit switch?
+* Coast mode?
+* Refine and test
+
+INTAKE/OUTTAKE:
+* Test and refine system
+* GET LINE SENSOR ON!!!
+
+SPINNER:
+* Comment/reorganize class
+* Test/refine detecting colors
+* Calibrate colors for actual wheel at USRA
 
 MUSIC:
 * Test music in auto
@@ -19,32 +50,3 @@ LEDs:
 * Reference 2018 code
 * Add ways to set LED depending on active task
 * Complete class
-
-SPINNER:
-* Comment/reorganize class
-* Test/refine detecting colors
-* Calibrate colors for actual wheel at USRA
-
-AUTOCOMPILER:
-* Add math operation/paretheses/comma support (ok maybe next year)
-* Use Logger to log errors in parsing when throwing exceptions
-* Continue testing AutoCompiler with generating basic tasks
-* Use AutoCompiler to design auto modes
-
-AUTOSELECTOR:
-* Make working Auto Selector interface in SmartDashboard
-* Come up with logical naming convention
-* Document class
-
-DRIVETRAIN:
-* Motion profiling?
-* Test automatic turning, driving, etc. with limited acceleration
-* Refine acceleration limit
-* Figure out why turning backwards is weird for Nico
-
-CLIMBER:
-* Test and refine system
-
-INTAKE/OUTTAKE:
-* Test and refine system
-* GET LINE SENSOR ON!!!
