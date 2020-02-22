@@ -39,6 +39,8 @@ AUTOSELECTOR:
 DRIVETRAIN:
 * Motion profiling?
 * Test automatic turning, driving, etc. with limited acceleration
+* Refine acceleration limit
+* Figure out why turning backwards is weird for Nico
 
 CLIMBER:
 * Test and refine system
