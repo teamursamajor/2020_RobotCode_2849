@@ -135,9 +135,9 @@ public class Robot extends TimedRobot implements UrsaRobot {
 	public void teleopInit() {
 		Logger.log("Started Teleop mode", LogLevel.INFO);
 		robotMode = "Teleop";
-		
+
 		drive.setMode(DriveMode.DRIVE_STICKS);
-		drive.setOpenloopRamp(0);
+		drive.setOpenloopRamp(1.5);
 	}
 
 	/**

@@ -1,6 +1,6 @@
 package frc.auto.tasks;
 
-// import frc.diagnostics.*;
+import frc.diagnostics.*;
 
 /**
  * This is a task class for printing out text when running Auto Modes.
@@ -20,7 +20,7 @@ public class PrintTask extends Task {
 	// Prints the string to System.out
 	public void run() {
 		System.out.println(str);
-		// Logger.log(str, Logger.LogLevel.DEBUG);
+		Logger.log(str, Logger.LogLevel.DEBUG);
 	}
 	
 	public String toString() {
