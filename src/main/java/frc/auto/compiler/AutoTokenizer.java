@@ -25,7 +25,6 @@ public class AutoTokenizer implements TokenList {
      * @throws IOException
      * @throws Exception
      */
-    @SuppressWarnings("resource")
     public static ArrayList<Token> tokenize(String filename) throws IOException, Exception {
         ArrayList<Token> tokenList = new ArrayList<Token>(); // List of all tokens identified
         BufferedReader buff = new BufferedReader(new FileReader(filename));
@@ -41,7 +40,7 @@ public class AutoTokenizer implements TokenList {
                 matchedToken = false; // Resets to check for new matched tokens
 
                 // If the line begins with a comment, disregard the line
-                if (line.trim().charAt(0) == '#') {
+                if (line.trim().charAt(0) == '#' || line.trim().charAt(0) == '/') {
                     matchedAny = true;
                     break;
                 }
