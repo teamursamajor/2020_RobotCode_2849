@@ -5,12 +5,9 @@ META:
 * Make sure people understand Java, how to debug stuff, working with WPILib
 * Document code so we know what stuff does
 * Incorporate Logger for debug/error info
-* Move subsystem mode enums to subsystem classes? Or keep in modes?
 
 VISION:
-* Write code to switch camera depending on drive motor power
-* Test out switching pipelines
-* Set up cameras for forward, backward, and climb movement
+* Refine system and camera placement
 
 MUSIC:
 * Test music in auto
@@ -29,11 +26,10 @@ SPINNER:
 * Calibrate colors for actual wheel at USRA
 
 AUTOCOMPILER:
-* Add math operation/paretheses/comma support
+* Add math operation/paretheses/comma support (ok maybe next year)
 * Use Logger to log errors in parsing when throwing exceptions
-* Test AutoCompiler with generating basic tasks
+* Continue testing AutoCompiler with generating basic tasks
 * Use AutoCompiler to design auto modes
-* Make script syntax and class documentation when all's said and done
 
 DRIVETRAIN:
 * Motion profiling?
