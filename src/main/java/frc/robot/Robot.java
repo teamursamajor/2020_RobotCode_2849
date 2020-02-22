@@ -86,9 +86,10 @@ public class Robot extends TimedRobot implements UrsaRobot {
   public void autonomousInit() {
     drive.resetEncoders();
     drive.resetNavx();
-    
-    // String autoMode = autoSelector.pickAutoMode(autoSelector.getStartingPosition(), 
-    //   autoSelector.getAutoPrefs(), autoSelector.findAutoFiles());
+
+    // String autoMode =
+    // autoSelector.pickAutoMode(autoSelector.getStartingPosition(),
+    // autoSelector.getAutoPrefs(), autoSelector.findAutoFiles());
     // TODO remove; for manual testing
     String autoMode = "home/lvuser/deploy/scripts/default.auto";
 
@@ -107,8 +108,8 @@ public class Robot extends TimedRobot implements UrsaRobot {
   }
 
   /**
-   * This function is run when teleop mode is first started up and should be
-	 * used for any teleop initialization code.
+   * This function is run when teleop mode is first started up and should be used
+   * for any teleop initialization code.
    */
   @Override
   public void teleopInit() {
@@ -116,8 +117,8 @@ public class Robot extends TimedRobot implements UrsaRobot {
   }
 
   /**
-   * This function is called periodically during operator control.
-   * It is used to check for controller inputs.
+   * This function is called periodically during operator control. It is used to
+   * check for controller inputs.
    */
   @Override
   public void teleopPeriodic() {
@@ -146,7 +147,8 @@ public class Robot extends TimedRobot implements UrsaRobot {
 
   /**
    * This function prints a jet plane.
-   * @author Jetplane
+   * 
+   * @author JJ the Jetplane
    */
   public static void jetPlane() {
     System.out.println("   ____       _");
