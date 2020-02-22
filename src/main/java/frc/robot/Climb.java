@@ -10,6 +10,9 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
  */
 public class Climb extends Subsystem<Climb.ClimbMode> implements UrsaRobot {
 
+    /**
+     * Modes for Climb.
+     */
     public enum ClimbMode {
         UP, DOWN, STOP;
     }

@@ -16,7 +16,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
  */
 public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 
-	/*
+	/**
      * Modes for Drive.
      * AUTO_DRIVE is for autonomous driving to a certain distance.
      * TURN is for autonomous turning to a certain angle.

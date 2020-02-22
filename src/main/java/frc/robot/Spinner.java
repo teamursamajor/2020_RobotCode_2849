@@ -16,6 +16,9 @@ import edu.wpi.first.wpilibj.util.Color;
  */
 public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot {
 
+    /**
+     * Modes for Spinner.
+     */
     public enum SpinnerMode {
         SPIN, DETECT, LEFT, RIGHT, STOP;
     }
@@ -285,5 +288,5 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
             return 'Y';
         return ' ';
     }
-    
+
 }
