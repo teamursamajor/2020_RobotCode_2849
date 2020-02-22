@@ -21,15 +21,19 @@ public class MusicTask extends Task {
 
     /**
      * Constructor for MusicTasks with a song to load.
+     * @param MusicPlayer The active instance of MusicPlayer.
+     * @param MusicMode The desired Music mode.
+     * @param song The song to play.
      */
     public MusicTask(MusicPlayer musicPlayer, MusicMode mode, String song) {
-        this.musicPlayer = musicPlayer;
-        this.mode = mode;
+        this(musicPlayer, mode); // Calls general constructor
         this.song = song;
     }
 
     /**
      * General constructor for MusicTasks.
+     * @param MusicPlayer The active instance of MusicPlayer.
+     * @param MusicMode The desired Music mode.
      */
     public MusicTask(MusicPlayer musicPlayer, MusicMode mode) {
         this.musicPlayer = musicPlayer;
@@ -51,4 +55,5 @@ public class MusicTask extends Task {
     public String toString() {
         return "--MusicTask: " + mode + " " + song + "\n";
     }
+    
 }

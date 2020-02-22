@@ -1,4 +1,0 @@
-#next three lines release the intake mechanism
-intake
-wait 0.1
-intake stop

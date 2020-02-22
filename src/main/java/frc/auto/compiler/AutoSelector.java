@@ -8,8 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * This class allows Auto Modes to be selected via the SmartDashboard interface.
- * TODO <b>UPDATE FOR 2020</b>
+ * This class allows Auto Scripts to be selected via the SmartDashboard interface.
  */
 public class AutoSelector {
 	private ArrayList<SendableChooser<String>> autoList = new ArrayList<SendableChooser<String>>();

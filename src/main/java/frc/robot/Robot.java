@@ -25,6 +25,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
   private Drive drive;
   private Spinner spinner;
   private Intake intake;
+  private Belt belt;
   private Outtake outtake;
   private Climb climb;
   private AutoCompiler autoCompiler;
@@ -50,6 +51,9 @@ public class Robot extends TimedRobot implements UrsaRobot {
     intake = new Intake();
     intake.initialize("IntakeThread");
 
+    belt = new Belt();
+    belt.initialize("BeltThread");
+
     outtake = new Outtake();
     outtake.initialize("OuttakeThread");
 
@@ -59,7 +63,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
     vision = new Vision();
     vision.initialize("VisionThread");
 
-    autoCompiler = new AutoCompiler(drive, intake, outtake, musicPlayer);
+    autoCompiler = new AutoCompiler(drive, intake, belt, outtake, musicPlayer);
 
     // autoSelector = new AutoSelector();
   }
@@ -121,6 +125,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
   public void teleopPeriodic() {
     climb.readControls();
     intake.readControls();
+    belt.readControls();
     outtake.readControls();
     spinner.readControls();
     // musicPlayer.readControls();

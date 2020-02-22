@@ -285,4 +285,5 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
             return 'Y';
         return ' ';
     }
+    
 }

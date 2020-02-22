@@ -19,4 +19,5 @@ public class SerialTask extends GroupTask {
 	public String toString() {
 		return "SerialTask:\n" + super.toString();
 	}
+	
 }

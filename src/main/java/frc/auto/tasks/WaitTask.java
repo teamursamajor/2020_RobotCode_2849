@@ -30,4 +30,5 @@ public class WaitTask extends Task {
 	public String toString() {
 		return "WaitTask: " + waitTime + "\n";
 	}
+	
 }

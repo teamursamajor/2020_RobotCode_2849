@@ -1,7 +1,7 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 // import edu.wpi.first.wpilibj.DigitalInput;
 
@@ -14,7 +14,7 @@ public class Climb extends Subsystem<Climb.ClimbMode> implements UrsaRobot {
         UP, DOWN, STOP;
     }
 
-    private WPI_TalonSRX mLeft, mRight;
+    private WPI_TalonFX mLeft, mRight;
     // private DigitalInput limitSwitch;
     // private int distanceToGo = 5;
 
@@ -25,8 +25,8 @@ public class Climb extends Subsystem<Climb.ClimbMode> implements UrsaRobot {
      * instantiated at any time.
      */
     public Climb() {    
-        mLeft = new WPI_TalonSRX(CLIMB_LEFT);
-        mRight = new WPI_TalonSRX(CLIMB_RIGHT);
+        mLeft = new WPI_TalonFX(CLIMB_LEFT);
+        mRight = new WPI_TalonFX(CLIMB_RIGHT);
         // limitSwitch = new DigitalInput(CLIMB_SWITCH_PORT);
         mLeft.configFactoryDefault();
         mRight.configFactoryDefault();
@@ -71,4 +71,5 @@ public class Climb extends Subsystem<Climb.ClimbMode> implements UrsaRobot {
             break;
         }
     }
+
 }

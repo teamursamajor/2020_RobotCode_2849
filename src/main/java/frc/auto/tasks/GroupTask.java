@@ -6,6 +6,7 @@ import java.util.ArrayList;
  * This is an abstract class for Group Tasks (parallel and serial).
  */
 public abstract class GroupTask extends Task {
+    
     protected ArrayList<Task> tasks = new ArrayList<Task>();
 
     public GroupTask() {
@@ -27,4 +28,5 @@ public abstract class GroupTask extends Task {
         }
         return ret;
     }
+
 }

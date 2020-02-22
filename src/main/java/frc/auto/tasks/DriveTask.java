@@ -2,12 +2,8 @@ package frc.auto.tasks;
 
 import frc.robot.Drive;
 
-// TODO make this only work for auto driving and split turn task into its own class
-// TODO make this work with Falcons/motion profiling
-// TODO clean this up please
-
 /**
- * This is a Task class for controlling the Drive mechanism in teleop and autonomous.
+ * This is a Task class for controlling the Drive mechanism in autonomous.
  */
 public class DriveTask extends Task {
 
@@ -20,21 +16,21 @@ public class DriveTask extends Task {
      * AUTO_DRIVE is for autonomous driving to a certain distance.
      * TURN is for autonomous turning to a certain angle.
      * DRIVE_STICKS is for manual control.
+     * STOP is for stopping.
      */
     public enum DriveMode {
         AUTO_DRIVE, TURN, DRIVE_STICKS, STOP;
     }
 
     /**
-     * Used to set the DriveMode and run drive autonomously with AUTO_DRIVE, TURN,
-     * or PATH
+     * Constructor for DriveTasks.
      * 
      * @param argument The argument pertaining to the particular drive mode.
-     *                 For AUTO_DRIVE: How far you want to drive. Positive is forward,
-     *                 negative is backwards.
-     *                 For TURN: desired angle to turn to.
-     * @param drive    Instance of Drive
-     * @param mode     The DriveMode that this Task is being used for
+     * For AUTO_DRIVE: How far you want to drive. Positive is forward,
+     * negative is backwards.
+     * For TURN: desired angle to turn to.
+     * @param drive The active instance of Drive.
+     * @param mode The desired Drive mode.
      */
     public DriveTask(double arg, Drive drive, DriveMode mode) {
         this.mode = mode;
@@ -56,4 +52,5 @@ public class DriveTask extends Task {
     public String toString() {
         return "DriveTask: " + mode + " " + arg + "\n";
     }
+
 }

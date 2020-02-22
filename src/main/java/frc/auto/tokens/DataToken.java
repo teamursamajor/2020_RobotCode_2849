@@ -30,4 +30,5 @@ public class DataToken<E> extends Token {
     public String toString() {
         return "Token of type " + type + " with value " + value;
     }
+    
 }

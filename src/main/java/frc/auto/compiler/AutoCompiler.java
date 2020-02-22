@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import frc.auto.tasks.*;
 import frc.auto.tasks.DriveTask.DriveMode;
 import frc.auto.tasks.IntakeTask.IntakeMode;
+import frc.auto.tasks.BeltTask.BeltMode;
 import frc.auto.tasks.OuttakeTask.OuttakeMode;
 import frc.auto.tasks.MusicTask.MusicMode;
 import frc.auto.tokens.*;
@@ -24,6 +25,7 @@ public class AutoCompiler {
 
 	private Drive drive;
 	private Intake intake;
+	private Belt belt;
 	private Outtake outtake;
 	private MusicPlayer musicPlayer;
 
@@ -32,12 +34,14 @@ public class AutoCompiler {
 	 * Refers to active instances of relevant subsystems.
 	 * @param drive The active instance of Drive.
 	 * @param intake The active instance of Intake.
+	 * @param belt The active instance of Belt.
 	 * @param outtake The active instance of Outtake.
 	 * @param musicPlayer The active instance of MusicPlayer.
 	 */
-	public AutoCompiler(Drive drive, Intake intake, Outtake outtake, MusicPlayer musicPlayer) {
+	public AutoCompiler(Drive drive, Intake intake, Belt belt, Outtake outtake, MusicPlayer musicPlayer) {
 		this.drive = drive;
 		this.intake = intake;
+		this.belt = belt;
 		this.outtake = outtake;
 		this.musicPlayer = musicPlayer;
 	}
@@ -85,9 +89,20 @@ public class AutoCompiler {
 							taskSet.addTask(new IntakeTask(intake, IntakeMode.STOP));
 						break;
 					} else { // defaults to release if no Boolean specified
-						taskSet.addTask(new IntakeTask(intake, IntakeMode.RELEASE));
+						taskSet.addTask(new IntakeTask(intake, IntakeMode.DEPLOY));
 						break;
 					}
+				
+				case BELT:
+					if (tokenList.get(0).type == TokenType.BOOLEAN) { // expecting Boolean next
+						boolean beltActive = ((DataToken<Boolean>) tokenList.remove(0)).getValue();
+						if (beltActive)
+							taskSet.addTask(new BeltTask(belt, BeltMode.IN));
+						else
+							taskSet.addTask(new BeltTask(belt, BeltMode.STOP));
+						break;
+					}
+					throw new Exception(); // if there is not a Boolean
 
 				case OUTTAKE: // can only be one of three arguments
 					if (t.argument == 0)

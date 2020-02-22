@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.SPI;
  * involving encoders and the robot.
  */
 public interface UrsaRobot {
+
 	// Arcade vs Tank drive
 	public static boolean isArcadeDrive = true;
 
@@ -56,4 +57,5 @@ public interface UrsaRobot {
 	
 	// Did I axe?
 	public static boolean didIAxe = false;
+	
 }

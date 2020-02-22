@@ -12,6 +12,7 @@ import edu.wpi.first.cameraserver.CameraServer;
  * This is a subsystem class for operating the USB Cameras.
  */
 public class Vision extends Subsystem<Vision.VisionMode> implements UrsaRobot {
+
 	private static CvSink cvSink;
 	private static CvSource outputStream;
 	private static UsbCamera forwardCam, backwardCam; // climbCam;
@@ -62,4 +63,5 @@ public class Vision extends Subsystem<Vision.VisionMode> implements UrsaRobot {
             }
         }
     }
+    
 }

@@ -42,4 +42,5 @@ public class OuttakeTask extends Task implements UrsaRobot {
     public String toString() {
         return "OuttakeTask: " + mode + "\n";
     }
+    
 }

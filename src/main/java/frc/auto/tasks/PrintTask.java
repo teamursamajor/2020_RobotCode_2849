@@ -6,11 +6,12 @@ package frc.auto.tasks;
  * This is a task class for printing out text when running Auto Modes.
  */
 public class PrintTask extends Task {
-	private String str; // The string to print
+
+	private String str;
 	
 	/**
-	 * 
-	 * @param str
+	 * Constructor for PrintTasks.
+	 * @param str The string to print.
 	 */
 	public PrintTask(String str) {
 		this.str = str;

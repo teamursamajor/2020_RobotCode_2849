@@ -10,7 +10,7 @@ import frc.auto.tasks.IntakeTask.IntakeMode;
  */
 public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobot {
 
-    private final Spark intakeMotor, beltMotor;
+    private final Spark intakeMotor;
     private int numOfCells;
     private final DigitalInput lineSensor;
     private boolean deltaLineSensor;
@@ -21,7 +21,6 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
      */
     public Intake() {
         intakeMotor = new Spark(INTAKE);
-        beltMotor = new Spark(BELT);
         lineSensor = new DigitalInput(LINE_SENSOR_PORT);
         deltaLineSensor = false;
         setMode(IntakeMode.STOP);
@@ -59,13 +58,11 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
         switch (subsystemMode) {
         case IN:
             intakeMotor.set(-0.69420);
-            beltMotor.set(0.55);
             break;
         case STOP:
             intakeMotor.set(0.0);
-            beltMotor.set(0.0);
             break;
-        case RELEASE:
+        case DEPLOY:
             intakeMotor.set(0.2);
             break;
         }
@@ -84,4 +81,5 @@ public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobo
     public int getCount() {
         return numOfCells;
     }
+    
 }
