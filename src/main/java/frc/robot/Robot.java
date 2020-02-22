@@ -92,7 +92,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
     // autoSelector.pickAutoMode(autoSelector.getStartingPosition(),
     // autoSelector.getAutoPrefs(), autoSelector.findAutoFiles());
     // TODO remove; for manual testing
-    String autoMode = "home/lvuser/deploy/scripts/outtake_test.auto";
+    String autoMode = "home/lvuser/deploy/scripts/default.auto";
 
     try {
       autoCompiler.buildAutoMode(autoMode).start();
@@ -115,7 +115,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
   @Override
   public void teleopInit() {
     drive.setMode(Drive.DriveMode.DRIVE_STICKS);
-    drive.setOpenloopRamp(2.5);
+    drive.setOpenloopRamp(0);
   }
 
   /**

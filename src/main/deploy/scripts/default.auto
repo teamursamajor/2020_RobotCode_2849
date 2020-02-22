@@ -1,2 +1,5 @@
-#TODO confirm that this is the right distance!
-drive 120
+drive -120
+outtake out
+outtake wait 0.1
+outtake stop
+print "complete"

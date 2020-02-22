@@ -49,9 +49,9 @@ public class Intake extends Subsystem<Intake.IntakeMode> implements UrsaRobot {
         // Adds a ball to the counter if the ball trips the line sensor
         if (lineSensor.get() && !deltaLineSensor) {
             deltaLineSensor = true;
-            System.out.println(deltaLineSensor + ". we saw da balls");
+            // System.out.println(deltaLineSensor + ". we saw da balls");
             numOfCells++;
-            System.out.println(numOfCells);
+            // System.out.println(numOfCells);
         } else if (!lineSensor.get()) {
             deltaLineSensor = false;
             // System.out.println(deltaLineSensor);

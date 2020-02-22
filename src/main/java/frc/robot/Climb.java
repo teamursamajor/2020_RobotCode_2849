@@ -19,7 +19,7 @@ public class Climb extends Subsystem<Climb.ClimbMode> implements UrsaRobot {
 
     private WPI_TalonFX mLeft, mRight;
     // private DigitalInput limitSwitch;
-    // private int distanceToGo = 5;
+    private double averagePos;//, distanceToGo = 10000; // TODO adjust
 
     public static boolean climbing = false;
 
@@ -43,16 +43,17 @@ public class Climb extends Subsystem<Climb.ClimbMode> implements UrsaRobot {
             setMode(ClimbMode.UP);
         } else if (xbox.getDPad(controls.map.get("climb_down"))) {
             setMode(ClimbMode.DOWN);
-        } else 
+        } else
             setMode(ClimbMode.STOP);
     }
 
     public void runSubsystem() throws InterruptedException {
-        // System.out.println("running " + subsystemMode);
+        averagePos = (mLeft.getSelectedSensorPosition() + mRight.getSelectedSensorPosition()) * CLIMB_INCHES_PER_TICK / 2;
         // Stop if climb got to right height (limit switch pressed) or encoder says
         // we've gone correct distance
-        // if (limitSwitch.get() || mLeft.getSelectedSensorPosition() * CLIMB_INCHES_PER_TICK >= distanceToGo)
-        //     setMode(ClimbMode.STOP);
+        System.out.println(averagePos);
+        // if (/*limitSwitch.get() || */averagePos >= distanceToGo)
+            // setMode(ClimbMode.STOP);
 
         switch (subsystemMode) {
         case UP:
