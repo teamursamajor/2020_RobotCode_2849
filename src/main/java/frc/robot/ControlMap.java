@@ -48,6 +48,6 @@ public class ControlMap {
         // Vision
         map.put("vision_cam1", XboxController.BUTTON_LEFTSTICK);
         map.put("vision_cam2", XboxController.BUTTON_RIGHTSTICK);
-
     }
+
 }
