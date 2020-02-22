@@ -79,13 +79,17 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 		switch (subsystemMode) {
 		case AUTO_DRIVE:
 			autoCalculator();
+			break;
 		case TURN:
 			turnTo();
+			break;
 		case DRIVE_STICKS:
 			sticksBox();
+			break;
 		case STOP:
 			leftPower = 0.0;
 			rightPower = 0.0;
+			break;
 		}
 
 		/*
@@ -234,16 +238,6 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 	}
 
 	/**
-     * This method takes the current DriveMode and iterates the appropriate control loop,
-	 * then returns the next DriveOrder for Drive to use.
-     * 
-     * @return DriveOrder containing the left and right powers
-     */
-    // public DriveOrder callLoop() {
-        
-    // }
-
-	/**
 	 * Used for DriveTasks to communicate pertinent information to Drive about 
 	 * starting a certain auto task.
 	 */
@@ -273,6 +267,7 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
      * returns the Xbox controller axis values. It is not actually calculating anything.
      */
     private void sticksBox() {
+		System.out.println("calling sticksbox");
 		double leftSpeed, rightSpeed, leftStickY, rightStickX;
         if (isArcadeDrive) { // Arcade Drive
             leftStickY = xbox.getAxis(XboxController.AXIS_LEFTSTICK_Y);
@@ -295,7 +290,6 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
             leftSpeed = xbox.getAxis(XboxController.AXIS_LEFTSTICK_Y);
             rightSpeed = -xbox.getAxis(XboxController.AXIS_RIGHTSTICK_Y);
         }
-		
 		leftPower = leftSpeed;
 		rightPower = rightSpeed;
 	}

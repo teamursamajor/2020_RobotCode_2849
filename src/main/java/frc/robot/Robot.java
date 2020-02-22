@@ -139,10 +139,17 @@ public class Robot extends TimedRobot implements UrsaRobot {
   }
 
   /**
-   * This function is called whenever a mode is disabled.
+   * This function is called whenever the robot is disabled.
    */
   @Override
   public void disabledInit() {
+    drive.setMode(Drive.DriveMode.STOP);
+    climb.setMode(Climb.ClimbMode.STOP);
+    intake.setMode(Intake.IntakeMode.STOP);
+    belt.setMode(Belt.BeltMode.STOP);
+    outtake.setMode(Outtake.OuttakeMode.STOP);
+    spinner.setMode(Spinner.SpinnerMode.STOP);
+    musicPlayer.setMode(MusicPlayer.MusicMode.STOP);
   }
 
   /**
