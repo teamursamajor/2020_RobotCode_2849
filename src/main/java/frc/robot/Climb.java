@@ -47,7 +47,6 @@ public class Climb extends Subsystem<Climb.ClimbMode> implements UrsaRobot {
             setMode(ClimbMode.STOP);
     }
 
-    @Override
     public void runSubsystem() throws InterruptedException {
         // System.out.println("running " + subsystemMode);
         // Stop if climb got to right height (limit switch pressed) or encoder says

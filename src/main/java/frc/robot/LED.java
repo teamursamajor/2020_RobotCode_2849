@@ -20,11 +20,9 @@ public class LED extends Subsystem<LED.LEDMode> implements UrsaRobot {
         bLED = new Solenoid(2);
     }
 
-    @Override
     public void readControls() {
     }
 
-    @Override
     public void runSubsystem() throws InterruptedException {
         // TODO for testing
         rLED.set(true);
