@@ -38,7 +38,6 @@ public class Climb extends Subsystem<Climb.ClimbMode> implements UrsaRobot {
         setMode(ClimbMode.STOP);
     }
 
-    @Override
     public void readControls() {
         if (xbox.getDPad(controls.map.get("climb_up"))) {
             setMode(ClimbMode.UP);

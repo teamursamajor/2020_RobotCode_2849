@@ -22,7 +22,6 @@ public class LED extends Subsystem<LED.LEDMode> implements UrsaRobot {
 
     @Override
     public void readControls() {
-        // TODO Auto-generated method stub
     }
 
     @Override

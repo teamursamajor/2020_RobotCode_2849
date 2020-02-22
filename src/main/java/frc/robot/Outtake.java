@@ -28,7 +28,6 @@ public class Outtake extends Subsystem<Outtake.OuttakeMode> implements UrsaRobot
         setMode(OuttakeMode.STOP);
     }
     
-    @Override
     public void readControls() {
         if (xbox.getButton(controls.map.get("outtake_out"))) {
             setMode(OuttakeMode.OUT);

@@ -32,7 +32,6 @@ public class Intake extends Subsystem<Intake.IntakeMode> implements UrsaRobot {
         resetCount();
     }
 
-    @Override
     public void readControls() {
         // Only operates if we haven't gotten 5 power cells yet
         if (xbox.getButton(controls.map.get("intake")) && getCount() < 5)

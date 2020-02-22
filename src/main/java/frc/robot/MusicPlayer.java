@@ -65,7 +65,6 @@ public class MusicPlayer extends Subsystem<MusicPlayer.MusicMode> implements Urs
         setMode(MusicMode.STOP);
     }
 
-    @Override
     public void readControls() {
         if (xbox.getSingleButtonPress(controls.map.get("music_play"))) {
             if (Drive.driving && !Climb.climbing) {

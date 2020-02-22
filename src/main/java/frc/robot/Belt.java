@@ -25,7 +25,6 @@ public class Belt extends Subsystem<Belt.BeltMode> implements UrsaRobot {
         setMode(BeltMode.STOP);
     }
 
-    @Override
     public void readControls() {
         if (xbox.getButton(controls.map.get("belt")))
             setMode(BeltMode.IN);

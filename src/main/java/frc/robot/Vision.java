@@ -51,7 +51,6 @@ public class Vision extends Subsystem<Vision.VisionMode> implements UrsaRobot {
         }
 	}
 
-    @Override
     public void readControls() {
         if (xbox.getButton(controls.map.get("vision_cam1"))) {
             synchronized (this) {
@@ -63,5 +62,5 @@ public class Vision extends Subsystem<Vision.VisionMode> implements UrsaRobot {
             }
         }
     }
-    
+
 }
