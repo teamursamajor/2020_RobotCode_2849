@@ -33,6 +33,8 @@ public class Climb extends Subsystem<Climb.ClimbMode> implements UrsaRobot {
         // limitSwitch = new DigitalInput(CLIMB_SWITCH_PORT);
         mLeft.configFactoryDefault();
         mRight.configFactoryDefault();
+        mLeft.setSelectedSensorPosition(0);
+        mRight.setSelectedSensorPosition(0);
         mLeft.setNeutralMode(NeutralMode.Brake);
         mRight.setNeutralMode(NeutralMode.Brake);
         setMode(ClimbMode.STOP);
@@ -48,23 +50,24 @@ public class Climb extends Subsystem<Climb.ClimbMode> implements UrsaRobot {
     }
 
     public void runSubsystem() throws InterruptedException {
-        averagePos = (mLeft.getSelectedSensorPosition() + mRight.getSelectedSensorPosition()) * CLIMB_INCHES_PER_TICK / 2;
-        // Stop if climb got to right height (limit switch pressed) or encoder says
-        // we've gone correct distance
-        System.out.println(averagePos);
-        // if (/*limitSwitch.get() || */averagePos >= distanceToGo)
-            // setMode(ClimbMode.STOP);
-
         switch (subsystemMode) {
         case UP:
             climbing = true;
             mLeft.set(-1);
             mRight.set(-1);
+            mLeft.setSelectedSensorPosition(0);
+            mRight.setSelectedSensorPosition(0);
             break;
         case DOWN:
             climbing = true;
             mLeft.set(1);
             mRight.set(1);
+
+            // TODO should stop climb if it reaches correct distance
+            averagePos = (mLeft.getSelectedSensorPosition() + mRight.getSelectedSensorPosition()) * CLIMB_INCHES_PER_TICK / 2;
+            System.out.println(averagePos);
+            // if (limitSwitch.get() || averagePos >= distanceToGo)
+                // setMode(ClimbMode.STOP);
             break;
         case STOP:
             climbing = false;
