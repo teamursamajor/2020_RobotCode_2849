@@ -12,7 +12,7 @@ public class Intake extends Subsystem<Intake.IntakeMode> implements UrsaRobot {
      * Modes for Intake.
      */
     public enum IntakeMode {
-        IN, STOP, DEPLOY;
+        IN, STOP;
     }
 
     private final Spark intakeMotor;
@@ -65,9 +65,6 @@ public class Intake extends Subsystem<Intake.IntakeMode> implements UrsaRobot {
             break;
         case STOP:
             intakeMotor.set(0.0);
-            break;
-        case DEPLOY:
-            intakeMotor.set(0.2);
             break;
         }
     }

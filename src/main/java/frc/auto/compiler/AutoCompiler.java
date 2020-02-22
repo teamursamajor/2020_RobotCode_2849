@@ -88,10 +88,8 @@ public class AutoCompiler {
 						else
 							taskSet.addTask(new IntakeTask(intake, IntakeMode.STOP));
 						break;
-					} else { // defaults to release if no Boolean specified
-						taskSet.addTask(new IntakeTask(intake, IntakeMode.DEPLOY));
-						break;
 					}
+					throw new Exception(); // if there is not a Boolean
 				
 				case BELT:
 					if (tokenList.get(0).type == TokenType.BOOLEAN) { // expecting Boolean next

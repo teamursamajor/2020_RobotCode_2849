@@ -57,12 +57,6 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 		mFrontRight.setNeutralMode(NeutralMode.Brake);
 		mRearRight.setNeutralMode(NeutralMode.Brake);
 		
-		// TODO test with different intervals + closedloopramps?
-		mFrontLeft.configOpenloopRamp(5);
-		mRearLeft.configOpenloopRamp(5);
-		mFrontRight.configOpenloopRamp(5);
-		mRearRight.configOpenloopRamp(5);
-		
 		resetEncoders();
 		resetNavx();
 	}
@@ -172,6 +166,17 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 	}
 
 	/**
+	 * Set motors to ramp up power for a given time
+	 * @param time Time to ramp
+	 */
+	public void setOpenloopRamp(double time) {
+		mFrontLeft.configOpenloopRamp(time);
+		mRearLeft.configOpenloopRamp(time);
+		mFrontRight.configOpenloopRamp(time);
+		mRearRight.configOpenloopRamp(time);
+	}
+
+	/**
 	 * Resets the current encoder distance to zero.
 	 */
 	public void resetEncoders() {
@@ -267,7 +272,6 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
      * returns the Xbox controller axis values. It is not actually calculating anything.
      */
     private void sticksBox() {
-		System.out.println("calling sticksbox");
 		double leftSpeed, rightSpeed, leftStickY, rightStickX;
         if (isArcadeDrive) { // Arcade Drive
             leftStickY = xbox.getAxis(XboxController.AXIS_LEFTSTICK_Y);
