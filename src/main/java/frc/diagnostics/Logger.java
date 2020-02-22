@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Logger {
+	
 	/**
 	 * Level of severity of the log information. Used to specify severity for
 	 * Logger.log method and getLogData method in subsystems
@@ -115,4 +116,5 @@ public class Logger {
 		}
 		writersOpened = false;
 	}
+	
 }

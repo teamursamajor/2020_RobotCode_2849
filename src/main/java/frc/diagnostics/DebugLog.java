@@ -12,16 +12,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class DebugLog {
+
 	private DebugSelector debugSelect = new DebugSelector();
 	private BufferedWriter log = null;
 	private String file;
 
-	// initialize the file destination and BufferedWriter in general
+	// Initialize the file destination and BufferedWriter in general
 	public void debugLogInit(String fileDestination) {
 		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
 		Date dateobj = new Date();
 		
-		//Only runs this if the current Logger level is debug
+		// Only runs this if the current Logger level is debug
 		if (debugSelect.isDebug()) {
 			try {
 				file = fileDestination;
@@ -44,7 +45,6 @@ public class DebugLog {
 			ioe.printStackTrace();
 			Logger.log("DebugLog logWriteLn method printStackTrace", LogLevel.ERROR);
 		}
-
 	}
 
 }

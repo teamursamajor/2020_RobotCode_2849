@@ -15,7 +15,7 @@ public class DebugSelector {
 	private NetworkButton debugSelect2;
 
 	public DebugSelector() {
-		// // TODO change default to debug disabled for comp
+		// TODO change default to debug disabled for comp
 		// debugSelect.addDefault("Enabled", LogLevel.DEBUG);
 		// debugSelect.addObject("Disabled", LogLevel.INFO);
 		// SmartDashboard.putData("Debug Logging", debugSelect);
@@ -47,4 +47,5 @@ public class DebugSelector {
 		m_entry = SmartDashboard.getEntry("Debug");
 		return m_entry.getInstance().isConnected();
 	}
+	
 }

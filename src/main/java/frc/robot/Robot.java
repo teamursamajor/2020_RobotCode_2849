@@ -10,6 +10,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.auto.compiler.AutoCompiler;
 // import frc.auto.compiler.AutoSelector;
+import frc.robot.Drive.DriveMode;
+import frc.diagnostics.*;
+import frc.diagnostics.Logger.LogLevel;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -20,150 +23,182 @@ import frc.auto.compiler.AutoCompiler;
  */
 public class Robot extends TimedRobot implements UrsaRobot {
 
-  private Drive drive;
-  private Spinner spinner;
-  private Intake intake;
-  private Belt belt;
-  private Outtake outtake;
-  private Climb climb;
-  private AutoCompiler autoCompiler;
-  // private AutoSelector autoSelector;
-  private MusicPlayer musicPlayer;
-  private Vision vision;
+	// Subsystems
+	private Drive drive;
+	private Spinner spinner;
+	private Intake intake;
+	private Belt belt;
+	private Outtake outtake;
+	private Climb climb;
+	private MusicPlayer musicPlayer;
+	private Vision vision;
 
-  /**
-   * This function is run when the robot is first started up and should be used
-   * for any initialization code.
-   */
-  @Override
-  public void robotInit() {
-    drive = new Drive();
-    drive.initialize("DriveThread");
+	// Autonomous
+	private AutoCompiler autoCompiler;
+	// private AutoSelector autoSelector;
 
-    spinner = new Spinner();
-    spinner.initialize("SpinnerThread");
+	// Logger
+	private DebugSelector debugSelect;
+	private String robotMode;
 
-    climb = new Climb();
-    climb.initialize("ClimbThread");
+	/**
+	 * This function is run when the robot is first started up and should be used
+	 * for any initialization code.
+	 */
+	@Override
+	public void robotInit() {
+		Logger.setLevel(LogLevel.DEBUG);
+		Logger.log("********ROBOT PROGRAM STARTING********", LogLevel.INFO);
 
-    intake = new Intake();
-    intake.initialize("IntakeThread");
+		drive = new Drive();
+		drive.initialize("DriveThread");
 
-    belt = new Belt();
-    belt.initialize("BeltThread");
+		spinner = new Spinner();
+		spinner.initialize("SpinnerThread");
 
-    outtake = new Outtake();
-    outtake.initialize("OuttakeThread");
+		climb = new Climb();
+		climb.initialize("ClimbThread");
 
-    musicPlayer = new MusicPlayer();
-    // musicPlayer.initialize("MusicThread");
+		intake = new Intake();
+		intake.initialize("IntakeThread");
 
-    vision = new Vision();
-    vision.initialize("VisionThread");
+		belt = new Belt();
+		belt.initialize("BeltThread");
 
-    autoCompiler = new AutoCompiler(drive, intake, belt, outtake, musicPlayer);
+		outtake = new Outtake();
+		outtake.initialize("OuttakeThread");
 
-    // autoSelector = new AutoSelector();
-  }
+		musicPlayer = new MusicPlayer();
+		// musicPlayer.initialize("MusicThread");
 
-  /**
-   * This function is called every robot packet, no matter the mode. Use this for
-   * items like diagnostics that you want ran during disabled, autonomous,
-   * teleoperated and test.
-   * <p>
-   * This runs after the mode specific periodic functions, but before LiveWindow
-   * and SmartDashboard integrated updating.
-   */
-  @Override
-  public void robotPeriodic() {
-  }
+		vision = new Vision();
+		vision.initialize("VisionThread");
 
-  /**
-   * This function is run when autonomous mode is first started up and should be
-   * used for any autonomous initialization code.
-   */
-  @Override
-  public void autonomousInit() {
-    drive.resetEncoders();
-    drive.resetNavx();
-    drive.setOpenloopRamp(5);
+		autoCompiler = new AutoCompiler(drive, intake, belt, outtake, musicPlayer);
 
-    // String autoMode =
-    // autoSelector.pickAutoMode(autoSelector.getStartingPosition(),
-    // autoSelector.getAutoPrefs(), autoSelector.findAutoFiles());
-    // TODO remove; for manual testing
-    String autoMode = "home/lvuser/deploy/scripts/default.auto";
+		// autoSelector = new AutoSelector();
 
-    try {
-      autoCompiler.buildAutoMode(autoMode).start();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
+		debugSelect = new DebugSelector();
+		Logger.setLevel(debugSelect.getLevel());
+	}
 
-  /**
-   * This function is called periodically during autonomous.
-   */
-  @Override
-  public void autonomousPeriodic() {
-  }
+	/**
+	 * This function is called every robot packet, no matter the mode. Use this for
+	 * items like diagnostics that you want ran during disabled, autonomous,
+	 * teleoperated and test.
+	 * <p>
+	 * This runs after the mode specific periodic functions, but before LiveWindow
+	 * and SmartDashboard integrated updating.
+	 */
+	@Override
+	public void robotPeriodic() {
+	}
 
-  /**
-   * This function is run when teleop mode is first started up and should be used
-   * for any teleop initialization code.
-   */
-  @Override
-  public void teleopInit() {
-    drive.setMode(Drive.DriveMode.DRIVE_STICKS);
-    drive.setOpenloopRamp(0);
-  }
+	/**
+	 * This function is run when autonomous mode is first started up and should be
+	 * used for any autonomous initialization code.
+	 */
+	@Override
+	public void autonomousInit() {
+		Logger.log("Started Autonomous mode", LogLevel.INFO);
+		robotMode = "Autonomous";
 
-  /**
-   * This function is called periodically during operator control. It is used to
-   * check for controller inputs.
-   */
-  @Override
-  public void teleopPeriodic() {
-    climb.readControls();
-    intake.readControls();
-    belt.readControls();
-    outtake.readControls();
-    spinner.readControls();
-    // musicPlayer.readControls();
-    vision.readControls();
-  }
+		drive.resetEncoders();
+		drive.resetNavx();
+		drive.setOpenloopRamp(5);
 
-  /**
-   * This function is called periodically during test mode.
-   */
-  @Override
-  public void testPeriodic() {
-  }
+		// String autoMode =
+		// autoSelector.pickAutoMode(autoSelector.getStartingPosition(),
+		// autoSelector.getAutoPrefs(), autoSelector.findAutoFiles());
+		// TODO remove; for manual testing
+		String autoMode = "home/lvuser/deploy/scripts/default.auto";
 
-  /**
-   * This function is called whenever the robot is disabled.
-   */
-  @Override
-  public void disabledInit() {
-    drive.setMode(Drive.DriveMode.STOP);
-    climb.setMode(Climb.ClimbMode.STOP);
-    intake.setMode(Intake.IntakeMode.STOP);
-    belt.setMode(Belt.BeltMode.STOP);
-    outtake.setMode(Outtake.OuttakeMode.STOP);
-    spinner.setMode(Spinner.SpinnerMode.STOP);
-    musicPlayer.setMode(MusicPlayer.MusicMode.STOP);
-  }
+		try {
+			autoCompiler.buildAutoMode(autoMode).start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-  /**
-   * This function prints a jet plane.
-   * 
-   * @author JJ the Jetplane
-   */
-  public static void jetPlane() {
-    System.out.println("   ____       _");
-    System.out.println(" |__\\_\\_o,___/ \\");
-    System.out.println("([___\\_\\_____-\\'");
-    System.out.println(" | o'");
-  }
+	/**
+	 * This function is called periodically during autonomous.
+	 */
+	@Override
+	public void autonomousPeriodic() {
+	}
+
+	/**
+	 * This function is run when teleop mode is first started up and should be used
+	 * for any teleop initialization code.
+	 */
+	@Override
+	public void teleopInit() {
+		Logger.log("Started Teleop mode", LogLevel.INFO);
+		robotMode = "Teleop";
+		
+		drive.setMode(DriveMode.DRIVE_STICKS);
+		drive.setOpenloopRamp(0);
+	}
+
+	/**
+	 * This function is called periodically during operator control. It is used to
+	 * check for controller inputs.
+	 */
+	@Override
+	public void teleopPeriodic() {
+		climb.readControls();
+		intake.readControls();
+		belt.readControls();
+		outtake.readControls();
+		spinner.readControls();
+		// musicPlayer.readControls();
+		vision.readControls();
+	}
+
+	/**
+	 * This function is run when test mode is first started up and should be used
+	 * for any test initialization code.
+	 */
+	@Override
+	public void testInit() {
+		Logger.log("Started Test mode", LogLevel.INFO);
+		robotMode = "Test";
+	}
+
+	/**
+	 * This function is called periodically during test mode.
+	 */
+	@Override
+	public void testPeriodic() {
+	}
+
+	/**
+	 * This function is called whenever the robot is disabled.
+	 */
+	@Override
+	public void disabledInit() {
+		drive.setMode(Drive.DriveMode.STOP);
+		climb.setMode(Climb.ClimbMode.STOP);
+		intake.setMode(Intake.IntakeMode.STOP);
+		belt.setMode(Belt.BeltMode.STOP);
+		outtake.setMode(Outtake.OuttakeMode.STOP);
+		spinner.setMode(Spinner.SpinnerMode.STOP);
+		musicPlayer.setMode(MusicPlayer.MusicMode.STOP);
+
+		Logger.log("Disabled " + robotMode + " mode", LogLevel.INFO);
+		Logger.closeWriters();
+	}
+
+	/**
+	 * This function prints a jet plane.
+	 * 
+	 * @author JJ the Jetplane
+	 */
+	public static void jetPlane() {
+		System.out.println("   ____       _");
+		System.out.println(" |__\\_\\_o,___/ \\");
+		System.out.println("([___\\_\\_____-\\'");
+		System.out.println(" | o'");
+	}
 
 }
