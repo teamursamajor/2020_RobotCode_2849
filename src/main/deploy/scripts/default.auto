@@ -1,2 +1,3 @@
+execute "intake_release"
 #TODO confirm that this is the right distance!
 drive 120

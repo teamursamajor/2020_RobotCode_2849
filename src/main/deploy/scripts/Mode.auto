@@ -11,7 +11,8 @@ outtake out
 outtake stop
 outtake in
 wait 3
-parallel {
-    turn 30
-    drive 10
-}
+#NEVER DO THIS
+#parallel {
+#    turn 30
+#    drive 10
+#}

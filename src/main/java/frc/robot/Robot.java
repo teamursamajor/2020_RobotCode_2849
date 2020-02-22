@@ -9,7 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.auto.compiler.AutoCompiler;
-import frc.auto.compiler.AutoSelector;
+// import frc.auto.compiler.AutoSelector;
 
 import frc.auto.tasks.DriveTask.DriveMode;
 
@@ -28,7 +28,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
   private Outtake outtake;
   private Climb climb;
   private AutoCompiler autoCompiler;
-  private AutoSelector autoSelector;
+  // private AutoSelector autoSelector;
   private MusicPlayer musicPlayer;
   private Vision vision;
 
@@ -61,7 +61,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
 
     autoCompiler = new AutoCompiler(drive, intake, outtake, musicPlayer);
 
-    autoSelector = new AutoSelector();
+    // autoSelector = new AutoSelector();
   }
 
   /**
@@ -85,10 +85,10 @@ public class Robot extends TimedRobot implements UrsaRobot {
     drive.resetEncoders();
     drive.resetNavx();
     
-    String autoMode = autoSelector.pickAutoMode(autoSelector.getStartingPosition(), 
-      autoSelector.getAutoPrefs(), autoSelector.findAutoFiles());
+    // String autoMode = autoSelector.pickAutoMode(autoSelector.getStartingPosition(), 
+    //   autoSelector.getAutoPrefs(), autoSelector.findAutoFiles());
     // TODO remove; for manual testing
-    autoMode = "home/lvuser/deploy/scripts/default.auto";
+    String autoMode = "home/lvuser/deploy/scripts/default.auto";
 
     try {
       autoCompiler.buildAutoMode(autoMode).start();

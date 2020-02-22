@@ -1,9 +1,7 @@
-intake :D #this line releases the intake mechanism
-drive -100
+execute "intake_release"
+drive -30
 wait 5
-drive 100
-intake true
-intake false
+drive 30
 
 #outtake out
 #wait 0.1
