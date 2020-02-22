@@ -5,6 +5,7 @@ META:
 * Make sure people understand Java, how to debug stuff, working with WPILib
 * Document code so we know what stuff does
 * Incorporate Logger for debug/error info
+    - see if it still works lol
 
 VISION:
 * Refine system and camera placement
@@ -13,7 +14,6 @@ MUSIC:
 * Test music in auto
 * If driving, use climb Falcons
 * If climbing, use drive Falcons
-* Get more songs
 
 LEDs:
 * Reference 2018 code
@@ -30,6 +30,11 @@ AUTOCOMPILER:
 * Use Logger to log errors in parsing when throwing exceptions
 * Continue testing AutoCompiler with generating basic tasks
 * Use AutoCompiler to design auto modes
+
+AUTOSELECTOR:
+* Make working Auto Selector interface in SmartDashboard
+* Come up with logical naming convention
+* Document class
 
 DRIVETRAIN:
 * Motion profiling?
