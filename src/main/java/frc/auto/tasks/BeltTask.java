@@ -1,18 +1,12 @@
 package frc.auto.tasks;
 
-import frc.robot.*;
+import frc.robot.Belt;
+import frc.robot.Belt.BeltMode;
 
 /**
  * This is a Task class for controlling the Belt mechanism during autonomous.
  */
-public class BeltTask extends Task implements UrsaRobot {
-
-    /**
-     * Modes for Intake.
-     */
-    public enum BeltMode {
-        IN, STOP;
-    }
+public class BeltTask extends Task {
 
     private long runTime = 1000;
     private Belt belt;
@@ -40,5 +34,5 @@ public class BeltTask extends Task implements UrsaRobot {
     public String toString() {
         return "BeltTask: " + mode + "\n";
     }
-    
+
 }

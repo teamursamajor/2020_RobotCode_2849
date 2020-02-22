@@ -11,8 +11,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import frc.auto.compiler.AutoCompiler;
 // import frc.auto.compiler.AutoSelector;
 
-import frc.auto.tasks.DriveTask.DriveMode;
-
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -114,7 +112,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
    */
   @Override
   public void teleopInit() {
-    drive.setMode(DriveMode.DRIVE_STICKS);
+    drive.setMode(Drive.DriveMode.DRIVE_STICKS);
   }
 
   /**

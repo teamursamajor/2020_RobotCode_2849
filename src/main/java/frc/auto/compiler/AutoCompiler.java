@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import frc.auto.tasks.*;
-import frc.auto.tasks.DriveTask.DriveMode;
-import frc.auto.tasks.IntakeTask.IntakeMode;
-import frc.auto.tasks.BeltTask.BeltMode;
-import frc.auto.tasks.OuttakeTask.OuttakeMode;
-import frc.auto.tasks.MusicTask.MusicMode;
+import frc.robot.Drive.DriveMode;
+import frc.robot.Intake.IntakeMode;
+import frc.robot.Belt.BeltMode;
+import frc.robot.Outtake.OuttakeMode;
+import frc.robot.MusicPlayer.MusicMode;
 import frc.auto.tokens.*;
 import frc.robot.*;
 

@@ -1,13 +1,21 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Spark;
-import frc.auto.tasks.OuttakeTask;
-import frc.auto.tasks.OuttakeTask.OuttakeMode;
 
 /**
  * This class operates the Outtake mechanism.
  */
-public class Outtake extends Subsystem<OuttakeTask.OuttakeMode> implements UrsaRobot  {
+public class Outtake extends Subsystem<Outtake.OuttakeMode> implements UrsaRobot  {
+
+    /**
+     * Modes for Outtake.
+     * IN: Outtake lifts up
+     * OUT: Outtake drops down
+     * STOP: Outtake is idle.
+     */
+    public enum OuttakeMode {
+        IN, OUT, STOP;
+    }
 
     private Spark outtakeMotor;
 
@@ -43,5 +51,5 @@ public class Outtake extends Subsystem<OuttakeTask.OuttakeMode> implements UrsaR
             break;
         }
     }
-    
+
 }

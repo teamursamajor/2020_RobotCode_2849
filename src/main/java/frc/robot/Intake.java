@@ -2,13 +2,18 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Spark;
-import frc.auto.tasks.IntakeTask;
-import frc.auto.tasks.IntakeTask.IntakeMode;
 
 /**
  * This class operates the Intake mechanism.
  */
-public class Intake extends Subsystem<IntakeTask.IntakeMode> implements UrsaRobot {
+public class Intake extends Subsystem<Intake.IntakeMode> implements UrsaRobot {
+
+    /**
+     * Modes for Intake.
+     */
+    public enum IntakeMode {
+        IN, STOP, DEPLOY;
+    }
 
     private final Spark intakeMotor;
     private int numOfCells;

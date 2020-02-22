@@ -1,19 +1,23 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Spark;
-import frc.auto.tasks.BeltTask;
-import frc.auto.tasks.BeltTask.BeltMode;
-
 /**
  * This class operates the Belt mechanism.
  */
-public class Belt extends Subsystem<BeltTask.BeltMode> implements UrsaRobot {
+public class Belt extends Subsystem<Belt.BeltMode> implements UrsaRobot {
+
+    /**
+     * Modes for Belt.
+     */
+    public enum BeltMode {
+        IN, STOP;
+    }
 
     private final Spark beltMotor;
 
     /**
      * Constructor for the Belt mechanism.
-     * Only one Intake object should be instantiated at any time.
+     * Only one Belt object should be instantiated at any time.
      */
     public Belt() {
         beltMotor = new Spark(BELT);

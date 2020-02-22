@@ -2,8 +2,6 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import frc.auto.tasks.DriveTask;
-import frc.auto.tasks.DriveTask.DriveMode;
 
 /**
  * This subsystem class allows us to drive the robot. It contains the following
@@ -16,8 +14,19 @@ import frc.auto.tasks.DriveTask.DriveMode;
  * It also implements control modes for driving a distance, turning to an angle,
  * and operating the robot via joysticks.
  */
-public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
+public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 
+	/*
+     * Modes for Drive.
+     * AUTO_DRIVE is for autonomous driving to a certain distance.
+     * TURN is for autonomous turning to a certain angle.
+     * DRIVE_STICKS is for manual control.
+     * STOP is for stopping.
+     */
+    public enum DriveMode {
+        AUTO_DRIVE, TURN, DRIVE_STICKS, STOP;
+    }
+	
 	public WPI_TalonFX mFrontLeft, mFrontRight, mRearLeft, mRearRight;
 	private double leftPower, rightPower;
 
@@ -25,7 +34,7 @@ public class Drive extends Subsystem<DriveTask.DriveMode> implements UrsaRobot {
 	private double averagePos = 0.0, desiredLocation = 0.0, startDistance = 0.0, direction = 1.0, desiredAngle = 0.0;
 
 	public static boolean driving = false;
-	
+
 	/**
 	 * Constructor for the Drive subsystem. Only one Drive object should be
 	 * instantiated at any time.

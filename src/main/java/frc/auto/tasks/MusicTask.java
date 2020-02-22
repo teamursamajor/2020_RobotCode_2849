@@ -1,18 +1,12 @@
 package frc.auto.tasks;
 
 import frc.robot.MusicPlayer;
+import frc.robot.MusicPlayer.MusicMode;
 
 /**
  * This is a Task class for playing music during autonomous.
  */
 public class MusicTask extends Task {
-
-    /**
-     * Modes for the Music Player.
-     */
-    public enum MusicMode {
-        PLAY, PAUSE, STOP
-    }
     
     private long runTime = 1000;
     private MusicPlayer musicPlayer;
@@ -55,5 +49,5 @@ public class MusicTask extends Task {
     public String toString() {
         return "--MusicTask: " + mode + " " + song + "\n";
     }
-    
+
 }

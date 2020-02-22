@@ -8,14 +8,18 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import frc.auto.tasks.MusicTask;
-import frc.auto.tasks.MusicTask.MusicMode;
-
 /**
  * This class plays music from the Falcons.
  */
-public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaRobot {
+public class MusicPlayer extends Subsystem<MusicPlayer.MusicMode> implements UrsaRobot {
     
+    /**
+     * Modes for the Music Player.
+     */
+    public enum MusicMode {
+        PLAY, PAUSE, STOP
+    }
+
     private Orchestra orchestra;
     private ArrayList<TalonFX> climbMotors, driveMotors;
     private String current, previous;
@@ -108,5 +112,5 @@ public class MusicPlayer extends Subsystem<MusicTask.MusicMode> implements UrsaR
     public void loadSong(String song) {
         orchestra.loadMusic(song);
     }
-    
+
 }

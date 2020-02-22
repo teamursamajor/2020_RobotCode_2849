@@ -1,6 +1,7 @@
 package frc.auto.tasks;
 
 import frc.robot.Drive;
+import frc.robot.Drive.DriveMode;
 
 /**
  * This is a Task class for controlling the Drive mechanism in autonomous.
@@ -10,17 +11,6 @@ public class DriveTask extends Task {
     private DriveMode mode;
     private Drive drive;
     private double arg;
-
-    /*
-     * Modes for Drive.
-     * AUTO_DRIVE is for autonomous driving to a certain distance.
-     * TURN is for autonomous turning to a certain angle.
-     * DRIVE_STICKS is for manual control.
-     * STOP is for stopping.
-     */
-    public enum DriveMode {
-        AUTO_DRIVE, TURN, DRIVE_STICKS, STOP;
-    }
 
     /**
      * Constructor for DriveTasks.

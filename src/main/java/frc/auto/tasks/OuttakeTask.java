@@ -1,21 +1,13 @@
 package frc.auto.tasks;
 
-import frc.robot.*;
+import frc.robot.Outtake;
+import frc.robot.Outtake.OuttakeMode;
 
 /**
  * This is a task class for controlling the Outtake mechanism during autonomous.
  */
-public class OuttakeTask extends Task implements UrsaRobot {
-    /**
-     * Modes for Outtake.
-     * IN: Outtake lifts up
-     * OUT: Outtake drops down
-     * STOP: Outtake is idle.
-     */
-    public enum OuttakeMode {
-        IN, OUT, STOP;
-    }
-
+public class OuttakeTask extends Task {
+    
     private Outtake outtake;
     private OuttakeMode mode;
     private long runTime = 1000;
@@ -42,5 +34,5 @@ public class OuttakeTask extends Task implements UrsaRobot {
     public String toString() {
         return "OuttakeTask: " + mode + "\n";
     }
-    
+
 }
