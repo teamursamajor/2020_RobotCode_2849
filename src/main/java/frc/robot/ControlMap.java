@@ -25,10 +25,10 @@ public class ControlMap {
         map.put("outtake_in", XboxController.BUTTON_Y);
 
         // Intake
-        map.put("intake", XboxController.BUTTON_RIGHTBUMPER);
+        map.put("intake_belt", XboxController.BUTTON_RIGHTBUMPER);
 
         // Belt
-        map.put("belt", XboxController.BUTTON_LEFTBUMPER);
+        map.put("intake", XboxController.BUTTON_LEFTBUMPER);
 
         // Spinner
         map.put("spinner_run", XboxController.BUTTON_A);

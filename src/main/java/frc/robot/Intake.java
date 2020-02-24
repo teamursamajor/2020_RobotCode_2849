@@ -33,10 +33,12 @@ public class Intake extends Subsystem<Intake.IntakeMode> implements UrsaRobot {
     }
 
     public void readControls() {
-        // Only operates if we haven't gotten 5 power cells yet
-        if (xbox.getButton(controls.map.get("intake")) && getCount() < 5)
-            setMode(IntakeMode.IN);
-        else
+        // Runs from two different controls
+        if (xbox.getButton(controls.map.get("intake")) || xbox.getButton(controls.map.get("intake_belt"))) {
+            if (getCount() < 5) { // Only operates if we haven't gotten 5 power cells yet
+                setMode(IntakeMode.IN);
+            }
+        } else
             setMode(IntakeMode.STOP);
 
         // Resets power cell count when we outtake

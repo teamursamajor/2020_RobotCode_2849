@@ -26,7 +26,7 @@ public class Belt extends Subsystem<Belt.BeltMode> implements UrsaRobot {
     }
 
     public void readControls() {
-        if (xbox.getButton(controls.map.get("belt")))
+        if (xbox.getButton(controls.map.get("intake_belt")))
             setMode(BeltMode.IN);
         else
             setMode(BeltMode.STOP);
@@ -36,7 +36,7 @@ public class Belt extends Subsystem<Belt.BeltMode> implements UrsaRobot {
         // Controlling the power of the motors based on the subsystem mode
         switch (subsystemMode) {
         case IN:
-            beltMotor.set(0.55);
+            beltMotor.set(0.60);
             break;
         case STOP:
             beltMotor.set(0.0);
