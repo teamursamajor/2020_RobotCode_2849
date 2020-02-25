@@ -40,10 +40,10 @@ public class Outtake extends Subsystem<Outtake.OuttakeMode> implements UrsaRobot
     public void runSubsystem() throws InterruptedException {
         switch (subsystemMode) {
         case OUT:
-            outtakeMotor.set(-0.15); // Releases outtake
+            outtakeMotor.set(-0.95); // Releases outtake
             break;
         case IN:
-            outtakeMotor.set(0.25); // Restores outtake
+            outtakeMotor.set(1); // Restores outtake
             break;
         case STOP:
             outtakeMotor.stopMotor();

@@ -21,8 +21,12 @@ public class Vision extends Subsystem<Vision.VisionMode> implements UrsaRobot {
     /**
      * Can be changed to modify video quality/framerate
      */
-    private static int width = 225, height = 225, fps = 30;
+    private static int width = 300, height = 300, fps = 25;
 
+    /**
+     * Empty mode enum -- not necessary for Vision functionality
+     * but still required by Subsystem implementation
+     */
     public enum VisionMode {}
 
 	public Vision() {
@@ -32,8 +36,8 @@ public class Vision extends Subsystem<Vision.VisionMode> implements UrsaRobot {
         forwardCam = new UsbCamera("Forward Camera", 0);
         backwardCam = new UsbCamera("Backward Camera", 1);
 
+        // Start with forward camera by default
         CameraServer.getInstance().addCamera(forwardCam);
-        CameraServer.getInstance().addCamera(backwardCam);
 
         forwardCam.setResolution(width, height);
         forwardCam.setFPS(fps);
@@ -43,6 +47,12 @@ public class Vision extends Subsystem<Vision.VisionMode> implements UrsaRobot {
 		cvSink = CameraServer.getInstance().getVideo(forwardCam);
 		outputStream = CameraServer.getInstance().putVideo("Camera", width, height);
 	}
+
+    /*
+     * Note: "synchronized (this)" guarantees that only one thread
+     * can change the camera server at a time. Very useful when we
+     * have multiple threads running all at once
+     */
 
 	public void runSubsystem() {
         synchronized (this) {
@@ -54,10 +64,18 @@ public class Vision extends Subsystem<Vision.VisionMode> implements UrsaRobot {
     public void readControls() {
         if (xbox.getButton(controls.map.get("vision_cam1"))) {
             synchronized (this) {
+                try {
+                    CameraServer.getInstance().removeCamera("Backward Camera");
+                } catch (Exception e) {}
+                CameraServer.getInstance().addCamera(forwardCam);
                 cvSink = CameraServer.getInstance().getVideo(forwardCam);
             }
         } else if (xbox.getButton(controls.map.get("vision_cam2"))) {
             synchronized (this) {
+                try {
+                    CameraServer.getInstance().removeCamera("Forward Camera");
+                } catch (Exception e) {}
+                CameraServer.getInstance().addCamera(backwardCam);
                 cvSink = CameraServer.getInstance().getVideo(backwardCam);
             }
         }
