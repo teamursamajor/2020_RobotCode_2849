@@ -23,6 +23,10 @@ public interface UrsaRobot {
 	// Spark Ports
 	public static final int SPINNER = 1, INTAKE = 2, BELT = 3, OUTTAKE = 4;
 
+	//Encoder
+	public static final int OUTTAKE_ENCODER_PORT1 = 1;
+	public static final int OUTTAKE_ENCODER_PORT2 = 2;
+
 	// Sensor Ports
 	public static final int LINE_SENSOR_PORT = 5, CLIMB_SWITCH_PORT = 7;
 
