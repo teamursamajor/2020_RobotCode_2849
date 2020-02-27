@@ -22,6 +22,14 @@ public class OuttakeTask extends Task {
         this.mode = mode;
     }
 
+    /**
+     * Sets the run time for the task.
+     * @param time The run time
+     */
+    public void setRunTime(double time) {
+        runTime = (long) (time * 1000d);
+    }
+
     public void run() {
         outtake.setMode(mode);
         try {
@@ -29,6 +37,7 @@ public class OuttakeTask extends Task {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        outtake.setMode(OuttakeMode.STOP); // stops after run time
     }
 
     public String toString() {

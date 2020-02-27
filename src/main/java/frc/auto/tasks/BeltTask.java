@@ -22,6 +22,13 @@ public class BeltTask extends Task {
         this.mode = mode;
     }
 
+    /**
+     * Sets the runtime for the task.
+     */
+    public void setRunTime(double time) {
+        runTime = (long) (time * 1000d);
+    }
+
     public void run() {
         belt.setMode(mode);
         try {
@@ -29,6 +36,7 @@ public class BeltTask extends Task {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        belt.setMode(BeltMode.STOP);
     }
 
     public String toString() {

@@ -82,33 +82,53 @@ public class AutoCompiler {
 
 				case INTAKE:
 					if (tokenList.get(0).type == TokenType.BOOLEAN) { // expecting Boolean next
-						boolean intakeActive = ((DataToken<Boolean>) tokenList.remove(0)).getValue();
-						if (intakeActive)
-							taskSet.addTask(new IntakeTask(intake, IntakeMode.IN));
-						else
-							taskSet.addTask(new IntakeTask(intake, IntakeMode.STOP));
-						break;
+						boolean IntakeActive = ((DataToken<Boolean>) tokenList.remove(0)).getValue();
+						// sets task to different mode depending on boolean
+						IntakeTask IntakeTask = IntakeActive ? new IntakeTask(intake, IntakeMode.IN) : new IntakeTask(intake, IntakeMode.STOP);
+
+						if (tokenList.get(0).type == TokenType.NUMBER) { // if there is a Number next (for run time)
+							double time = ((DataToken<Double>) tokenList.remove(0)).getValue();
+							IntakeTask.setRunTime(time);
+						}
+						
+						taskSet.addTask(IntakeTask);
+					} else { // if there is not a Boolean
+						taskSet.addTask(new IntakeTask(intake, IntakeMode.STOP));
 					}
-					throw new Exception(); // if there is not a Boolean
+					break;
 				
 				case BELT:
 					if (tokenList.get(0).type == TokenType.BOOLEAN) { // expecting Boolean next
 						boolean beltActive = ((DataToken<Boolean>) tokenList.remove(0)).getValue();
-						if (beltActive)
-							taskSet.addTask(new BeltTask(belt, BeltMode.IN));
-						else
-							taskSet.addTask(new BeltTask(belt, BeltMode.STOP));
-						break;
+						// sets task to different mode depending on boolean
+						BeltTask beltTask = beltActive ? new BeltTask(belt, BeltMode.IN) : new BeltTask(belt, BeltMode.STOP);
+
+						if (tokenList.get(0).type == TokenType.NUMBER) { // if there is a Number next (for run time)
+							double time = ((DataToken<Double>) tokenList.remove(0)).getValue();
+							beltTask.setRunTime(time);
+						}
+
+						taskSet.addTask(beltTask);
+					} else { // if there is not a Boolean
+						taskSet.addTask(new BeltTask(belt, BeltMode.STOP));
 					}
-					throw new Exception(); // if there is not a Boolean
+					break;
 
 				case OUTTAKE: // can only be one of three arguments
+					OuttakeTask outtakeTask;
 					if (t.argument == 0)
-						taskSet.addTask(new OuttakeTask(outtake, OuttakeMode.IN));
+						outtakeTask = new OuttakeTask(outtake, OuttakeMode.IN);
 					else if (t.argument == 1)
-						taskSet.addTask(new OuttakeTask(outtake, OuttakeMode.OUT));
-					else if (t.argument == 2)
-						taskSet.addTask(new OuttakeTask(outtake, OuttakeMode.STOP));
+						outtakeTask = new OuttakeTask(outtake, OuttakeMode.OUT);
+					else
+						outtakeTask = new OuttakeTask(outtake, OuttakeMode.STOP);
+
+					if (tokenList.get(0).type == TokenType.NUMBER) { // if there is a Number next (for run time)
+						double time = ((DataToken<Double>) tokenList.remove(0)).getValue();
+						outtakeTask.setRunTime(time);
+					}
+
+					taskSet.addTask(outtakeTask);
 					break;
 				
 				case MUSIC:
