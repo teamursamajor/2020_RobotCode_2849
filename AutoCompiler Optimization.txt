@@ -1,0 +1,9 @@
+OPTIMIZATIONS:
+- Just say "outtake" and have it generate outtake out, wait, outtake in tasks
+- Just say "intake" and have it generate whatever other tasks
+- Make "intake" control the belt smartly too. Belt task is kind of superfluous
+  > FOR NOW: just use execute and "routine" modes since we're low on time
+- AutoSelector -- maybe just make a couple presets but you don't need a super intense selector
+- relative turning
+- general commands (abstraction!)
+- ultrasonic sensors for distance?

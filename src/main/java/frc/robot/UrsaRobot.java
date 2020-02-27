@@ -24,7 +24,7 @@ public interface UrsaRobot {
 	public static final int SPINNER = 1, INTAKE = 2, BELT = 3, OUTTAKE = 4;
 
 	// Sensor Ports
-	public static final int LINE_SENSOR_PORT = 5, CLIMB_SWITCH_PORT = 7;
+	public static final int LINE_SENSOR_PORT = 5, OUTTAKE_SWITCH_PORT = 6, CLIMB_SWITCH_PORT = 7;
 
 	// Tells encoder the value of each tick. Must be set in the corresponding file
 	public static final double GEAR_RATIO = 4.0d; // TODO change?

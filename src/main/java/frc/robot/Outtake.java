@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Spark;
 
 /**
@@ -13,12 +14,15 @@ public class Outtake extends Subsystem<Outtake.OuttakeMode> implements UrsaRobot
      * OUT: Outtake drops down.
      * STOP: Outtake is idle.
      */
+
     public enum OuttakeMode {
         IN, OUT, STOP;
     }
-
+    
     private Spark outtakeMotor;
+    private static DigitalInput limitSwitch;
 
+    // private static final int desiredDistance = 50;
     /**
      * Constructor for the Outtake mechanism.
      * Only one Outtake object should be instantiated at any time.
@@ -26,20 +30,26 @@ public class Outtake extends Subsystem<Outtake.OuttakeMode> implements UrsaRobot
     public Outtake() {
         outtakeMotor = new Spark(OUTTAKE);
         setMode(OuttakeMode.STOP);
+        limitSwitch = new DigitalInput(OUTTAKE_SWITCH_PORT);
     }
+    
     
     public void readControls() {
         if (xbox.getButton(controls.map.get("outtake_out"))) {
             setMode(OuttakeMode.OUT);
         } else if (xbox.getButton(controls.map.get("outtake_in"))) {
             setMode(OuttakeMode.IN);
-        } else
+        } else {
             setMode(OuttakeMode.STOP);
+        }
     }
 
     public void runSubsystem() throws InterruptedException {
         switch (subsystemMode) {
         case OUT:
+            if (limitSwitch.get()) { // Stops once limit switch is activated
+                setMode(OuttakeMode.STOP);
+            }
             outtakeMotor.set(-0.95); // Releases outtake
             break;
         case IN:
