@@ -35,7 +35,7 @@ public interface TokenList {
     /**
      * List of all regular tokens to search through in order
      */
-    Token[] regularTokens = new Token[] { DRIVE_TOKEN, INTAKE_TOKEN, OUTTAKE_TOKEN, TURN_TOKEN, WAIT_TOKEN, MUSIC_TOKEN,
+    Token[] regularTokens = new Token[] { DRIVE_TOKEN, INTAKE_TOKEN, BELT_TOKEN, OUTTAKE_TOKEN, TURN_TOKEN, WAIT_TOKEN, MUSIC_TOKEN,
             PARALLEL_TOKEN, SERIAL_TOKEN, EXECUTE_TOKEN, PRINT_TOKEN, /*LPAREN_TOKEN, RPAREN_TOKEN, COMMA_TOKEN,
             PLUS_TOKEN, MINUS_TOKEN, MULTIPLY_TOKEN, DIVIDE_TOKEN,*/ RBRACE_TOKEN };
 

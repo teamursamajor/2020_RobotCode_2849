@@ -104,7 +104,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
 		robotMode = "Autonomous";
 
 		drive.resetEncoders();
-		drive.resetNavx();
+		// drive.resetNavx();
 		drive.setOpenloopRamp(5);
 
 		// String autoMode =
@@ -133,6 +133,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
 	 */
 	@Override
 	public void teleopInit() {
+		// System.out.println("navX Firmware version: " + ahrs.getFirmwareVersion());
 		Logger.log("Started Teleop mode", LogLevel.INFO);
 		robotMode = "Teleop";
 

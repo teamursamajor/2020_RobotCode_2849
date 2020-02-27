@@ -1,0 +1,5 @@
+# Intake routine. Adjust time as desired.
+parallel {
+    intake true 0.5
+    belt true 0.5
+}

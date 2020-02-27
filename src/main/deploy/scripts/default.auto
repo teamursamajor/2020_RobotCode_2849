@@ -1,5 +1,4 @@
-drive -120
-outtake out
-outtake wait 0.1
-outtake stop
+# Feel free to edit this as desired!
+execute "outtake"
+drive 36
 print "complete"

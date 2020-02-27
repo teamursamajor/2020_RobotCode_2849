@@ -1,0 +1,4 @@
+# Outtake routine. Adjust time as desired.
+outtake out 0.5
+wait 3
+outtake in 0.8

@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+// import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 /**
@@ -17,16 +18,14 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 
 	/**
-     * Modes for Drive.
-     * AUTO_DRIVE is for autonomous driving to a certain distance.
-     * TURN is for autonomous turning to a certain angle.
-     * DRIVE_STICKS is for manual control.
-     * STOP is for stopping.
-     */
-    public enum DriveMode {
-        AUTO_DRIVE, TURN, DRIVE_STICKS, STOP;
-    }
-	
+	 * Modes for Drive. AUTO_DRIVE is for autonomous driving to a certain distance.
+	 * TURN is for autonomous turning to a certain angle. DRIVE_STICKS is for manual
+	 * control. STOP is for stopping.
+	 */
+	public enum DriveMode {
+		AUTO_DRIVE, TURN, DRIVE_STICKS, STOP;
+	}
+
 	public WPI_TalonFX mFrontLeft, mFrontRight, mRearLeft, mRearRight;
 	private double leftPower, rightPower;
 
@@ -51,12 +50,16 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 		mRearLeft.configFactoryDefault();
 		mFrontRight.configFactoryDefault();
 		mRearRight.configFactoryDefault();
-
-		mFrontLeft.setNeutralMode(NeutralMode.Brake);
-		mRearLeft.setNeutralMode(NeutralMode.Brake);
-		mFrontRight.setNeutralMode(NeutralMode.Brake);
-		mRearRight.setNeutralMode(NeutralMode.Brake);
 		
+		// TODO look into how you can use this! config.?
+		// TalonFXConfiguration config = new TalonFXConfiguration();
+
+		// TODO does this work?
+		mFrontLeft.setNeutralMode(NeutralMode.Coast);
+		mRearLeft.setNeutralMode(NeutralMode.Coast);
+		mFrontRight.setNeutralMode(NeutralMode.Coast);
+		mRearRight.setNeutralMode(NeutralMode.Coast);
+
 		resetEncoders();
 		resetNavx();
 	}
@@ -93,6 +96,12 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 		 */
 		if (leftPower != 0 && rightPower != 0) {
 			driving = true;
+			// reduces speed for driving up to spinner
+			if (Spinner.spinning) {
+				System.out.println("spinning power activated");
+				leftPower *= 0.06; //test values
+				rightPower *= 0.06;
+			}
 			setLeftPower(leftPower);
 			setRightPower(rightPower);
 		} else {
@@ -239,7 +248,7 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 	}
 
 	public void readControls() {
-		// TODO fill in here?
+		
 	}
 
 	/**
@@ -272,6 +281,7 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
      * returns the Xbox controller axis values. It is not actually calculating anything.
      */
     private void sticksBox() {
+		// System.out.println(getHeading() + " " + getRawHeading());
 		double leftSpeed, rightSpeed, leftStickY, rightStickX;
         if (isArcadeDrive) { // Arcade Drive
             leftStickY = xbox.getAxis(XboxController.AXIS_LEFTSTICK_Y);
@@ -380,14 +390,16 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 		double newAngle = desiredAngle - getHeading();
 		// TODO test this: should make it turn "by" an angle and optimize that angle
 		// double newAngle = desiredAngle + getHeading();
-		// newAngle = turnAmount(fixHeading(newAngle));
+		newAngle = turnAmount(fixHeading(newAngle));
         double angleTolerance = 5;
 		
+		// System.out.println("before: " + newAngle);
 		// Adjusts angle if it's less than -180
 		// TODO still necessary?
-        if (newAngle < 0 && Math.abs(newAngle) > 180)
-			newAngle += 360;
-		
+        // if (newAngle < 0 && Math.abs(newAngle) > 180)
+		// 	newAngle += 360;
+		System.out.println(newAngle);
+
 		// If we are within the angleTolerance of the desired angle, stop
 		if (Math.abs(newAngle) < angleTolerance) {
             setMode(DriveMode.STOP);
@@ -396,7 +408,7 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 
         double turningKp = 1.0 / 80.0;
 		double turningKd = 0.0;
-		double maximumPower = 0.5;
+		double maximumPower = 0.4;
 
         // If we're turning right, use leftVelocity; if we're turning left, use rightVelocity
         double velocity = getLeftRate() > 0 ? getLeftRate() : getRightRate();

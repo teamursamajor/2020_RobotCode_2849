@@ -50,24 +50,25 @@ public class Climb extends Subsystem<Climb.ClimbMode> implements UrsaRobot {
     }
 
     public void runSubsystem() throws InterruptedException {
+        averagePos = (mLeft.getSelectedSensorPosition() + mRight.getSelectedSensorPosition()) / 2;
+        // System.out.println(averagePos);
         switch (subsystemMode) {
         case UP:
-            climbing = true;
-            mLeft.set(-1);
-            mRight.set(-1);
-            mLeft.setSelectedSensorPosition(0);
-            mRight.setSelectedSensorPosition(0);
+            // TODO TEST THIS LIMIT!!!! DON'T BREAK CLIMB
+            if (averagePos < -540000) {
+                setMode(ClimbMode.STOP);
+            } else {
+                climbing = true;
+                mLeft.set(-1);
+                mRight.set(-1);
+            }
             break;
         case DOWN:
             climbing = true;
             mLeft.set(1);
             mRight.set(1);
-
-            // TODO should stop climb if it reaches correct distance
-            averagePos = (mLeft.getSelectedSensorPosition() + mRight.getSelectedSensorPosition()) * CLIMB_INCHES_PER_TICK / 2;
-            System.out.println(averagePos);
-            // if (limitSwitch.get() || averagePos >= distanceToGo)
-                // setMode(ClimbMode.STOP);
+            // if (averagePos >= distanceToGo)
+            //     setMode(ClimbMode.STOP);
             break;
         case STOP:
             climbing = false;

@@ -1,7 +1,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Spark;
 
 /**
@@ -11,8 +10,8 @@ public class Outtake extends Subsystem<Outtake.OuttakeMode> implements UrsaRobot
 
     /**
      * Modes for Outtake.
-     * IN: Outtake lifts up
-     * OUT: Outtake drops down
+     * IN: Outtake lifts up.
+     * OUT: Outtake drops down.
      * STOP: Outtake is idle.
      */
 
@@ -21,8 +20,9 @@ public class Outtake extends Subsystem<Outtake.OuttakeMode> implements UrsaRobot
     }
     
     private Spark outtakeMotor;
-    private Encoder encoder;
-    private static final int desiredDistance = 50;
+    private static DigitalInput limitSwitch;
+
+    // private static final int desiredDistance = 50;
     /**
      * Constructor for the Outtake mechanism.
      * Only one Outtake object should be instantiated at any time.
@@ -30,38 +30,32 @@ public class Outtake extends Subsystem<Outtake.OuttakeMode> implements UrsaRobot
     public Outtake() {
         outtakeMotor = new Spark(OUTTAKE);
         setMode(OuttakeMode.STOP);
-        encoder = new Encoder(OUTTAKE_ENCODER_PORT1, OUTTAKE_ENCODER_PORT2);   
-    
-    
+        limitSwitch = new DigitalInput(OUTTAKE_SWITCH_PORT);
     }
     
     
     public void readControls() {
-
-        System.out.println("encoderValue" + encoder.getRaw());
-        
-        if (xbox.getSingleButtonPress(controls.map.get("outtake_out"))) {
+        if (xbox.getButton(controls.map.get("outtake_out"))) {
             setMode(OuttakeMode.OUT);
-        } else if (xbox.getSingleButtonPress(controls.map.get("outtake_in"))) {
+        } else if (xbox.getButton(controls.map.get("outtake_in"))) {
             setMode(OuttakeMode.IN);
-        } else
+        } else {
             setMode(OuttakeMode.STOP);
+        }
     }
 
     public void runSubsystem() throws InterruptedException {
         switch (subsystemMode) {
         case OUT:
-            outtakeMotor.set(-0.15);// Releases outtake                               
-            if (encoder.getRaw() > desiredDistance) {
-                setMode(OuttakeMode.STOP); 
-            }
+            outtakeMotor.set(-0.25); // Releases outtake
             break;
         case IN:
-            outtakeMotor.set(0.25); // Restores outtake
-            if (encoder.getRaw() <= 0) {
+            // Stops going in once limit switch is activated (safety feature)
+            if (limitSwitch.get()) {
+                // System.out.println("stopping outtake");
                 setMode(OuttakeMode.STOP);
-                
-            }
+            } else
+                outtakeMotor.set(0.25); // Restores outtake
             break;
         case STOP:
             outtakeMotor.stopMotor();
