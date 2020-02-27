@@ -58,7 +58,9 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 		mRearRight.setNeutralMode(NeutralMode.Brake);
 		
 		resetEncoders();
+		System.out.println("before");
 		resetNavx();
+		System.out.println("after");
 	}
 
 	/**
@@ -272,6 +274,7 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
      * returns the Xbox controller axis values. It is not actually calculating anything.
      */
     private void sticksBox() {
+		System.out.println(getHeading() + " " + getRawHeading());
 		double leftSpeed, rightSpeed, leftStickY, rightStickX;
         if (isArcadeDrive) { // Arcade Drive
             leftStickY = xbox.getAxis(XboxController.AXIS_LEFTSTICK_Y);
@@ -380,14 +383,16 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 		double newAngle = desiredAngle - getHeading();
 		// TODO test this: should make it turn "by" an angle and optimize that angle
 		// double newAngle = desiredAngle + getHeading();
-		// newAngle = turnAmount(fixHeading(newAngle));
+		newAngle = turnAmount(fixHeading(newAngle));
         double angleTolerance = 5;
 		
+		// System.out.println("before: " + newAngle);
 		// Adjusts angle if it's less than -180
 		// TODO still necessary?
-        if (newAngle < 0 && Math.abs(newAngle) > 180)
-			newAngle += 360;
-		
+        // if (newAngle < 0 && Math.abs(newAngle) > 180)
+		// 	newAngle += 360;
+		System.out.println(newAngle);
+
 		// If we are within the angleTolerance of the desired angle, stop
 		if (Math.abs(newAngle) < angleTolerance) {
             setMode(DriveMode.STOP);
@@ -396,7 +401,7 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 
         double turningKp = 1.0 / 80.0;
 		double turningKd = 0.0;
-		double maximumPower = 0.5;
+		double maximumPower = 0.4;
 
         // If we're turning right, use leftVelocity; if we're turning left, use rightVelocity
         double velocity = getLeftRate() > 0 ? getLeftRate() : getRightRate();

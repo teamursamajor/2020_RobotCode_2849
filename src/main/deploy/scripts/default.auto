@@ -1,5 +1,1 @@
-drive -120
-outtake out
-outtake wait 0.1
-outtake stop
-print "complete"
+turn 90

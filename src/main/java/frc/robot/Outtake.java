@@ -9,8 +9,8 @@ public class Outtake extends Subsystem<Outtake.OuttakeMode> implements UrsaRobot
 
     /**
      * Modes for Outtake.
-     * IN: Outtake lifts up
-     * OUT: Outtake drops down
+     * IN: Outtake lifts up.
+     * OUT: Outtake drops down.
      * STOP: Outtake is idle.
      */
     public enum OuttakeMode {
