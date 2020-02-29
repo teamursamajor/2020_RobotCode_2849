@@ -1,0 +1,5 @@
+# Outtake routine with belt. Adjust timing as desired.
+parallel {
+    execute "outtake"
+    belt true 0.5
+}

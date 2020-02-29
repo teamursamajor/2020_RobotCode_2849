@@ -1,9 +1,4 @@
 # Outtake routine. Adjust time as desired.
-parallel {
-    serial {
-        outtake out 0.5
-        wait 3
-        outtake in 0.8
-    }
-    belt true 0.5
-}
+outtake out 0.5
+wait 3
+outtake in 0.8
