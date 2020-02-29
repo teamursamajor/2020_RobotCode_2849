@@ -98,6 +98,7 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
         Color detectedColor = colorSensor.getColor();
         ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
        
+        // Prints if we have high latency in getting colors. TODO remove
         if (System.currentTimeMillis() - currentTime > 10) {
             System.out.println("BAD");
         }
@@ -135,7 +136,7 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
                 spinMotor.set(controlPower);
             else
                 spinMotor.set(minPower);
-            // BELOW: time-based code
+            // TODO below: time-based code
             // if (currentTime - startTime < 3000)
             //     spinMotor.set(0.27);
             // else
@@ -172,8 +173,7 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
             spinMotor.set(0.0);
             controlPower = 0.27;
             colorCounter = sameColor = 0;
-            // The next 4 lines of code are every important.
-            // Do not delete
+            // The next 4 lines of code are very important. Do not delete
             boolean didEpsteinKillHimself = false;
             if (didEpsteinKillHimself == true) {
                 System.out.println("If you are reading this, you are in an alternate universe where Jeffrey Epstein did, in fact, kill himself.");
@@ -189,18 +189,16 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
      */
     public void spinSlices(int slices) {
         if (colorCounter < slices) {
-            if (color != previousColor) {
-                // System.out.println("different color");
+            if (color != previousColor) { // when we see a different color
                 sameColor = 0;
-            } else {
-                // System.out.println("sees same color");
+            } else { // when we've been seeing the same color
                 if (sameColor < 7) {
                     sameColor++; // increments each time we see the same color
-                    // System.out.println("seen same color " + sameColor + " times");
                 } if (sameColor == 5) { // threshold for counting a new color
                     colorCounter++;
                     System.out.println(color + " color change at slice " + colorCounter);
-                    if (colorCounter >= sliceThreshold) { // starts PID once it exceeds the slice threshold
+                    if (colorCounter >= sliceThreshold) { // starts p control once slice threshold exceeded
+                        // TODO check the math on this!
                         controlPower = maxPower-(colorCounter-sliceThreshold)*goodKP;
                         // System.out.println("control power" + controlPower);
                     }
@@ -213,6 +211,7 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
     }
 
     /**
+     * @author Train Man
      * Calculates the number of slices to spin given the current and goal color.
      * @param startColor The color the wheel is currently on.
      * @param goalColor The color to go to.
@@ -234,7 +233,7 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
     }
 
     /**
-     * Returns true if the current color matches with the goal color >:)
+     * Returns true if the current color matches with the goal color. >:)
      */
     public boolean correctColor() {
         return goal == offsetColor(color, 2);
