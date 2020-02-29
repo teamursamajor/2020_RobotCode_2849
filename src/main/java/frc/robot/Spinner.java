@@ -230,7 +230,7 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
     }
 
     /**
-     * Returns true if the current color matches with the goal color. >:)
+     * Returns true if the current color matches with the goal color. >:D
      */
     public boolean correctColor() {
         return goal == offsetColor(color, 2);
