@@ -41,6 +41,8 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
     double minPower = 0.15;
     double maxPower = 0.21;
 
+    public static boolean spinning = false;
+
     // Color Sensor Utilities
     private static final I2C.Port i2cPort = I2C.Port.kOnboard;
     private static final ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
@@ -126,6 +128,7 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
 
         switch (subsystemMode) {
         case SPIN:
+            spinning = true;
             spinSlices(26);
             if (controlPower < maxPower && controlPower > minPower)
                 spinMotor.set(controlPower);
@@ -137,6 +140,7 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
             //     setMode(SpinnerMode.STOP);
             break;
         case DETECT:
+            spinning = true;
             // TODO add better PID control here. this is where it's really crucial
             int slices = 0;
             float direction = Math.signum(slicesToSpin);
@@ -154,12 +158,15 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
             previousColor = color;
             break;
         case LEFT:
+            spinning = true;
             spinMotor.set(0.18);
             break;
         case RIGHT:
+            spinning = true;
             spinMotor.set(-0.18);
             break;
         case STOP:
+            spinning = false;
             spinMotor.set(0.0);
             controlPower = 0.20;
             colorCounter = sameColor = 0;

@@ -9,6 +9,7 @@ import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 
 /**
+ * TODO increase resolution
  * This is a subsystem class for operating the USB Cameras.
  */
 public class Vision extends Subsystem<Vision.VisionMode> implements UrsaRobot {
@@ -21,7 +22,7 @@ public class Vision extends Subsystem<Vision.VisionMode> implements UrsaRobot {
     /**
      * Can be changed to modify video quality/framerate
      */
-    private static int width = 300, height = 300, fps = 25;
+    private static int width = 225, height = 225, fps = 25;
 
     /**
      * Empty mode enum -- not necessary for Vision functionality
@@ -64,18 +65,10 @@ public class Vision extends Subsystem<Vision.VisionMode> implements UrsaRobot {
     public void readControls() {
         if (xbox.getButton(controls.map.get("vision_cam1"))) {
             synchronized (this) {
-                try {
-                    CameraServer.getInstance().removeCamera("Backward Camera");
-                } catch (Exception e) {}
-                CameraServer.getInstance().addCamera(forwardCam);
                 cvSink = CameraServer.getInstance().getVideo(forwardCam);
             }
         } else if (xbox.getButton(controls.map.get("vision_cam2"))) {
             synchronized (this) {
-                try {
-                    CameraServer.getInstance().removeCamera("Forward Camera");
-                } catch (Exception e) {}
-                CameraServer.getInstance().addCamera(backwardCam);
                 cvSink = CameraServer.getInstance().getVideo(backwardCam);
             }
         }

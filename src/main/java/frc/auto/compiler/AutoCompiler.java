@@ -228,6 +228,7 @@ public class AutoCompiler {
 				e.printStackTrace();
 			}
 		}
+		System.out.println(taskSet);
 		return taskSet;
 	}
 

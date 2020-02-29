@@ -47,13 +47,17 @@ public class Outtake extends Subsystem<Outtake.OuttakeMode> implements UrsaRobot
     public void runSubsystem() throws InterruptedException {
         switch (subsystemMode) {
         case OUT:
-            if (limitSwitch.get()) { // Stops once limit switch is activated
-                setMode(OuttakeMode.STOP);
-            }
-            outtakeMotor.set(-0.95); // Releases outtake
+            System.out.println("going out");
+            outtakeMotor.set(-0.25); // Releases outtake
             break;
         case IN:
-            outtakeMotor.set(1); // Restores outtake
+            // Stops going in once limit switch is activated (safety feature)
+            if (limitSwitch.get()) {
+                System.out.println("stopping outtake");
+                setMode(OuttakeMode.STOP);
+                return;
+            }
+            outtakeMotor.set(0.25); // Restores outtake
             break;
         case STOP:
             outtakeMotor.stopMotor();

@@ -1,6 +1,6 @@
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
+// import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 /**
@@ -17,16 +17,14 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 
 	/**
-     * Modes for Drive.
-     * AUTO_DRIVE is for autonomous driving to a certain distance.
-     * TURN is for autonomous turning to a certain angle.
-     * DRIVE_STICKS is for manual control.
-     * STOP is for stopping.
-     */
-    public enum DriveMode {
-        AUTO_DRIVE, TURN, DRIVE_STICKS, STOP;
-    }
-	
+	 * Modes for Drive. AUTO_DRIVE is for autonomous driving to a certain distance.
+	 * TURN is for autonomous turning to a certain angle. DRIVE_STICKS is for manual
+	 * control. STOP is for stopping.
+	 */
+	public enum DriveMode {
+		AUTO_DRIVE, TURN, DRIVE_STICKS, STOP;
+	}
+
 	public WPI_TalonFX mFrontLeft, mFrontRight, mRearLeft, mRearRight;
 	private double leftPower, rightPower;
 
@@ -52,15 +50,14 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 		mFrontRight.configFactoryDefault();
 		mRearRight.configFactoryDefault();
 
-		mFrontLeft.setNeutralMode(NeutralMode.Brake);
-		mRearLeft.setNeutralMode(NeutralMode.Brake);
-		mFrontRight.setNeutralMode(NeutralMode.Brake);
-		mRearRight.setNeutralMode(NeutralMode.Brake);
-		
+		// TODO figure out how to set brake/coast mode depending on teleop/auto
+		// mFrontLeft.setNeutralMode(NeutralMode.Brake);
+		// mRearLeft.setNeutralMode(NeutralMode.Brake);
+		// mFrontRight.setNeutralMode(NeutralMode.Brake);
+		// mRearRight.setNeutralMode(NeutralMode.Brake);
+
 		resetEncoders();
-		System.out.println("before");
 		resetNavx();
-		System.out.println("after");
 	}
 
 	/**
@@ -95,6 +92,11 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 		 */
 		if (leftPower != 0 && rightPower != 0) {
 			driving = true;
+			// reduces speed for driving up to spinner
+			if (Spinner.spinning) {
+				leftPower *= 0.05;
+				rightPower *= 0.05;
+			}
 			setLeftPower(leftPower);
 			setRightPower(rightPower);
 		} else {
@@ -241,7 +243,7 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 	}
 
 	public void readControls() {
-		// TODO fill in here?
+		
 	}
 
 	/**
@@ -274,7 +276,7 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
      * returns the Xbox controller axis values. It is not actually calculating anything.
      */
     private void sticksBox() {
-		System.out.println(getHeading() + " " + getRawHeading());
+		// System.out.println(getHeading() + " " + getRawHeading());
 		double leftSpeed, rightSpeed, leftStickY, rightStickX;
         if (isArcadeDrive) { // Arcade Drive
             leftStickY = xbox.getAxis(XboxController.AXIS_LEFTSTICK_Y);
