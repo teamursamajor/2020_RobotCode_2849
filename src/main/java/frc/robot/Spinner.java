@@ -36,10 +36,10 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
 
     // control loop stuff
     final double goodKP = 0.005;
-    double controlPower = 0.20;
+    double controlPower = 0.27;
     int sliceThreshold = 20;
-    double minPower = 0.15;
-    double maxPower = 0.21;
+    double minPower = 0.24;
+    double maxPower = 0.27;
 
     public static boolean spinning = false;
 
@@ -48,11 +48,11 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
     private static final ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
     private final ColorMatch colorMatcher = new ColorMatch();
 
-    // TODO calibrate targets if needed
-    private final Color kBlueTarget = ColorMatch.makeColor(0.117, 0.435, 0.450);
-    private final Color kGreenTarget = ColorMatch.makeColor(0.135, 0.614, 0.251);
-    private final Color kRedTarget = ColorMatch.makeColor(0.588, 0.300, 0.111);
-    private final Color kYellowTarget = ColorMatch.makeColor(0.311, 0.569, 0.120);
+    // TODO: CALIBRATE FOR EACH EVENT
+    private final Color kBlueTarget = ColorMatch.makeColor(0.119, 0.421, 0.459);
+    private final Color kGreenTarget = ColorMatch.makeColor(0.163, 0.599, 0.237);
+    private final Color kRedTarget = ColorMatch.makeColor(0.521, 0.348, 0.131);
+    private final Color kYellowTarget = ColorMatch.makeColor(0.316, 0.569, 0.115);
 
     /**
      * Constructor for the Spinner mechanism.
@@ -101,6 +101,7 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
         if (System.currentTimeMillis() - currentTime > 10) {
             System.out.println("BAD");
         }
+
         SmartDashboard.putNumber("Red", detectedColor.red);
         SmartDashboard.putNumber("Green", detectedColor.green);
         SmartDashboard.putNumber("Blue", detectedColor.blue);
@@ -134,6 +135,7 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
                 spinMotor.set(controlPower);
             else
                 spinMotor.set(minPower);
+            // BELOW: time-based code
             // if (currentTime - startTime < 3000)
             //     spinMotor.set(0.27);
             // else
@@ -145,12 +147,12 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
             int slices = 0;
             float direction = Math.signum(slicesToSpin);
             int threshold = Math.abs(slicesToSpin) - 1;
-            double spinPower = .17  * direction;
+            double spinPower = 27 * direction;
 
             if (color != previousColor)
                 slices++;
             if (slices >= threshold)
-                spinPower = .19 * direction;
+                spinPower = .24 * direction; 
             if (correctColor())
                 setMode(SpinnerMode.STOP);
 
@@ -159,16 +161,16 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
             break;
         case LEFT:
             spinning = true;
-            spinMotor.set(0.18);
+            spinMotor.set(0.30);
             break;
         case RIGHT:
             spinning = true;
-            spinMotor.set(-0.18);
+            spinMotor.set(-0.30);
             break;
         case STOP:
             spinning = false;
             spinMotor.set(0.0);
-            controlPower = 0.20;
+            controlPower = 0.27;
             colorCounter = sameColor = 0;
             // The next 4 lines of code are every important.
             // Do not delete
@@ -199,7 +201,7 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
                     colorCounter++;
                     System.out.println(color + " color change at slice " + colorCounter);
                     if (colorCounter >= sliceThreshold) { // starts PID once it exceeds the slice threshold
-                        controlPower = (goodKP * (slices - colorCounter) + 0.15);
+                        controlPower = maxPower-(colorCounter-sliceThreshold)*goodKP;
                         // System.out.println("control power" + controlPower);
                     }
                 }
