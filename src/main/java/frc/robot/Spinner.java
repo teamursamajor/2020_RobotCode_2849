@@ -29,12 +29,12 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
     // private long currentTime, startTime;
     private int sameColor = 0, colorCounter = 0;
 
-    // for storing slices to spin
+    /** For storing slices to spin */
     private int slicesToSpin;
 
     private long currentTime;
 
-    // control loop stuff
+    /** Control loop variables */
     final double goodKP = 0.005;
     double controlPower = 0.27;
     int sliceThreshold = 20;
@@ -44,8 +44,8 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
     public static boolean spinning = false;
 
     // Color Sensor Utilities
-    private static final I2C.Port i2cPort = I2C.Port.kOnboard;
-    private static final ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
+    private final I2C.Port i2cPort = I2C.Port.kOnboard;
+    private final ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
     private final ColorMatch colorMatcher = new ColorMatch();
 
     // TODO: CALIBRATE FOR EACH EVENT
@@ -70,18 +70,18 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
     public void readControls() {
         if (xbox.getSingleButtonPress(controls.map.get("spinner_run"))) {
             // Chooses SPIN unless there is a color to detect
-            setMode(getGoal() == ' ' ? SpinnerMode.SPIN : SpinnerMode.DETECT);
-            if (getMode() == SpinnerMode.DETECT)
+            setMode(goal == ' ' ? SpinnerMode.SPIN : SpinnerMode.DETECT);
+            if (subsystemMode == SpinnerMode.DETECT) // Only does this when we're starting detect mode
                 getSlicesToSpin(color, offsetColor(goal, 2));
-            // else
-                // startTime = System.currentTimeMillis();
         }
 
+        // For manual control
         if (xbox.getDPad(controls.map.get("spinner_left"))) {
             setMode(SpinnerMode.LEFT);
         } else if (xbox.getDPad(controls.map.get("spinner_right"))) {
             setMode(SpinnerMode.RIGHT);
         } else if (subsystemMode == SpinnerMode.LEFT || subsystemMode == SpinnerMode.RIGHT) {
+            // Only disables when we're already in manual control
             setMode(SpinnerMode.STOP);
         }
 
@@ -103,6 +103,7 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
             System.out.println("BAD");
         }
 
+        // Necessary for calibration.
         SmartDashboard.putNumber("Red", detectedColor.red);
         SmartDashboard.putNumber("Green", detectedColor.green);
         SmartDashboard.putNumber("Blue", detectedColor.blue);
@@ -116,17 +117,13 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
         if (match.color == kYellowTarget)
             color = 'Y';
         
-        /*
-         * Determines goal color from DriverStation Game Data
-         */
+        // Determines goal color from DriverStation game specific message
         gameData = DriverStation.getInstance().getGameSpecificMessage();
-
-        // SmartDashboard.putString("Color", color + "");
 
         if (gameData.length() > 0) // If we've gotten a color to check for
             goal = gameData.charAt(0); // Store in goal
         else
-            goal = ' ';
+            goal = ' '; // Placeholder value
 
         switch (subsystemMode) {
         case SPIN:
@@ -136,7 +133,7 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
                 spinMotor.set(controlPower);
             else
                 spinMotor.set(minPower);
-            // TODO below: time-based code
+            // TODO consider below: time-based code
             // if (currentTime - startTime < 3000)
             //     spinMotor.set(0.27);
             // else
