@@ -104,7 +104,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
 		robotMode = "Autonomous";
 
 		drive.resetEncoders();
-		// drive.resetNav%x();
+		// drive.resetNavx();
 		drive.setOpenloopRamp(5);
 
 		// String autoMode =

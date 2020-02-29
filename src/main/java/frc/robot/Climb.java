@@ -57,20 +57,17 @@ public class Climb extends Subsystem<Climb.ClimbMode> implements UrsaRobot {
             // TODO TEST THIS LIMIT!!!! DON'T BREAK CLIMB
             if (averagePos < -540000) {
                 setMode(ClimbMode.STOP);
-                return;
+            } else {
+                climbing = true;
+                mLeft.set(-1);
+                mRight.set(-1);
             }
-            climbing = true;
-            mLeft.set(-1);
-            mRight.set(-1);
-
             break;
         case DOWN:
             climbing = true;
             mLeft.set(1);
             mRight.set(1);
-
-            
-            // if (limitSwitch.get() || averagePos >= distanceToGo)
+            // if (averagePos >= distanceToGo)
             //     setMode(ClimbMode.STOP);
             break;
         case STOP:

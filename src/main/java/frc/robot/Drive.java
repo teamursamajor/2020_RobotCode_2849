@@ -94,8 +94,8 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 			driving = true;
 			// reduces speed for driving up to spinner
 			if (Spinner.spinning) {
-				leftPower *= 0.05;
-				rightPower *= 0.05;
+				leftPower *= 0.1;
+				rightPower *= 0.1;
 			}
 			setLeftPower(leftPower);
 			setRightPower(rightPower);
