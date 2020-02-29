@@ -1,6 +1,7 @@
 package frc.robot;
 
-// import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+// import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 /**
@@ -49,12 +50,15 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 		mRearLeft.configFactoryDefault();
 		mFrontRight.configFactoryDefault();
 		mRearRight.configFactoryDefault();
+		
+		// TODO look into how you can use this! config.?
+		// TalonFXConfiguration config = new TalonFXConfiguration();
 
-		// TODO figure out how to set brake/coast mode depending on teleop/auto
-		// mFrontLeft.setNeutralMode(NeutralMode.Brake);
-		// mRearLeft.setNeutralMode(NeutralMode.Brake);
-		// mFrontRight.setNeutralMode(NeutralMode.Brake);
-		// mRearRight.setNeutralMode(NeutralMode.Brake);
+		// TODO does this work?
+		mFrontLeft.setNeutralMode(NeutralMode.Coast);
+		mRearLeft.setNeutralMode(NeutralMode.Coast);
+		mFrontRight.setNeutralMode(NeutralMode.Coast);
+		mRearRight.setNeutralMode(NeutralMode.Coast);
 
 		resetEncoders();
 		resetNavx();
