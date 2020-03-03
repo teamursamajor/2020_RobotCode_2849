@@ -36,10 +36,10 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
 
     /** Control loop variables */
     final double goodKP = 0.005;
-    double controlPower = 0.27;
+    double controlPower = 1.00;
     int sliceThreshold = 20;
     double minPower = 0.24;
-    double maxPower = 0.27;
+    double maxPower = 0.30;
 
     public static boolean spinning = false;
 
@@ -50,7 +50,7 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
 
     // TODO: CALIBRATE FOR EACH EVENT
     private final Color kBlueTarget = ColorMatch.makeColor(0.119, 0.421, 0.459);
-    private final Color kGreenTarget = ColorMatch.makeColor(0.163, 0.599, 0.237);
+    private final Color kGreenTarget = ColorMatch.makeColor(0.183, 0.579, 0.247);
     private final Color kRedTarget = ColorMatch.makeColor(0.521, 0.348, 0.131);
     private final Color kYellowTarget = ColorMatch.makeColor(0.316, 0.569, 0.115);
 
@@ -107,6 +107,7 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
         SmartDashboard.putNumber("Red", detectedColor.red);
         SmartDashboard.putNumber("Green", detectedColor.green);
         SmartDashboard.putNumber("Blue", detectedColor.blue);
+        
 
         if (match.color == kBlueTarget)
             color = 'B';
@@ -159,11 +160,11 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
             break;
         case LEFT:
             spinning = true;
-            spinMotor.set(0.30);
+            spinMotor.set(0.50);
             break;
         case RIGHT:
             spinning = true;
-            spinMotor.set(-0.30);
+            spinMotor.set(-0.50);
             break;
         case STOP:
             spinning = false;
@@ -185,6 +186,7 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
      * @param slices the number of slices to spin
      */
     public void spinSlices(int slices) {
+        
         if (colorCounter < slices) {
             if (color != previousColor) { // when we see a different color
                 sameColor = 0;
