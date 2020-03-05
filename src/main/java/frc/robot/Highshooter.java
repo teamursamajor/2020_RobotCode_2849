@@ -11,7 +11,7 @@ public class HighShooter extends Subsystem<HighShooter.ShooterMode> implements U
      * Modes for High Shooter
      */
     public enum ShooterMode {
-        ON, OFF
+        ON, STOP
     }
 
     private final Spark shooterMotor;
@@ -24,7 +24,7 @@ public class HighShooter extends Subsystem<HighShooter.ShooterMode> implements U
         if (xbox.getButton(controls.map.get("outtake_in")))
             setMode(ShooterMode.ON);
         else if (xbox.getButton(controls.map.get("outtake_out")))
-            setMode(ShooterMode.OFF);
+            setMode(ShooterMode.STOP);
     } 
 
     @Override
@@ -32,10 +32,12 @@ public class HighShooter extends Subsystem<HighShooter.ShooterMode> implements U
         // Controlling high shooter motors
         switch (subsystemMode) {
         case ON:
-            shooterMotor.set(0.0);
+            // shooterMotor.set(0.5);
+            System.out.println("big bets. it ran");
             break;
-        case OFF:
-            shooterMotor.set(0.5);
+        case STOP:
+            System.out.println("Big bets. it turned off");
+            shooterMotor.set(0.0);
             break;
         }
     }

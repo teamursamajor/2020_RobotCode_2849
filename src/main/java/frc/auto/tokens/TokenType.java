@@ -6,7 +6,7 @@ package frc.auto.tokens;
 public enum TokenType {
 
     /* Movement/Subsystems */
-    DRIVE, TURN, INTAKE, BELT, OUTTAKE, MUSIC,
+    DRIVE, TURN, INTAKE, BELT, OUTTAKE, MUSIC, SHOOTER,
 
     /* Running Logic */
     PARALLEL, SERIAL, EXECUTE, FOLLOW, WAIT, PRINT, RBRACE, LPAREN, RPAREN, COMMA,

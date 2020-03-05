@@ -31,6 +31,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
 	private Outtake outtake;
 	private Climb climb;
 	private MusicPlayer musicPlayer;
+	private HighShooter shooter;
 	private Vision vision;
 
 	// Autonomous
@@ -71,10 +72,13 @@ public class Robot extends TimedRobot implements UrsaRobot {
 		musicPlayer = new MusicPlayer();
 		// musicPlayer.initialize("MusicThread");
 
+		shooter = new HighShooter();
+		shooter.initialize("ShooterThread");
+
 		vision = new Vision();
 		vision.initialize("VisionThread");
 
-		autoCompiler = new AutoCompiler(drive, intake, belt, outtake, musicPlayer);
+		autoCompiler = new AutoCompiler(drive, intake, belt, outtake, musicPlayer, shooter);
 
 		// autoSelector = new AutoSelector();
 
@@ -111,7 +115,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
 		// autoSelector.pickAutoMode(autoSelector.getStartingPosition(),
 		// autoSelector.getAutoPrefs(), autoSelector.findAutoFiles());
 		// TODO remove; for manual testing
-		String autoMode = "home/lvuser/deploy/scripts/default.auto";
+		String autoMode = "home/lvuser/deploy/scripts/Test1.auto";
 
 		try {
 			autoCompiler.buildAutoMode(autoMode).start();

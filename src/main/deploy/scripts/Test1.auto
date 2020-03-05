@@ -1,6 +1,8 @@
-drive -30
-wait 5
-drive 30
+#drive -30
+#wait 5
+#drive 30
+
+shoot true
 
 #outtake out
 #wait 0.1
