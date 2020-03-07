@@ -29,7 +29,7 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 		AUTO_DRIVE, TURN, ALIGN, DRIVE_STICKS, STOP;
 	}
 
-	public  WPI_TalonFX mFrontLeft, mFrontRight, mRearLeft, mRearRight;
+	public WPI_TalonFX mFrontLeft, mFrontRight, mRearLeft, mRearRight;
 	private double leftPower, rightPower;
 
 	/**
