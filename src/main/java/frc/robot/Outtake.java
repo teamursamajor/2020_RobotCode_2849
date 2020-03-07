@@ -14,7 +14,6 @@ public class Outtake extends Subsystem<Outtake.OuttakeMode> implements UrsaRobot
      * OUT: Outtake drops down.
      * STOP: Outtake is idle.
      */
-
     public enum OuttakeMode {
         IN, OUT, STOP;
     }
@@ -22,7 +21,6 @@ public class Outtake extends Subsystem<Outtake.OuttakeMode> implements UrsaRobot
     private Spark outtakeMotor;
     private static DigitalInput limitSwitch;
 
-    // private static final int desiredDistance = 50;
     /**
      * Constructor for the Outtake mechanism.
      * Only one Outtake object should be instantiated at any time.
@@ -32,7 +30,6 @@ public class Outtake extends Subsystem<Outtake.OuttakeMode> implements UrsaRobot
         setMode(OuttakeMode.STOP);
         limitSwitch = new DigitalInput(OUTTAKE_SWITCH_PORT);
     }
-    
     
     public void readControls() {
         if (xbox.getButton(controls.map.get("outtake_out"))) {

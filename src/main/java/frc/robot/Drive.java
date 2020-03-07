@@ -264,7 +264,7 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 			desiredLocation = startDistance + desiredDistance;
 			break;
 		case TURN:
-			desiredAngle = fixHeading(arg);
+			desiredAngle = fixHeading(arg) - getHeading();
 			// desiredAngle += getHeading(); // makes it turn by angle; TODO test
 			// desiredAngle = turnAmount(desiredAngle); // supposedly optimizes turning; TODO test
 			break;
@@ -385,12 +385,11 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
      * Drive to turn to a specific angle.
 	 */
     private void turnTo() {
-		System.out.println("turning to " + desiredAngle);
 		System.out.println("current heading: " + getHeading());
 		double newAngle = desiredAngle - getHeading();
-		// TODO test this: should make it turn "by" an angle and optimize that angle
-		// double newAngle = desiredAngle + getHeading();
+		
 		newAngle = turnAmount(fixHeading(newAngle));
+		System.out.println("turning to " + newAngle);
         double angleTolerance = 5;
 		
 		// System.out.println("before: " + newAngle);
@@ -398,7 +397,6 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 		// TODO still necessary?
         // if (newAngle < 0 && Math.abs(newAngle) > 180)
 		// 	newAngle += 360;
-		System.out.println(newAngle);
 
 		// If we are within the angleTolerance of the desired angle, stop
 		if (Math.abs(newAngle) < angleTolerance) {
@@ -408,7 +406,7 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 
         double turningKp = 1.0 / 80.0;
 		double turningKd = 0.0;
-		double maximumPower = 0.4;
+		double maximumPower = 0.5;
 
         // If we're turning right, use leftVelocity; if we're turning left, use rightVelocity
         double velocity = getLeftRate() > 0 ? getLeftRate() : getRightRate();
@@ -420,8 +418,8 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 			outputPower = maximumPower * Math.signum(outputPower);
 		}
 
-		leftPower = Math.signum(newAngle)*outputPower;
-		rightPower = -Math.signum(newAngle)*outputPower;
+		leftPower = -Math.signum(newAngle)*outputPower;
+		rightPower = Math.signum(newAngle)*outputPower;
 	}
 
 	/**

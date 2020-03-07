@@ -1,4 +1,4 @@
 # Feel free to edit this as desired!
+drive -80
 execute "outtake"
-drive 36
-print "complete"
+drive 80%

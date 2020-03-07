@@ -115,7 +115,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
 		// autoSelector.pickAutoMode(autoSelector.getStartingPosition(),
 		// autoSelector.getAutoPrefs(), autoSelector.findAutoFiles());
 		// TODO remove; for manual testing
-		String autoMode = "home/lvuser/deploy/scripts/Test1.auto";
+		String autoMode = "home/lvuser/deploy/scripts/default.auto";
 
 		try {
 			autoCompiler.buildAutoMode(autoMode).start();

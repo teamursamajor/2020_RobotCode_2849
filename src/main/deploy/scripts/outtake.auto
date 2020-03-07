@@ -1,4 +1,7 @@
 # Outtake routine. Adjust time as desired.
-outtake out 0.5
-wait 3
-outtake in 0.8
+parallel {
+    outtake out 0.8
+    drive -2
+}
+wait 2
+outtake in 1

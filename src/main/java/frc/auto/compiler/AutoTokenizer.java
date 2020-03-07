@@ -28,19 +28,16 @@ public class AutoTokenizer implements TokenList {
         ArrayList<Token> tokenList = new ArrayList<Token>(); // List of all tokens identified
         BufferedReader buff = new BufferedReader(new FileReader(filename));
         String line = null;
-        boolean matchedAny, matchedToken; // True once a token has been matched on a given line
+        boolean matchedToken = false; // True once a token has been matched on a given line
 
         // Buffers through each line in the file
         while ((line = buff.readLine()) != null) {
-            matchedAny = false;
-
             // Iterates through current line, as long as it still has characters
             while (line.trim().length() > 0) {
                 matchedToken = false; // Resets to check for new matched tokens
 
                 // If the line begins with a comment, disregard the line
                 if (line.trim().charAt(0) == '#' || line.trim().charAt(0) == '/') {
-                    matchedAny = true;
                     break;
                 }
 
@@ -55,7 +52,6 @@ public class AutoTokenizer implements TokenList {
                         if (match.find()) { // If matching argument has been found
                             tokenList.add(t.setArgument(i));
                             matchedToken = true;
-                            matchedAny = true;
                             line = line.substring(match.end()); // Removes matched characters from line
                             break;
                         }
@@ -69,7 +65,6 @@ public class AutoTokenizer implements TokenList {
                     DataToken<Double> t = NUMBER_TOKEN.newInstance(val);
                     tokenList.add(t);
                     matchedToken = true;
-                    matchedAny = true;
                     line = line.substring(match.end());
                 }
 
@@ -82,7 +77,6 @@ public class AutoTokenizer implements TokenList {
                     DataToken<String> t = STRING_TOKEN.newInstance(str);
                     tokenList.add(t);
                     matchedToken = true;
-                    matchedAny = true;
                     line = line.substring(match.end());
                 }
 
@@ -92,7 +86,6 @@ public class AutoTokenizer implements TokenList {
                     DataToken<Boolean> t = BOOLEAN_TOKEN.newInstance(true);
                     tokenList.add(t);
                     matchedToken = true;
-                    matchedAny = true;
                     line = line.substring(match.end());
                 }
 
@@ -102,15 +95,11 @@ public class AutoTokenizer implements TokenList {
                     DataToken<Boolean> t = BOOLEAN_TOKEN.newInstance(false);
                     tokenList.add(t);
                     matchedToken = true;
-                    matchedAny = true;
                     line = line.substring(match.end());
                 }
-
-                if (!matchedToken) // If there are more tokens to match, move to a new line.
+                if (!matchedToken) // If there are no more tokens to match, move to a new line.
                     break;
             }
-            if (!matchedAny) // If the line failed to match a single token, move to a new line.
-                break;
         }
         buff.close();
         return tokenList;
