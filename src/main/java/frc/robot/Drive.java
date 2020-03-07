@@ -18,18 +18,23 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 
 	/**
-	 * Modes for Drive. AUTO_DRIVE is for autonomous driving to a certain distance.
-	 * TURN is for autonomous turning to a certain angle. DRIVE_STICKS is for manual
-	 * control. STOP is for stopping.
+	 * Modes for Drive.
+	 * AUTO_DRIVE is for autonomous driving to a certain distance.
+	 * TURN is for autonomous turning to a certain angle.
+	 * DRIVE_STICKS is for manual control.
+	 * ALIGN is for aligning to a Limelight target.
+	 * STOP is for stopping.
 	 */
 	public enum DriveMode {
-		AUTO_DRIVE, TURN, DRIVE_STICKS, STOP;
+		AUTO_DRIVE, TURN, ALIGN, DRIVE_STICKS, STOP;
 	}
 
-	public WPI_TalonFX mFrontLeft, mFrontRight, mRearLeft, mRearRight;
+	public static WPI_TalonFX mFrontLeft, mFrontRight, mRearLeft, mRearRight;
 	private double leftPower, rightPower;
 
-	/** For autonomous */
+	/**
+	 * For autonomous driving/turning
+	 */
 	private double averagePos = 0.0, desiredLocation = 0.0, startDistance = 0.0, direction = 1.0, desiredAngle = 0.0;
 
 	public static boolean driving = false;
@@ -79,6 +84,9 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 			break;
 		case TURN:
 			turnTo();
+			break;
+		case ALIGN:
+			autoAlign();
 			break;
 		case DRIVE_STICKS:
 			sticksBox();
@@ -209,7 +217,7 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 	 * Stops all four motors. Remember that robot will still have forward momentum
 	 * and slide slightly.
 	 */
-	public void stop() {
+	public static void stop() {
 		mFrontLeft.stopMotor();
 		mFrontRight.stopMotor();
 		mRearLeft.stopMotor();
@@ -222,7 +230,7 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 	 * 
 	 * @param power the power the motors get set to
 	 */
-	public void setPower(final double power) {
+	public static void setPower(final double power) {
 		setRightPower(power);
 		setLeftPower(power);
 	}
@@ -232,7 +240,7 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 	 * 
 	 * @param power the power the motor is set to
 	 */
-	public void setLeftPower(final double power) {
+	public static void setLeftPower(final double power) {
 		mFrontLeft.set(-power);
 		mRearLeft.set(-power);
 	}
@@ -242,13 +250,13 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 	 * 
 	 * @param power the power the motor is set to.
 	 */
-	public void setRightPower(final double power) {
+	public static void setRightPower(final double power) {
 		mFrontRight.set(power);
 		mRearRight.set(power);
 	}
 
 	public void readControls() {
-		
+		// TODO listen for shooter button and set align mode
 	}
 
 	/**
@@ -267,6 +275,9 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 			desiredAngle = fixHeading(arg) - getHeading();
 			// desiredAngle += getHeading(); // makes it turn by angle; TODO test
 			// desiredAngle = turnAmount(desiredAngle); // supposedly optimizes turning; TODO test
+			break;
+		case ALIGN:
+			// TODO add autocompiler implementation
 			break;
 		case DRIVE_STICKS:
 			break;
@@ -432,7 +443,7 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 	 * @param desiredAngle
 	 *            the angle you want to turn TO.
 	 */
-	public double turnAmount(double desiredAngle) {
+	private double turnAmount(double desiredAngle) {
 		double angle = getHeading();
 		desiredAngle = fixHeading(desiredAngle);
 		double turnAmount = desiredAngle - angle;
@@ -441,6 +452,47 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 		else if (turnAmount < -180)
 			turnAmount = 360 + (turnAmount % 360);
 		return -turnAmount;
+	}
+
+	/**
+	 * Iterates the auto align control loop to automatically align
+	 * the robot to a given Limelight target (if such a target exists)
+	 */
+	private void autoAlign() {
+		if (Vision.validTarget()) {
+			// TODO adjust
+			double maxTurnPower = 0.20;
+			double maxTapeAreaPercent = 60;
+			double passiveSpeed = 0.25;
+			double turnKp = 1.0 / 40.0;
+			double tolerance = 0.2;
+
+			// turn PID using tx
+			double outputPower = turnKp * Vision.tx;
+
+			// bounds output power to maximum
+			if (outputPower > maxTurnPower)
+				outputPower = maxTurnPower;
+
+			// set drive powers to passive speed + PID speed
+			if (Vision.tx < 0) // need to turn right
+				System.out.println("left power: " + (passiveSpeed + outputPower));
+				// Drive.setLeftPower(passiveSpeed + outputPower);
+			else if (Vision.tx > 0) // need to turn left
+				System.out.println("right power: " + (passiveSpeed + outputPower));
+				// Drive.setRightPower(passiveSpeed + outputPower);
+
+			if (Math.abs(Vision.tx) < tolerance) {
+				outputPower = 0;
+				System.out.println("target acquired");
+			}
+
+			if (Vision.ta > maxTapeAreaPercent) {
+				System.out.println("wrong target -- kill align");
+			}
+		} else {
+			System.out.println("NO VALID TARGET");
+		}
 	}
 	
 }

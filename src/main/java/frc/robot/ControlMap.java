@@ -46,8 +46,8 @@ public class ControlMap {
         map.put("music_pause", XboxController.BUTTON_BACK);
 
         // Vision
-        map.put("vision_cam1", XboxController.BUTTON_LEFTSTICK);
-        map.put("vision_cam2", XboxController.BUTTON_RIGHTSTICK);
+        map.put("vision_processing", XboxController.BUTTON_LEFTSTICK);
+        map.put("vision_cam_switch", XboxController.BUTTON_RIGHTSTICK);
     }
 
 }

@@ -52,11 +52,11 @@ public class XboxController extends Joystick implements Runnable {
 		startRumble();
 
 		// Creates Latch objects for every button and axis on the controller
-		for (int i = 0; i < buttonLatch.length - 1; i++) {
+		for (int i = 0; i < buttonLatch.length; i++) {
 			buttonLatch[i] = new Latch();
 		}
 
-		for (int i = 0; i < axisLatch.length - 1; i++) {
+		for (int i = 0; i < axisLatch.length; i++) {
 			axisLatch[i] = new Latch();
 		}
 	}

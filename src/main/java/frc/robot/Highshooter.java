@@ -32,11 +32,19 @@ public class HighShooter extends Subsystem<HighShooter.ShooterMode> implements U
         // Controlling high shooter motors
         switch (subsystemMode) {
         case ON:
-            // shooterMotor.set(0.5);
-            System.out.println("big bets. it ran");
+            // TODO skeleton code -- adjust based on testing
+            if (Vision.validTarget()) {
+                double basePower = 0.25;
+                double scale = 0.1;
+                double outputPower = basePower + scale * Vision.ty;
+                System.out.println("Shooter output power: " + outputPower);
+            } else {
+                System.out.println("Default output power");
+            }
+            // System.out.println("big bets. it ran");
             break;
         case STOP:
-            System.out.println("Big bets. it turned off");
+            // System.out.println("Big bets. it turned off");
             shooterMotor.set(0.0);
             break;
         }

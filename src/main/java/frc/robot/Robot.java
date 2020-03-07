@@ -52,28 +52,28 @@ public class Robot extends TimedRobot implements UrsaRobot {
 		Logger.log("********ROBOT PROGRAM STARTING********", LogLevel.INFO);
 
 		drive = new Drive();
-		drive.initialize("DriveThread");
+		// drive.initialize("DriveThread");
 
 		spinner = new Spinner();
-		spinner.initialize("SpinnerThread");
+		// spinner.initialize("SpinnerThread");
 
 		climb = new Climb();
-		climb.initialize("ClimbThread");
+		// climb.initialize("ClimbThread");
 
 		intake = new Intake();
-		intake.initialize("IntakeThread");
+		// intake.initialize("IntakeThread");
 
 		belt = new Belt();
-		belt.initialize("BeltThread");
+		// belt.initialize("BeltThread");
 
 		outtake = new Outtake();
-		outtake.initialize("OuttakeThread");
+		// outtake.initialize("OuttakeThread");
 
 		musicPlayer = new MusicPlayer();
 		// musicPlayer.initialize("MusicThread");
 
 		shooter = new HighShooter();
-		shooter.initialize("ShooterThread");
+		// shooter.initialize("ShooterThread");
 
 		vision = new Vision();
 		vision.initialize("VisionThread");
