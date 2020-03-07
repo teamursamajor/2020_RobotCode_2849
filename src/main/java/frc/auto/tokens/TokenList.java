@@ -13,7 +13,7 @@ public interface TokenList {
     Token OUTTAKE_TOKEN = new Token(TokenType.OUTTAKE, new String[] { "^\\s*outtake\\s*in", "^\\s*outtake\\s*out", "^\\s*outtake\\s*stop" });
     Token SHOOTER_TOKEN = new Token(TokenType.SHOOTER, new String[] { "^\\s*shoot" });
     Token TURN_TOKEN = new Token(TokenType.TURN, new String[] { "^\\s*turn" });
-    Token ALIGN_TOKEN = new Token(TokenType.TURN, new String[] { "^\\s*align" });
+    Token ALIGN_TOKEN = new Token(TokenType.ALIGN, new String[] { "^\\s*align" });
     Token WAIT_TOKEN = new Token(TokenType.WAIT, new String[] { "^\\s*wait" });
     Token MUSIC_TOKEN = new Token(TokenType.MUSIC, new String[] { "^\\s*music\\s*play", "^\\s*music\\s*pause", "^\\s*music\\s*stop" });
 
