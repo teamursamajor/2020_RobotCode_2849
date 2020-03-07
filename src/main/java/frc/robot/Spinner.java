@@ -91,6 +91,7 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
 
     public void runSubsystem() throws InterruptedException {
         currentTime = System.currentTimeMillis();
+        
         /*
          * Matches the color the color sensor is seeing to the closest
          * of four possible colors.
@@ -108,7 +109,6 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
         SmartDashboard.putNumber("Green", detectedColor.green);
         SmartDashboard.putNumber("Blue", detectedColor.blue);
         
-
         if (match.color == kBlueTarget)
             color = 'B';
         if (match.color == kRedTarget)
@@ -186,7 +186,6 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
      * @param slices the number of slices to spin
      */
     public void spinSlices(int slices) {
-        
         if (colorCounter < slices) {
             if (color != previousColor) { // when we see a different color
                 sameColor = 0;
