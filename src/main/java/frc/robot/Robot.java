@@ -66,6 +66,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
 		belt = new Belt();
 		belt.initialize("BeltThread");
 
+		// TODO depending on which we go with only use either outtake or shooter
 		outtake = new Outtake();
 		// outtake.initialize("OuttakeThread");
 
@@ -158,6 +159,8 @@ public class Robot extends TimedRobot implements UrsaRobot {
 		spinner.readControls();
 		// musicPlayer.readControls();
 		vision.readControls();
+		drive.readControls();
+		shooter.readControls();
 	}
 
 	/**

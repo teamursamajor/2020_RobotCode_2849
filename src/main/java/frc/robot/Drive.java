@@ -40,8 +40,8 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 	public static boolean driving = false;
 
 	/**
-	 * Constructor for the Drive subsystem. Only one Drive object should be
-	 * instantiated at any time.
+	 * Constructor for the Drive subsystem.
+	 * Only one Drive object should be instantiated at any time.
 	 */
 	public Drive() {
 		setMode(DriveMode.STOP);
@@ -457,6 +457,7 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 	}
 
 	/**
+	 * TODO drive forward when target is aligned. maximize area and then exit
 	 * Iterates the auto align control loop to automatically align
 	 * the robot to a given Limelight target (if such a target exists)
 	 */
@@ -478,10 +479,10 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 
 			// set drive powers to passive speed + PID speed
 			if (Vision.tx < 0) {// need to turn right
-				System.out.println("left power: " + (passiveSpeed + outputPower));
+				System.out.println("right power: " + (passiveSpeed + outputPower));
 				setLeftPower(passiveSpeed + outputPower);
 			} else if (Vision.tx > 0) { // need to turn left
-				System.out.println("right power: " + (passiveSpeed + outputPower));
+				System.out.println("left power: " + (passiveSpeed + outputPower));
 				setRightPower(passiveSpeed + outputPower);
 			}
 
@@ -494,7 +495,7 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 			}
 
 			if (Vision.ta > maxTapeAreaPercent) {
-				System.out.println("wrong target -- kill align");
+				System.out.println("kill align");
 				if (Robot.robotMode.equals("Teleop"))
 					setMode(DriveMode.DRIVE_STICKS);
 				else
