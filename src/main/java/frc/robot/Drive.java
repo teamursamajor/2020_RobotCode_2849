@@ -104,10 +104,10 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 		 */
 		if (leftPower != 0 && rightPower != 0) {
 			driving = true;
-			// reduces speed for driving up to spinner
+			// TODO test -- reduces speed for driving up to spinner
 			if (Spinner.spinning) {
 				System.out.println("spinning power activated");
-				leftPower *= 0.06; //test values
+				leftPower *= 0.06;
 				rightPower *= 0.06;
 			}
 			setLeftPower(leftPower);
@@ -256,7 +256,9 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 	}
 
 	public void readControls() {
-		// TODO listen for shooter button and set align mode
+		if (xbox.getButton(controls.map.get("outtake_out"))) {
+			setMode(DriveMode.ALIGN);
+		}
 	}
 
 	/**
@@ -475,20 +477,28 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 				outputPower = maxTurnPower;
 
 			// set drive powers to passive speed + PID speed
-			if (Vision.tx < 0) // need to turn right
+			if (Vision.tx < 0) {// need to turn right
 				System.out.println("left power: " + (passiveSpeed + outputPower));
-				// Drive.setLeftPower(passiveSpeed + outputPower);
-			else if (Vision.tx > 0) // need to turn left
+				setLeftPower(passiveSpeed + outputPower);
+			} else if (Vision.tx > 0) { // need to turn left
 				System.out.println("right power: " + (passiveSpeed + outputPower));
-				// Drive.setRightPower(passiveSpeed + outputPower);
+				setRightPower(passiveSpeed + outputPower);
+			}
 
 			if (Math.abs(Vision.tx) < tolerance) {
-				outputPower = 0;
 				System.out.println("target acquired");
+				if (Robot.robotMode.equals("Teleop"))
+					setMode(DriveMode.DRIVE_STICKS);
+				else
+					setMode(DriveMode.AUTO_DRIVE);
 			}
 
 			if (Vision.ta > maxTapeAreaPercent) {
 				System.out.println("wrong target -- kill align");
+				if (Robot.robotMode.equals("Teleop"))
+					setMode(DriveMode.DRIVE_STICKS);
+				else
+					setMode(DriveMode.AUTO_DRIVE);
 			}
 		} else {
 			System.out.println("NO VALID TARGET");

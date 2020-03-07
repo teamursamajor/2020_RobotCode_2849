@@ -12,6 +12,7 @@ import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.util.Color;
 
 /**
+ * TODO make manual spinning use triggers
  * This class operates the Spinner mechanism.
  */
 public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot {
@@ -29,12 +30,14 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
     // private long currentTime, startTime;
     private int sameColor = 0, colorCounter = 0;
 
-    /** For storing slices to spin */
+    /**
+     * For storing slices to spin
+     */
     private int slicesToSpin;
 
     private long currentTime;
 
-    /** Control loop variables */
+    // Control loop variables
     final double goodKP = 0.005;
     double controlPower = 1.00;
     int sliceThreshold = 20;

@@ -16,30 +16,29 @@ AUTOSELECTOR:
 * Document class
 
 AUTOCOMPILER:
+* ADD ALIGN/SHOOTER TOKENS
 * Use Logger to log errors in parsing when throwing exceptions
 * Design and organize auto scripts!
 * Add math operation/paretheses/comma support? (ok maybe next year)
 
 DRIVETRAIN:
 * Motion profiling?
-* Test automatic turning, driving, etc. with limited acceleration
+* Test auto alignment
 * Refine acceleration limit
-* Figure out why turning backwards is weird for Nico
 
 CLIMBER:
 * Distance limit?
-* Limit switch?
 * Coast mode?
 * Refine and test
 
 INTAKE/OUTTAKE:
 * Test and refine system
-* GET LINE SENSOR ON!!!
 
 SPINNER:
 * Comment/reorganize class
 * Test/refine detecting colors
-* Calibrate colors for actual wheel at USRA
+* Calibrate colors for actual wheel
+* Migrate manual control to triggers (ty SickoMode)
 
 MUSIC:
 * Test music in auto
