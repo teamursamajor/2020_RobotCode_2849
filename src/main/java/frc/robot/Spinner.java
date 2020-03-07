@@ -30,9 +30,6 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
     // private long currentTime, startTime;
     private int sameColor = 0, colorCounter = 0;
 
-    /**
-     * For storing slices to spin
-     */
     private int slicesToSpin;
 
     private long currentTime;
