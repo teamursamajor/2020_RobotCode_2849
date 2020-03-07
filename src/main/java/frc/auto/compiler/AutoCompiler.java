@@ -82,6 +82,10 @@ public class AutoCompiler {
 					}
 					throw new Exception(); // if there is not a Number
 
+				case ALIGN:
+					taskSet.addTask(new DriveTask(0, drive, DriveMode.ALIGN));
+					break;
+					
 				case INTAKE:
 					if (tokenList.get(0).type == TokenType.BOOLEAN) { // expecting Boolean next
 						boolean IntakeActive = ((DataToken<Boolean>) tokenList.remove(0)).getValue();

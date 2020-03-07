@@ -29,7 +29,7 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 		AUTO_DRIVE, TURN, ALIGN, DRIVE_STICKS, STOP;
 	}
 
-	public static WPI_TalonFX mFrontLeft, mFrontRight, mRearLeft, mRearRight;
+	public  WPI_TalonFX mFrontLeft, mFrontRight, mRearLeft, mRearRight;
 	private double leftPower, rightPower;
 
 	/**
@@ -77,6 +77,10 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 	public void runSubsystem() {
 		// Calculates average position for use in autonomous
 		averagePos = (getLeftDistance() + getRightDistance()) / 2.0;
+
+		// Goes back to drive sticks after align complete in teleop
+		if (subsystemMode == DriveMode.STOP && Robot.robotMode.equals("Teleop"));
+			setMode(DriveMode.DRIVE_STICKS);
 
 		switch (subsystemMode) {
 		case AUTO_DRIVE:
@@ -217,7 +221,7 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 	 * Stops all four motors. Remember that robot will still have forward momentum
 	 * and slide slightly.
 	 */
-	public static void stop() {
+	public void stop() {
 		mFrontLeft.stopMotor();
 		mFrontRight.stopMotor();
 		mRearLeft.stopMotor();
@@ -230,7 +234,7 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 	 * 
 	 * @param power the power the motors get set to
 	 */
-	public static void setPower(final double power) {
+	public void setPower(final double power) {
 		setRightPower(power);
 		setLeftPower(power);
 	}
@@ -240,7 +244,7 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 	 * 
 	 * @param power the power the motor is set to
 	 */
-	public static void setLeftPower(final double power) {
+	public void setLeftPower(final double power) {
 		mFrontLeft.set(-power);
 		mRearLeft.set(-power);
 	}
@@ -250,7 +254,7 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 	 * 
 	 * @param power the power the motor is set to.
 	 */
-	public static void setRightPower(final double power) {
+	public void setRightPower(final double power) {
 		mFrontRight.set(power);
 		mRearRight.set(power);
 	}
@@ -279,7 +283,7 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 			// desiredAngle = turnAmount(desiredAngle); // supposedly optimizes turning; TODO test
 			break;
 		case ALIGN:
-			// TODO add autocompiler implementation
+			// TODO add autocompiler implementation?
 			break;
 		case DRIVE_STICKS:
 			break;
@@ -488,18 +492,14 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 
 			if (Math.abs(Vision.tx) < tolerance) {
 				System.out.println("target acquired");
-				if (Robot.robotMode.equals("Teleop"))
-					setMode(DriveMode.DRIVE_STICKS);
-				else
-					setMode(DriveMode.AUTO_DRIVE);
+				setMode(DriveMode.STOP);
+				return;
 			}
 
 			if (Vision.ta > maxTapeAreaPercent) {
 				System.out.println("kill align");
-				if (Robot.robotMode.equals("Teleop"))
-					setMode(DriveMode.DRIVE_STICKS);
-				else
-					setMode(DriveMode.AUTO_DRIVE);
+				setMode(DriveMode.STOP);
+				return;
 			}
 		} else {
 			System.out.println("NO VALID TARGET");
