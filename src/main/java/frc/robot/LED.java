@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 
 /**
  * This is a subsystem class for controlling LEDs on the robot.
+ * @deprecated
  */
 public class LED extends Subsystem<LED.LEDMode> implements UrsaRobot {
 
