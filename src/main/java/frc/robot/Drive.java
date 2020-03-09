@@ -78,10 +78,6 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 		// Calculates average position for use in autonomous
 		averagePos = (getLeftDistance() + getRightDistance()) / 2.0;
 
-		// Goes back to drive sticks after align complete in teleop
-		if (subsystemMode == DriveMode.STOP && Robot.robotMode.equals("Teleop"));
-			setMode(DriveMode.DRIVE_STICKS);
-
 		switch (subsystemMode) {
 		case AUTO_DRIVE:
 			autoCalculator();
@@ -120,6 +116,16 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 			driving = false;
 			stop();
 		}
+	}
+
+	public void readControls() {
+		// Goes to align mode when shooter is activated
+		if (xbox.getButton(controls.map.get("outtake_out"))) {
+			setMode(DriveMode.ALIGN);
+		}
+		// Goes back to drive sticks after align complete in teleop
+		if (subsystemMode == DriveMode.STOP);
+			setMode(DriveMode.DRIVE_STICKS);
 	}
 
 	/**
@@ -259,12 +265,6 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 		mRearRight.set(power);
 	}
 
-	public void readControls() {
-		if (xbox.getButton(controls.map.get("outtake_out"))) {
-			setMode(DriveMode.ALIGN);
-		}
-	}
-
 	/**
 	 * Used for DriveTasks to communicate pertinent information to Drive about 
 	 * starting a certain auto task.
@@ -328,7 +328,6 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
     /**
      * Iterates the regular auto control loop and calculates the new powers for
      * Drive.
-
      */
     private void autoCalculator() {
         double leftOutputPower = 0.0, rightOutputPower = 0.0;
@@ -471,7 +470,7 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 			double maxTurnPower = 0.20;
 			double maxTapeAreaPercent = 60;
 			double passiveSpeed = 0.25;
-			double turnKp = 1.0 / 40.0;
+			double turnKp = 1.0 / 80.0;
 			double tolerance = 0.2;
 
 			// turn PID using tx
@@ -481,13 +480,15 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 			if (outputPower > maxTurnPower)
 				outputPower = maxTurnPower;
 
-			// set drive powers to passive speed + PID speed
+			// TODO TEST - set drive powers to passive speed + PID speed
 			if (Vision.tx < 0) {// need to turn right
 				System.out.println("right power: " + (passiveSpeed + outputPower));
-				setLeftPower(passiveSpeed + outputPower);
+				leftPower = passiveSpeed + outputPower;
+				rightPower = -leftPower;
 			} else if (Vision.tx > 0) { // need to turn left
 				System.out.println("left power: " + (passiveSpeed + outputPower));
-				setRightPower(passiveSpeed + outputPower);
+				rightPower = passiveSpeed + outputPower;
+				leftPower = -rightPower;
 			}
 
 			if (Math.abs(Vision.tx) < tolerance) {

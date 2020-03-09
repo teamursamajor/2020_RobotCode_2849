@@ -40,7 +40,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
 
 	// Logger
 	private DebugSelector debugSelect;
-	public static String robotMode;
+	private String robotMode;
 
 	/**
 	 * This function is run when the robot is first started up and should be used
