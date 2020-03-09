@@ -462,6 +462,7 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 
 	/**
 	 * TODO drive forward when target is aligned. maximize area and then exit
+	 * TODO do we need to use ty? other limelight vars?
 	 * Iterates the auto align control loop to automatically align
 	 * the robot to a given Limelight target (if such a target exists)
 	 */

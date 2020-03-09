@@ -31,21 +31,13 @@ CLIMBER:
 * Coast mode?
 * Refine and test
 
-INTAKE/OUTTAKE:
-* Test and refine system
+HIGH SHOOTER:
+* Test limelight drive auto alignment
+* Test PID loop on shooter motor
+* Test feeder with lim switch
 
 SPINNER:
 * Comment/reorganize class
 * Test/refine detecting colors
 * Calibrate colors for actual wheel
 * Migrate manual control to triggers (ty SickoMode)
-
-MUSIC:
-* Test music in auto
-* If driving, use climb Falcons
-* If climbing, use drive Falcons
-
-LEDs:
-* Reference 2018 code
-* Add ways to set LED depending on active task
-* Complete class
