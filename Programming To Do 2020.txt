@@ -5,36 +5,29 @@ META:
 * Make sure people understand Java, how to debug stuff, working with WPILib
 * Document code so we know what stuff does
 
-LOGGER:
-* Incorporate for debug/error info in testing auto
-* See if it still works alone
-* Debug selector??
-
-AUTOSELECTOR:
-* Make working Auto Selector interface in SmartDashboard
-* Come up with logical naming convention
-* Document class
-
-AUTOCOMPILER:
-* ADD ALIGN/SHOOTER TOKENS
-* Use Logger to log errors in parsing when throwing exceptions
-* Design and organize auto scripts!
-* Add math operation/paretheses/comma support? (ok maybe next year)
+HIGH SHOOTER:
+* Test PID loop on shooter motor
+* Test feeder with lim switch
 
 DRIVETRAIN:
-* Motion profiling?
 * Test auto alignment
 * Refine acceleration limit
+
+AUTOSELECTOR/AUTOCOMPILER:
+* Make working Auto Selector interface in SmartDashboard
+* Come up with logical naming convention
+* Document classes
+* Design and organize auto scripts!
+* Incorporate Logger for debug/error info in testing auto
+
+LOGGER:
+* Debug selector??
+* Use Logger to log errors in parsing when throwing exceptions
 
 CLIMBER:
 * Distance limit?
 * Coast mode?
 * Refine and test
-
-HIGH SHOOTER:
-* Test limelight drive auto alignment
-* Test PID loop on shooter motor
-* Test feeder with lim switch
 
 SPINNER:
 * Comment/reorganize class

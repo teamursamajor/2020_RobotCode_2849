@@ -25,10 +25,10 @@ public interface UrsaRobot {
 	public static final int SPINNER = 5, INTAKE = 2, BELT = 3, SHOOTER = 0, FEEDER = 1, OUTTAKE = 11;
 
 	// Sensor Ports
-	public static final int LINE_SENSOR_PORT = 5, FEEDER_SWITCH_PORT = 2, OUTTAKE_SWITCH_PORT = 0, CLIMB_SWITCH_PORT = 7;
+	public static final int FEEDER_SWITCH_PORT = 3, OUTTAKE_SWITCH_PORT = 0;
 
 	// Encoder Channels
-	public static final int SHOOTER_ENCODER_A = 0, SHOOTER_ENCODER_B = 1;
+	public static final int SHOOTER_ENCODER_A = 1, SHOOTER_ENCODER_B = 2;
 
 	// Tells encoder the value of each tick. Must be set in the corresponding file
 	public static final double GEAR_RATIO = 4.0d; // TODO change?
