@@ -16,7 +16,6 @@ public class Intake extends Subsystem<Intake.IntakeMode> implements UrsaRobot {
     }
 
     private final Spark intakeMotor;
-
     private Feeder feeder;
 
     /**

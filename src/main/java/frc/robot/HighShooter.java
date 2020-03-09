@@ -2,20 +2,17 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpiutil.math.MathUtil;
 
 /** 
  * This subsystem class operates the High Shooter mechanism.
  */
 public class HighShooter extends Subsystem<HighShooter.ShooterMode> implements UrsaRobot {
 
-    /**
-     * Used to scale up output power.
-     * Can be changed from SmartDashboard.
-     */
-    private double powerScale;
     private Feeder feeder;
     private Encoder encoder;
+    private PIDController pidController;
 
     /**
      * Modes for High Shooter
@@ -38,10 +35,16 @@ public class HighShooter extends Subsystem<HighShooter.ShooterMode> implements U
         setMode(ShooterMode.STOP);
 
         encoder = new Encoder(SHOOTER_ENCODER_A, SHOOTER_ENCODER_B);
+        encoder.setDistancePerPulse(1/2048.0);
 
-        powerScale = 1.0;
-        // Allows this to be modified in SmartDashboard
-        SmartDashboard.putNumber("Shooter Power Scale", powerScale);
+        // TODO TUNE VALUES
+        double kp = 1/2600.0;
+        double ki = 0.0;
+        double kd = 0.0;
+        double tolerance = 100;
+        double error = 10;
+        pidController = new PIDController(kp, ki, kd);
+        pidController.setTolerance(tolerance, error);
     }
 
     public void readControls() {
@@ -52,15 +55,17 @@ public class HighShooter extends Subsystem<HighShooter.ShooterMode> implements U
     } 
 
     public void runSubsystem() throws InterruptedException {
-        powerScale = SmartDashboard.getNumber("Shooter Power Scale", 0);
         switch (subsystemMode) {
         case ON:
-            // TODO WRITE PID LOOP - stay on 2600 rpm
-            double distance = encoder.getDistance();
-            // once ball is released
-            feeder.setMode(Feeder.FeederMode.IN);
-            // scale by powerScale
-            shooterMotor.set(distance*powerScale);
+            if (pidController.atSetpoint())
+                feeder.setMode(Feeder.FeederMode.IN);
+            double rpm = encoder.getRate()*60.0;
+            // TODO might need to multiply output power by -1?
+            double outputPower = pidController.calculate(rpm, 2600.0);
+            // TODO for testing
+            double minPower = -0.5, maxPower = 0.5;
+            outputPower = MathUtil.clamp(outputPower, minPower, maxPower);
+            shooterMotor.set(outputPower);
             break;
         case STOP:
             shooterMotor.stopMotor();
