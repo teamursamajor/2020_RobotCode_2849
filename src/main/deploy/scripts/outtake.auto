@@ -1,4 +1,5 @@
 # Outtake routine. Adjust time as desired.
+# DEPRECATED
 parallel {
     outtake out 0.8
     drive -2

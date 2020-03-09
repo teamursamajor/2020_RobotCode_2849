@@ -1,4 +1,5 @@
 # Outtake routine with belt. Adjust timing as desired.
+# DEPRECATED
 parallel {
     execute "outtake"
     belt true 0.5

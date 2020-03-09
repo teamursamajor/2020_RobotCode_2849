@@ -1,7 +1,0 @@
-outtake out
-wait 0.1
-outtake stop
-wait 5
-outtake in
-wait 0.1
-outtake stop
