@@ -2,3 +2,4 @@
 drive -80
 execute "outtake"
 drive 80
+print "complete"

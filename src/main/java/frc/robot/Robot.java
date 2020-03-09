@@ -28,10 +28,11 @@ public class Robot extends TimedRobot implements UrsaRobot {
 	private Spinner spinner;
 	private Intake intake;
 	private Belt belt;
-	private Outtake outtake;
+	// private Outtake outtake;
 	private Climb climb;
-	private MusicPlayer musicPlayer;
+	// private MusicPlayer musicPlayer;
 	private HighShooter shooter;
+	private Feeder feeder;
 	private Vision vision;
 
 	// Autonomous
@@ -60,26 +61,30 @@ public class Robot extends TimedRobot implements UrsaRobot {
 		climb = new Climb();
 		climb.initialize("ClimbThread");
 
-		intake = new Intake();
-		intake.initialize("IntakeThread");
 
 		belt = new Belt();
 		belt.initialize("BeltThread");
 
 		// TODO depending on which we go with only use either outtake or shooter
-		outtake = new Outtake();
+		// outtake = new Outtake();
 		// outtake.initialize("OuttakeThread");
 
-		shooter = new HighShooter();
+		feeder = new Feeder();
+		feeder.initialize("FeederThread");
+
+		intake = new Intake(feeder);
+		intake.initialize("IntakeThread");
+
+		shooter = new HighShooter(feeder);
 		shooter.initialize("ShooterThread");
 
-		musicPlayer = new MusicPlayer();
+		// musicPlayer = new MusicPlayer();
 		// musicPlayer.initialize("MusicThread");
 
 		vision = new Vision();
 		vision.initialize("VisionThread");
 
-		autoCompiler = new AutoCompiler(drive, intake, belt, outtake, musicPlayer, shooter);
+		autoCompiler = new AutoCompiler(drive, intake, belt, shooter);
 
 		// autoSelector = new AutoSelector();
 
@@ -109,7 +114,6 @@ public class Robot extends TimedRobot implements UrsaRobot {
 		robotMode = "Autonomous";
 
 		drive.resetEncoders();
-		// drive.resetNavx();
 		drive.setOpenloopRamp(5);
 
 		// String autoMode =
@@ -155,7 +159,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
 		climb.readControls();
 		intake.readControls();
 		belt.readControls();
-		outtake.readControls();
+		// outtake.readControls();
 		spinner.readControls();
 		// musicPlayer.readControls();
 		vision.readControls();
@@ -189,9 +193,11 @@ public class Robot extends TimedRobot implements UrsaRobot {
 		climb.setMode(Climb.ClimbMode.STOP);
 		intake.setMode(Intake.IntakeMode.STOP);
 		belt.setMode(Belt.BeltMode.STOP);
-		outtake.setMode(Outtake.OuttakeMode.STOP);
+		// outtake.setMode(Outtake.OuttakeMode.STOP);
+		shooter.setMode(HighShooter.ShooterMode.STOP);
 		spinner.setMode(Spinner.SpinnerMode.STOP);
-		musicPlayer.setMode(MusicPlayer.MusicMode.STOP);
+		feeder.setMode(Feeder.FeederMode.STOP);
+		// musicPlayer.setMode(MusicPlayer.MusicMode.STOP);
 
 		Logger.log("Disabled " + robotMode + " mode", LogLevel.INFO);
 		Logger.closeWriters();

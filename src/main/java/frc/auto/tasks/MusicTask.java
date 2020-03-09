@@ -5,6 +5,7 @@ import frc.robot.MusicPlayer.MusicMode;
 
 /**
  * This is a Task class for playing music during autonomous.
+ * @deprecated
  */
 public class MusicTask extends Task {
     

@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * This class plays music from the Falcons.
+ * @deprecated
  */
 public class MusicPlayer extends Subsystem<MusicPlayer.MusicMode> implements UrsaRobot {
     

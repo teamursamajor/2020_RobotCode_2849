@@ -124,8 +124,9 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 			setMode(DriveMode.ALIGN);
 		}
 		// Goes back to drive sticks after align complete in teleop
-		if (subsystemMode == DriveMode.STOP);
+		if (subsystemMode == DriveMode.STOP) {
 			setMode(DriveMode.DRIVE_STICKS);
+		}
 	}
 
 	/**

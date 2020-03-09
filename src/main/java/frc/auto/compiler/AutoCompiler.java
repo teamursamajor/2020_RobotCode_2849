@@ -3,12 +3,10 @@ package frc.auto.compiler;
 import java.io.IOException;
 import java.util.ArrayList;
 import frc.auto.tasks.*;
-import frc.robot.HighShooter.ShooterMode;
 import frc.robot.Drive.DriveMode;
 import frc.robot.Intake.IntakeMode;
 import frc.robot.Belt.BeltMode;
-import frc.robot.Outtake.OuttakeMode;
-import frc.robot.MusicPlayer.MusicMode;
+import frc.robot.HighShooter.ShooterMode;
 import frc.auto.tokens.*;
 import frc.robot.*;
 
@@ -26,8 +24,8 @@ public class AutoCompiler {
 	private Drive drive;
 	private Intake intake;
 	private Belt belt;
-	private Outtake outtake;
-	private MusicPlayer musicPlayer;
+	// private Outtake outtake;
+	// private MusicPlayer musicPlayer;
 	private HighShooter shooter;
 	
 	/**
@@ -36,15 +34,14 @@ public class AutoCompiler {
 	 * @param drive The active instance of Drive.
 	 * @param intake The active instance of Intake.
 	 * @param belt The active instance of Belt.
-	 * @param outtake The active instance of Outtake.
-	 * @param musicPlayer The active instance of MusicPlayer.
+	 * @param shooter The active instance of HighShooter.
 	 */
-	public AutoCompiler(Drive drive, Intake intake, Belt belt, Outtake outtake, MusicPlayer musicPlayer, HighShooter shooter) {
+	public AutoCompiler(Drive drive, Intake intake, Belt belt, HighShooter shooter) {
 		this.drive = drive;
 		this.intake = intake;
 		this.belt = belt;
-		this.outtake = outtake;
-		this.musicPlayer = musicPlayer;
+		// this.outtake = outtake;
+		// this.musicPlayer = musicPlayer;
 		this.shooter = shooter;
 	}
 
@@ -120,22 +117,22 @@ public class AutoCompiler {
 					}
 					break;
 
-				case OUTTAKE: // can only be one of three arguments
-					OuttakeTask outtakeTask;
-					if (t.argument == 0)
-						outtakeTask = new OuttakeTask(outtake, OuttakeMode.IN);
-					else if (t.argument == 1)
-						outtakeTask = new OuttakeTask(outtake, OuttakeMode.OUT);
-					else
-						outtakeTask = new OuttakeTask(outtake, OuttakeMode.STOP);
+				// case OUTTAKE: // can only be one of three arguments
+				// 	OuttakeTask outtakeTask;
+				// 	if (t.argument == 0)
+				// 		outtakeTask = new OuttakeTask(outtake, OuttakeMode.IN);
+				// 	else if (t.argument == 1)
+				// 		outtakeTask = new OuttakeTask(outtake, OuttakeMode.OUT);
+				// 	else
+				// 		outtakeTask = new OuttakeTask(outtake, OuttakeMode.STOP);
 
-					if (tokenList.get(0).type == TokenType.NUMBER) { // if there is a Number next (for run time)
-						double time = ((DataToken<Double>) tokenList.remove(0)).getValue();
-						outtakeTask.setRunTime(time);
-					}
+				// 	if (tokenList.get(0).type == TokenType.NUMBER) { // if there is a Number next (for run time)
+				// 		double time = ((DataToken<Double>) tokenList.remove(0)).getValue();
+				// 		outtakeTask.setRunTime(time);
+				// 	}
 
-					taskSet.addTask(outtakeTask);
-					break;
+				// 	taskSet.addTask(outtakeTask);
+				// 	break;
 
 				case SHOOTER:
 					if (tokenList.get(0).type == TokenType.BOOLEAN) { // expecting Boolean next
@@ -154,20 +151,20 @@ public class AutoCompiler {
 					}
 					break;
 				
-				case MUSIC:
-					if (t.argument == 0) { // Playing song
-						if (tokenList.get(0).type == TokenType.STRING) { // expecting String next
-							String song = ((DataToken<String>) tokenList.remove(0)).getValue();
-							taskSet.addTask(new MusicTask(musicPlayer, MusicMode.PLAY, "music/" + song.trim() + ".chrp"));
-						} else {
-							taskSet.addTask(new MusicTask(musicPlayer, MusicMode.PLAY));
-						}
-					} else if (t.argument == 1) { // Pausing song
-						taskSet.addTask(new MusicTask(musicPlayer, MusicMode.PAUSE));
-					} else { // Stopping song
-						taskSet.addTask(new MusicTask(musicPlayer, MusicMode.STOP));
-					}
-					break;
+				// case MUSIC:
+				// 	if (t.argument == 0) { // Playing song
+				// 		if (tokenList.get(0).type == TokenType.STRING) { // expecting String next
+				// 			String song = ((DataToken<String>) tokenList.remove(0)).getValue();
+				// 			taskSet.addTask(new MusicTask(musicPlayer, MusicMode.PLAY, "music/" + song.trim() + ".chrp"));
+				// 		} else {
+				// 			taskSet.addTask(new MusicTask(musicPlayer, MusicMode.PLAY));
+				// 		}
+				// 	} else if (t.argument == 1) { // Pausing song
+				// 		taskSet.addTask(new MusicTask(musicPlayer, MusicMode.PAUSE));
+				// 	} else { // Stopping song
+				// 		taskSet.addTask(new MusicTask(musicPlayer, MusicMode.STOP));
+				// 	}
+				// 	break;
 
 				case EXECUTE:
 					if (tokenList.get(0).type == TokenType.STRING) { // expecting String next

@@ -5,6 +5,7 @@ import frc.robot.Outtake.OuttakeMode;
 
 /**
  * This is a task class for controlling the Outtake mechanism during autonomous.
+ * @deprecated
  */
 public class OuttakeTask extends Task {
     

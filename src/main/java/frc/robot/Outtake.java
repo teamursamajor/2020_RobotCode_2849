@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Spark;
 
 /**
  * This class operates the Outtake mechanism.
+ * @deprecated
  */
 public class Outtake extends Subsystem<Outtake.OuttakeMode> implements UrsaRobot  {
 

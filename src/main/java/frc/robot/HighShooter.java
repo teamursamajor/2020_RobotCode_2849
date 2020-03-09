@@ -1,15 +1,25 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** 
- * TODO add second motor for feeding in
  * This subsystem class operates the High Shooter mechanism.
  */
 public class HighShooter extends Subsystem<HighShooter.ShooterMode> implements UrsaRobot {
 
     /**
+     * Used to scale up output power.
+     * Can be changed from SmartDashboard.
+     */
+    private double powerScale;
+    private Feeder feeder;
+    private Encoder encoder;
+
+    /**
      * Modes for High Shooter
+     * TODO add more modes??
      */
     public enum ShooterMode {
         ON, STOP
@@ -21,9 +31,17 @@ public class HighShooter extends Subsystem<HighShooter.ShooterMode> implements U
 	 * Constructor for the High Shooter subsystem.
      * Only one HighShooter object should be instantiated at any time.
 	 */
-    public HighShooter() {
+    public HighShooter(Feeder feeder) {
+        this.feeder = feeder;
+
         shooterMotor = new Spark(SHOOTER);
         setMode(ShooterMode.STOP);
+
+        encoder = new Encoder(SHOOTER_ENCODER_A, SHOOTER_ENCODER_B);
+
+        powerScale = 1.0;
+        // Allows this to be modified in SmartDashboard
+        SmartDashboard.putNumber("Shooter Power Scale", powerScale);
     }
 
     public void readControls() {
@@ -34,23 +52,18 @@ public class HighShooter extends Subsystem<HighShooter.ShooterMode> implements U
     } 
 
     public void runSubsystem() throws InterruptedException {
-        // Controlling high shooter motors
+        powerScale = SmartDashboard.getNumber("Shooter Power Scale", 0);
         switch (subsystemMode) {
         case ON:
-            // TODO skeleton code -- adjust based on testing
-            if (Vision.validTarget()) {
-                double basePower = 0.25;
-                double scale = 0.01;
-                double outputPower = basePower + scale * Vision.ty;
-                System.out.println("Shooter output power: " + outputPower);
-            } else {
-                System.out.println("Default output power");
-            }
-            // System.out.println("big bets. it ran");
+            // TODO WRITE PID LOOP - stay on 2600 rpm
+            double distance = encoder.getDistance();
+            // once ball is released
+            feeder.setMode(Feeder.FeederMode.IN);
+            // scale by powerScale
+            shooterMotor.set(distance*powerScale);
             break;
         case STOP:
-            // System.out.println("Big bets. it turned off");
-            shooterMotor.set(0.0);
+            shooterMotor.stopMotor();
             break;
         }
     }

@@ -73,7 +73,7 @@ public abstract class Subsystem<E> implements Runnable {
     }
 
     /**
-     * Abstract method for subsystems to do stuff in their individual threads.
+     * Abstract method for subsystems to perform actions in their individual threads.
      * 
      * @throws InterruptedException in case thread is interrupted to change mode.
      */
