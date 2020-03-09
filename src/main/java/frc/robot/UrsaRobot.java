@@ -21,7 +21,8 @@ public interface UrsaRobot {
 	public static final int CLIMB_LEFT = 4, CLIMB_RIGHT = 5;
 
 	// Spark Ports
-	public static final int SPINNER = 1, INTAKE = 2, BELT = 3, SHOOTER = 4, FEEDER = 5, OUTTAKE = 11;
+	// TODO revert SPINNER to 1
+	public static final int SPINNER = 5, INTAKE = 2, BELT = 3, SHOOTER = 0, FEEDER = 1, OUTTAKE = 11;
 
 	// Sensor Ports
 	public static final int LINE_SENSOR_PORT = 5, FEEDER_SWITCH_PORT = 2, OUTTAKE_SWITCH_PORT = 0, CLIMB_SWITCH_PORT = 7;

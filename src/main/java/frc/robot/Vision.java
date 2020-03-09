@@ -114,12 +114,12 @@ public class Vision extends Subsystem<Vision.VisionMode> implements UrsaRobot {
         }
 
         // Toggles taking snapshots -- TODO temp
-        if (xbox.getSingleButtonPress(controls.map.get("outtake_in"))) {
+        if (xbox.getSingleButtonPress(controls.map.get("shooter_off"))) {
             snapshot = !snapshot;
         }
 
         // Prints out target information -- TODO temp
-        if (xbox.getSingleButtonPress(controls.map.get("outtake_out"))) {
+        if (xbox.getSingleButtonPress(controls.map.get("shooter_out"))) {
             if (validTarget()) { // If a target is found
                 System.out.println("tx: " + tx); // Horizontal offset
                 System.out.println("ty: " + ty); // Vertical offset

@@ -48,9 +48,9 @@ public class HighShooter extends Subsystem<HighShooter.ShooterMode> implements U
     }
 
     public void readControls() {
-        if (xbox.getButton(controls.map.get("outtake_out")))
+        if (xbox.getButton(controls.map.get("shooter_out")))
             setMode(ShooterMode.ON);
-        else if (xbox.getButton(controls.map.get("outtake_in")))
+        else if (xbox.getButton(controls.map.get("shooter_off")))
             setMode(ShooterMode.STOP);
     } 
 
