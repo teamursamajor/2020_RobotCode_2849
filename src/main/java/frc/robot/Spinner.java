@@ -160,10 +160,12 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
             break;
         case LEFT:
             spinning = true;
+            System.out.println(xbox.getAxis(XboxController.AXIS_LEFTTRIGGER));
             spinMotor.set(xbox.getAxis(XboxController.AXIS_LEFTTRIGGER)*0.50);
             break;
         case RIGHT:
             spinning = true;
+            System.out.println(xbox.getAxis(XboxController.AXIS_RIGHTTRIGGER));
             spinMotor.set(-xbox.getAxis(XboxController.AXIS_RIGHTTRIGGER)*0.50);
             break;
         case STOP:

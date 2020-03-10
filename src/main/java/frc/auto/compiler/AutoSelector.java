@@ -15,14 +15,12 @@ public class AutoSelector {
 	private SendableChooser<String> startingPosition = new SendableChooser<String>();
 
 	public AutoSelector() {
-		startingPosition.setDefaultOption("Select starting position...", "");
-        startingPosition.addOption("Bottom Left", "L1");
-        startingPosition.addOption("Top Left", "L2");
-        startingPosition.addOption("Middle", "M1");
-        startingPosition.addOption("Bottom Right", "R1");      
-        startingPosition.addOption("Top Right", "R2");
+		startingPosition.setDefaultOption("Select starting position:", "");
+        startingPosition.addOption("Left", "L");
+        startingPosition.addOption("Middle", "M");
+        startingPosition.addOption("Right", "R");
         
-		for (int i = 0; i < 4; i++){
+		for (int i = 0; i < 3; i++){
 			SendableChooser<String> sc = new SendableChooser<String>();
 			autoList.add(sc);
 		}
@@ -30,8 +28,8 @@ public class AutoSelector {
 	}
 
 	/**
-	 * Searches through auto script file directory for valid auto modes.
-	 * @return All valid auto scripts.
+	 * Searches through auto script file directory for valid auto files.
+	 * @return All valid auto files.
 	 */
 	public File[] findAutoFiles() {
 		File[] autoFiles;
@@ -49,8 +47,7 @@ public class AutoSelector {
 	}
 
 	/**
-	 * TODO update this entire thing
-	 * @return
+	 * @return a list of valid auto scripts
 	 */
 	public String[] findAutoModes() {
 		String[] names;
@@ -72,10 +69,9 @@ public class AutoSelector {
 	 * @param names
 	 */
 	public void sendAutoModes(String[] names) {
-		autoList.get(0).setDefaultOption("Select LL auto", "LL");
-		autoList.get(1).setDefaultOption("Select LR auto", "LR");
-		autoList.get(2).setDefaultOption("Select RL auto", "RL");
-		autoList.get(3).setDefaultOption("Select RR auto", "RR");
+		autoList.get(0).setDefaultOption("Select L auto", "L");
+		autoList.get(1).setDefaultOption("Select R auto", "R");
+		autoList.get(2).setDefaultOption("Select M auto", "M");
 
 		for(SendableChooser<String> chooser: autoList){
 			for (String name : names) {
@@ -103,22 +99,18 @@ public class AutoSelector {
 		return startingPosition.getSelected();
 	}
 
-	// TODO ADAPT THIS FOR 2020!
 	/**
 	 * Finds an Auto Script which performs the highest task in the ranked list of tasks
 	 * from the SmartDashboard that matches the current setup.
 	 * 
-	 * @param robotPos  The hab platform our robot starts on. L1/2, M1, R1/2. // TODO reconsider
+	 * @param robotPos  The position our robot starts on (L, M, R)
 	 * @param autoPrefs String array of ranked Auto Modes
 	 * @param autoFiles File array of all files in the AutoModes folder
 	 * @return String name of the auto file to run
 	 */
 	public String pickAutoMode(String robotPos, String[] autoPrefs, File[] autoFiles) {
-		// TODO make a new selector for this based on what we want to do
-		// String mode = " ";
-
-		// String regex = "/(" + robotPos + ")(" + mode + "(.auto)/gi";
-		String regex = "\\w*\\.auto";
+		String mode = " ";
+		String regex = "/(" + robotPos + ")(" + mode + "(.auto)/gi";
 
 		for (File f : autoFiles) {
 			if (f.getName().matches(regex)) {

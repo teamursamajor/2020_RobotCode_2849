@@ -33,3 +33,4 @@ SPINNER:
 * Comment/reorganize class
 * Test/refine detecting colors
 * Calibrate colors for actual wheel
+* Design system so that we don't even need to calibrate anything

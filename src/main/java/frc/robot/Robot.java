@@ -53,14 +53,13 @@ public class Robot extends TimedRobot implements UrsaRobot {
 		Logger.log("********ROBOT PROGRAM STARTING********", LogLevel.INFO);
 
 		drive = new Drive();
-		drive.initialize("DriveThread");
+		// drive.initialize("DriveThread");
 
 		spinner = new Spinner();
 		spinner.initialize("SpinnerThread");
 
 		climb = new Climb();
-		climb.initialize("ClimbThread");
-
+		// climb.initialize("ClimbThread");
 
 		belt = new Belt();
 		belt.initialize("BeltThread");

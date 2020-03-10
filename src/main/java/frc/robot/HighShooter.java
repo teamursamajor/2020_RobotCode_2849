@@ -16,7 +16,6 @@ public class HighShooter extends Subsystem<HighShooter.ShooterMode> implements U
 
     /**
      * Modes for High Shooter
-     * TODO add more modes??
      */
     public enum ShooterMode {
         ON, STOP
@@ -38,13 +37,13 @@ public class HighShooter extends Subsystem<HighShooter.ShooterMode> implements U
         encoder.setDistancePerPulse(1/2048.0);
 
         // TODO TUNE VALUES
-        double kp = 1/2600.0;
-        double ki = 0.0;
+        double kp = 1/1000.0;
+        double ki = 1/1300.0;
         double kd = 0.0;
-        double tolerance = 100;
-        double error = 10;
+        // double tolerance = 1;
+        // double error = 10;
         pidController = new PIDController(kp, ki, kd);
-        pidController.setTolerance(tolerance, error);
+        // pidController.setTolerance(tolerance, error);
     }
 
     public void readControls() {
@@ -52,7 +51,7 @@ public class HighShooter extends Subsystem<HighShooter.ShooterMode> implements U
             setMode(ShooterMode.ON);
         else if (xbox.getButton(controls.map.get("shooter_off")))
             setMode(ShooterMode.STOP);
-    } 
+    }
 
     public void runSubsystem() throws InterruptedException {
         switch (subsystemMode) {
@@ -61,11 +60,13 @@ public class HighShooter extends Subsystem<HighShooter.ShooterMode> implements U
                 feeder.setMode(Feeder.FeederMode.IN);
             double rpm = encoder.getRate()*60.0;
             // TODO might need to multiply output power by -1?
-            double outputPower = pidController.calculate(rpm, 2600.0);
+            double outputPower = pidController.calculate(rpm, -2600.0);
             // TODO for testing
             double minPower = -0.75, maxPower = 0.75;
             outputPower = MathUtil.clamp(outputPower, minPower, maxPower);
-            shooterMotor.set(outputPower);
+            System.out.println("RPM: " + rpm);
+            System.out.println("Output: " + outputPower);
+            shooterMotor.set(-outputPower);
             break;
         case STOP:
             shooterMotor.stopMotor();

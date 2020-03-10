@@ -120,9 +120,9 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 
 	public void readControls() {
 		// Goes to align mode when shooter is activated
-		if (xbox.getButton(controls.map.get("shooter_out"))) {
-			setMode(DriveMode.ALIGN);
-		}
+		// if (xbox.getButton(controls.map.get("shooter_out"))) {
+		// 	setMode(DriveMode.ALIGN);
+		// }
 		// Goes back to drive sticks after align complete in teleop
 		if (subsystemMode == DriveMode.STOP) {
 			setMode(DriveMode.DRIVE_STICKS);
