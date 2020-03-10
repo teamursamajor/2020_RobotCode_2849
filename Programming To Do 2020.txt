@@ -33,4 +33,3 @@ SPINNER:
 * Comment/reorganize class
 * Test/refine detecting colors
 * Calibrate colors for actual wheel
-* Migrate manual control to triggers (ty SickoMode)

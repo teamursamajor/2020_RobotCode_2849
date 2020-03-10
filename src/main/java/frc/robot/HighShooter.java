@@ -63,7 +63,7 @@ public class HighShooter extends Subsystem<HighShooter.ShooterMode> implements U
             // TODO might need to multiply output power by -1?
             double outputPower = pidController.calculate(rpm, 2600.0);
             // TODO for testing
-            double minPower = -0.5, maxPower = 0.5;
+            double minPower = -0.75, maxPower = 0.75;
             outputPower = MathUtil.clamp(outputPower, minPower, maxPower);
             shooterMotor.set(outputPower);
             break;

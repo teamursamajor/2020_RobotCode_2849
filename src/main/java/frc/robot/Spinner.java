@@ -76,9 +76,9 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
         }
 
         // For manual control
-        if (xbox.getDPad(controls.map.get("spinner_left"))) {
+        if (xbox.getAxisGreaterThan(XboxController.AXIS_LEFTTRIGGER, 0)) {
             setMode(SpinnerMode.LEFT);
-        } else if (xbox.getDPad(controls.map.get("spinner_right"))) {
+        } else if (xbox.getAxisGreaterThan(XboxController.AXIS_RIGHTTRIGGER, 0)) {
             setMode(SpinnerMode.RIGHT);
         } else if (subsystemMode == SpinnerMode.LEFT || subsystemMode == SpinnerMode.RIGHT) {
             // Only disables when we're already in manual control
@@ -160,11 +160,11 @@ public class Spinner extends Subsystem<Spinner.SpinnerMode> implements UrsaRobot
             break;
         case LEFT:
             spinning = true;
-            spinMotor.set(0.50);
+            spinMotor.set(xbox.getAxis(XboxController.AXIS_LEFTTRIGGER)*0.50);
             break;
         case RIGHT:
             spinning = true;
-            spinMotor.set(-0.50);
+            spinMotor.set(-xbox.getAxis(XboxController.AXIS_RIGHTTRIGGER)*0.50);
             break;
         case STOP:
             spinning = false;
