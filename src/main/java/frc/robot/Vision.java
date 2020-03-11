@@ -19,15 +19,15 @@ public class Vision extends Subsystem<Vision.VisionMode> implements UrsaRobot {
     private Mat image;
     private boolean camSwitch;
 
-    /**
-     * Limelight status
-     */
-    public static boolean visionProcessing, snapshot;
+    // /**
+    //  * Limelight status
+    //  */
+    // public static boolean visionProcessing, snapshot;
 
     /**
      * Limelight table values
      */
-    public static double tx, ty, tv, ta, ts;
+    // public static double tx, ty, tv, ta, ts;
 
     /**
      * Can be changed to modify video quality/framerate
@@ -38,7 +38,7 @@ public class Vision extends Subsystem<Vision.VisionMode> implements UrsaRobot {
      * Modes for Vision (pertaining to Limelight)
      */
     public enum VisionMode {
-        PROCESSING, OFF
+        // PROCESSING, OFF
     }
 
 	public Vision() {
@@ -61,32 +61,32 @@ public class Vision extends Subsystem<Vision.VisionMode> implements UrsaRobot {
         outputStream = CameraServer.getInstance().putVideo("Camera", width, height);
         
         // Limelight Handling
-        limelightTable.getEntry("pipeline").setNumber(0);
-        visionProcessing = true;
-        setMode(VisionMode.PROCESSING);
+        // limelightTable.getEntry("pipeline").setNumber(0);
+        // visionProcessing = true;
+        // setMode(VisionMode.PROCESSING);
 	}
 
 	public void runSubsystem() {
-        subsystemMode = visionProcessing ? VisionMode.PROCESSING : VisionMode.OFF;
+        // subsystemMode = visionProcessing ? VisionMode.PROCESSING : VisionMode.OFF;
 
-        tx = limelightTable.getEntry("tx").getDouble(0);
-        ty = limelightTable.getEntry("ty").getDouble(0);
-        tv = limelightTable.getEntry("tv").getDouble(0);
-        ta = limelightTable.getEntry("ta").getDouble(0);
-        ts = limelightTable.getEntry("ts").getDouble(0);
+        // tx = limelightTable.getEntry("tx").getDouble(0);
+        // ty = limelightTable.getEntry("ty").getDouble(0);
+        // tv = limelightTable.getEntry("tv").getDouble(0);
+        // ta = limelightTable.getEntry("ta").getDouble(0);
+        // ts = limelightTable.getEntry("ts").getDouble(0);
 
-        limelightTable.getEntry("snapshot").setNumber(snapshot ? 1 : 0);
+        // limelightTable.getEntry("snapshot").setNumber(snapshot ? 1 : 0);
 
-        switch (subsystemMode) {
-        case PROCESSING:
-            limelightTable.getEntry("camMode").setNumber(0); // enables vision processing
-            limelightTable.getEntry("ledMode").setNumber(3); // forces LEDs on
-            break;
-        case OFF:
-            limelightTable.getEntry("camMode").setNumber(1); // sets normal camera
-            limelightTable.getEntry("ledMode").setNumber(1); // forces LEDs off
-            break;
-        }
+        // switch (subsystemMode) {
+        // case PROCESSING:
+        //     limelightTable.getEntry("camMode").setNumber(0); // enables vision processing
+        //     limelightTable.getEntry("ledMode").setNumber(3); // forces LEDs on
+        //     break;
+        // case OFF:
+        //     limelightTable.getEntry("camMode").setNumber(1); // sets normal camera
+        //     limelightTable.getEntry("ledMode").setNumber(1); // forces LEDs off
+        //     break;
+        // }
 
         /*
          * Note: "synchronized (this)" guarantees that only one thread
@@ -108,32 +108,32 @@ public class Vision extends Subsystem<Vision.VisionMode> implements UrsaRobot {
             }
         }
 
-        // Toggles vision processing
-        if (xbox.getSingleButtonPress(controls.map.get("vision_processing"))) {
-            visionProcessing = !visionProcessing;
-        }
+        // // Toggles vision processing
+        // if (xbox.getSingleButtonPress(controls.map.get("vision_processing"))) {
+        //     visionProcessing = !visionProcessing;
+        // }
 
-        // Toggles taking snapshots -- TODO temp
-        if (xbox.getSingleButtonPress(controls.map.get("shooter_off"))) {
-            snapshot = !snapshot;
-        }
+        // // Toggles taking snapshots -- TODO temp
+        // if (xbox.getSingleButtonPress(controls.map.get("shooter_off"))) {
+        //     snapshot = !snapshot;
+        // }
 
         // Prints out target information -- TODO temp
-        if (xbox.getSingleButtonPress(controls.map.get("shooter_out"))) {
-            if (validTarget()) { // If a target is found
-                System.out.println("tx: " + tx); // Horizontal offset
-                System.out.println("ty: " + ty); // Vertical offset
-                System.out.println("ta: " + ta); // Area fullness
-                System.out.println("ts: " + ts); // Skew
-            }
-        }
+        // if (xbox.getSingleButtonPress(controls.map.get("shooter_out"))) {
+        //     if (validTarget()) { // If a target is found
+        //         System.out.println("tx: " + tx); // Horizontal offset
+        //         System.out.println("ty: " + ty); // Vertical offset
+        //         System.out.println("ta: " + ta); // Area fullness
+        //         System.out.println("ts: " + ts); // Skew
+        //     }
+        // }
     }
 
     /**
      * @return if there is a valid Limelight target
      */
-    public static boolean validTarget() {
-        return tv == 1;
-    }
+    // public static boolean validTarget() {
+    //     return tv == 1;
+    // }
 
 }
