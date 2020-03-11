@@ -7,6 +7,7 @@ import edu.wpi.first.wpiutil.math.MathUtil;
 
 /** 
  * This subsystem class operates the High Shooter mechanism.
+ * @deprecated
  */
 public class HighShooter extends Subsystem<HighShooter.ShooterMode> implements UrsaRobot {
 
@@ -21,7 +22,7 @@ public class HighShooter extends Subsystem<HighShooter.ShooterMode> implements U
     private Encoder encoder;
     private PIDController pidController;
     private Feeder feeder;
-    
+
     /**
 	 * Constructor for the High Shooter subsystem.
      * Only one HighShooter object should be instantiated at any time.

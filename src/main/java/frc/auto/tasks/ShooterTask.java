@@ -1,23 +1,23 @@
 package frc.auto.tasks;
 
-import frc.robot.HighShooter;
-import frc.robot.HighShooter.ShooterMode;
+import frc.robot.Shooter;
+import frc.robot.Shooter.ShooterMode;
 
 /**
- * This is a Task class for controlling the High Shooter mechanism during autonomous.
+ * This is a Task class for controlling the Shooter mechanism during autonomous.
  */
 public class ShooterTask extends Task{
     private long runTime = 1000;
-    private HighShooter highShooter;
+    private Shooter shooter;
     private ShooterMode mode;
 
     /**
-     * Constructor for IntakeTasks.
-     * @param intake The active instance of Intake.
-     * @param mode The desired Intake mode.
+     * Constructor for ShooterTasks.
+     * @param intake The active instance of Shooter.
+     * @param mode The desired Shooter mode.
      */
-    public ShooterTask(HighShooter highShooter, ShooterMode mode) {
-        this.highShooter = highShooter;
+    public ShooterTask(Shooter shooter, ShooterMode mode) {
+        this.shooter = shooter;
         this.mode = mode;
     }
 
@@ -30,13 +30,13 @@ public class ShooterTask extends Task{
     }
 
     public void run() {
-        highShooter.setMode(mode);
+        shooter.setMode(mode);
         try {
             Thread.sleep(runTime);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        highShooter.setMode(ShooterMode.STOP); // stops after run time
+        shooter.setMode(ShooterMode.STOP); // stops after run time
     }
 
     public String toString() {

@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Spark;
 
 /**
  * This class operates the Feeder mechanism.
+ * @deprecated
  */
 public class Feeder extends Subsystem<Feeder.FeederMode> implements UrsaRobot {
 

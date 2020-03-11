@@ -16,14 +16,14 @@ public class Intake extends Subsystem<Intake.IntakeMode> implements UrsaRobot {
     }
 
     private final Spark intakeMotor;
-    private Feeder feeder;
+    // private Feeder feeder;
 
     /**
      * Constructor for the Intake mechanism.
      * Only one Intake object should be instantiated at any time.
      */
-    public Intake(Feeder feeder) {
-        this.feeder = feeder;
+    public Intake(/*Feeder feeder*/) {
+        // this.feeder = feeder;
 
         intakeMotor = new Spark(INTAKE);
         setMode(IntakeMode.STOP);
@@ -41,8 +41,7 @@ public class Intake extends Subsystem<Intake.IntakeMode> implements UrsaRobot {
         switch (subsystemMode) {
         case IN:
             intakeMotor.set(-0.69420);
-            // TODO decide when to do this
-            feeder.setMode(Feeder.FeederMode.IN);
+            // feeder.setMode(Feeder.FeederMode.IN);
             break;
         case STOP:
             intakeMotor.set(0.0);

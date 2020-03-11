@@ -26,7 +26,7 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 	 * STOP is for stopping.
 	 */
 	public enum DriveMode {
-		AUTO_DRIVE, TURN, ALIGN, DRIVE_STICKS, STOP;
+		AUTO_DRIVE, TURN, /*ALIGN,*/ DRIVE_STICKS, STOP;
 	}
 
 	public WPI_TalonFX mFrontLeft, mFrontRight, mRearLeft, mRearRight;
@@ -85,9 +85,9 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 		case TURN:
 			turnTo();
 			break;
-		case ALIGN:
-			autoAlign();
-			break;
+		// case ALIGN:
+		// 	autoAlign();
+		// 	break;
 		case DRIVE_STICKS:
 			sticksBox();
 			break;
@@ -124,9 +124,9 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 		// 	setMode(DriveMode.ALIGN);
 		// }
 		// Goes back to drive sticks after align complete in teleop
-		if (subsystemMode == DriveMode.STOP) {
-			setMode(DriveMode.DRIVE_STICKS);
-		}
+		// if (subsystemMode == DriveMode.STOP) {
+		// 	setMode(DriveMode.DRIVE_STICKS);
+		// }
 	}
 
 	/**
@@ -283,9 +283,9 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 			// desiredAngle += getHeading(); // makes it turn by angle; TODO test
 			// desiredAngle = turnAmount(desiredAngle); // supposedly optimizes turning; TODO test
 			break;
-		case ALIGN:
-			// TODO add autocompiler implementation?
-			break;
+		// case ALIGN:
+		// 	// TODO add autocompiler implementation?
+		// 	break;
 		case DRIVE_STICKS:
 			break;
 		case STOP:
@@ -460,53 +460,53 @@ public class Drive extends Subsystem<Drive.DriveMode> implements UrsaRobot {
 		return -turnAmount;
 	}
 
-	/**
-	 * TODO drive forward when target is aligned. maximize area and then exit
-	 * TODO do we need to use ty? other limelight vars?
-	 * Iterates the auto align control loop to automatically align
-	 * the robot to a given Limelight target (if such a target exists)
-	 */
-	private void autoAlign() {
-		if (Vision.validTarget()) {
-			// TODO adjust
-			double maxTurnPower = 0.20;
-			double maxTapeAreaPercent = 60;
-			double passiveSpeed = 0.25;
-			double turnKp = 1.0 / 80.0;
-			double tolerance = 0.2;
+	// /**
+	//  * TODO drive forward when target is aligned. maximize area and then exit
+	//  * TODO do we need to use ty? other limelight vars?
+	//  * Iterates the auto align control loop to automatically align
+	//  * the robot to a given Limelight target (if such a target exists)
+	//  */
+	// private void autoAlign() {
+	// 	if (Vision.validTarget()) {
+	// 		// TODO adjust
+	// 		double maxTurnPower = 0.20;
+	// 		double maxTapeAreaPercent = 60;
+	// 		double passiveSpeed = 0.25;
+	// 		double turnKp = 1.0 / 80.0;
+	// 		double tolerance = 0.2;
 
-			// turn PID using tx
-			double outputPower = turnKp * Vision.tx;
+	// 		// turn PID using tx
+	// 		double outputPower = turnKp * Vision.tx;
 
-			// bounds output power to maximum
-			if (outputPower > maxTurnPower)
-				outputPower = maxTurnPower;
+	// 		// bounds output power to maximum
+	// 		if (outputPower > maxTurnPower)
+	// 			outputPower = maxTurnPower;
 
-			// TODO TEST - set drive powers to passive speed + PID speed
-			if (Vision.tx < 0) {// need to turn right
-				System.out.println("right power: " + (passiveSpeed + outputPower));
-				leftPower = passiveSpeed + outputPower;
-				rightPower = -leftPower;
-			} else if (Vision.tx > 0) { // need to turn left
-				System.out.println("left power: " + (passiveSpeed + outputPower));
-				rightPower = passiveSpeed + outputPower;
-				leftPower = -rightPower;
-			}
+	// 		// TODO TEST - set drive powers to passive speed + PID speed
+	// 		if (Vision.tx < 0) {// need to turn right
+	// 			System.out.println("right power: " + (passiveSpeed + outputPower));
+	// 			leftPower = passiveSpeed + outputPower;
+	// 			rightPower = -leftPower;
+	// 		} else if (Vision.tx > 0) { // need to turn left
+	// 			System.out.println("left power: " + (passiveSpeed + outputPower));
+	// 			rightPower = passiveSpeed + outputPower;
+	// 			leftPower = -rightPower;
+	// 		}
 
-			if (Math.abs(Vision.tx) < tolerance) {
-				System.out.println("target acquired");
-				setMode(DriveMode.STOP);
-				return;
-			}
+	// 		if (Math.abs(Vision.tx) < tolerance) {
+	// 			System.out.println("target acquired");
+	// 			setMode(DriveMode.STOP);
+	// 			return;
+	// 		}
 
-			if (Vision.ta > maxTapeAreaPercent) {
-				System.out.println("kill align");
-				setMode(DriveMode.STOP);
-				return;
-			}
-		} else {
-			System.out.println("NO VALID TARGET");
-		}
-	}
+	// 		if (Vision.ta > maxTapeAreaPercent) {
+	// 			System.out.println("kill align");
+	// 			setMode(DriveMode.STOP);
+	// 			return;
+	// 		}
+	// 	} else {
+	// 		System.out.println("NO VALID TARGET");
+	// 	}
+	// }
 	
 }

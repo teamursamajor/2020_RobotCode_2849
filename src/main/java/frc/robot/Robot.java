@@ -31,8 +31,8 @@ public class Robot extends TimedRobot implements UrsaRobot {
 	// private Outtake outtake;
 	private Climb climb;
 	// private MusicPlayer musicPlayer;
-	private HighShooter shooter;
-	private Feeder feeder;
+	private Shooter shooter;
+	// private Feeder feeder;
 	private Vision vision;
 
 	// Autonomous
@@ -53,13 +53,13 @@ public class Robot extends TimedRobot implements UrsaRobot {
 		Logger.log("********ROBOT PROGRAM STARTING********", LogLevel.INFO);
 
 		drive = new Drive();
-		// drive.initialize("DriveThread");
+		drive.initialize("DriveThread");
 
 		spinner = new Spinner();
 		spinner.initialize("SpinnerThread");
 
 		climb = new Climb();
-		// climb.initialize("ClimbThread");
+		climb.initialize("ClimbThread");
 
 		belt = new Belt();
 		belt.initialize("BeltThread");
@@ -68,13 +68,13 @@ public class Robot extends TimedRobot implements UrsaRobot {
 		// outtake = new Outtake();
 		// outtake.initialize("OuttakeThread");
 
-		feeder = new Feeder();
-		feeder.initialize("FeederThread");
+		// feeder = new Feeder();
+		// feeder.initialize("FeederThread");
 
-		intake = new Intake(feeder);
+		intake = new Intake();
 		intake.initialize("IntakeThread");
 
-		shooter = new HighShooter(feeder);
+		shooter = new Shooter();
 		shooter.initialize("ShooterThread");
 
 		// musicPlayer = new MusicPlayer();
@@ -193,9 +193,9 @@ public class Robot extends TimedRobot implements UrsaRobot {
 		intake.setMode(Intake.IntakeMode.STOP);
 		belt.setMode(Belt.BeltMode.STOP);
 		// outtake.setMode(Outtake.OuttakeMode.STOP);
-		shooter.setMode(HighShooter.ShooterMode.STOP);
+		shooter.setMode(Shooter.ShooterMode.STOP);
 		spinner.setMode(Spinner.SpinnerMode.STOP);
-		feeder.setMode(Feeder.FeederMode.STOP);
+		// feeder.setMode(Feeder.FeederMode.STOP);
 		// musicPlayer.setMode(MusicPlayer.MusicMode.STOP);
 
 		Logger.log("Disabled " + robotMode + " mode", LogLevel.INFO);

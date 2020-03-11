@@ -6,7 +6,7 @@ import frc.auto.tasks.*;
 import frc.robot.Drive.DriveMode;
 import frc.robot.Intake.IntakeMode;
 import frc.robot.Belt.BeltMode;
-import frc.robot.HighShooter.ShooterMode;
+import frc.robot.Shooter.ShooterMode;
 import frc.auto.tokens.*;
 import frc.robot.*;
 
@@ -26,7 +26,7 @@ public class AutoCompiler {
 	private Belt belt;
 	// private Outtake outtake;
 	// private MusicPlayer musicPlayer;
-	private HighShooter shooter;
+	private Shooter shooter;
 	
 	/**
 	 * Constructor for the AutoCompiler.
@@ -36,7 +36,7 @@ public class AutoCompiler {
 	 * @param belt The active instance of Belt.
 	 * @param shooter The active instance of HighShooter.
 	 */
-	public AutoCompiler(Drive drive, Intake intake, Belt belt, HighShooter shooter) {
+	public AutoCompiler(Drive drive, Intake intake, Belt belt, Shooter shooter) {
 		this.drive = drive;
 		this.intake = intake;
 		this.belt = belt;
@@ -79,9 +79,9 @@ public class AutoCompiler {
 					}
 					throw new Exception(); // if there is not a Number
 
-				case ALIGN:
-					taskSet.addTask(new DriveTask(0, drive, DriveMode.ALIGN));
-					break;
+				// case ALIGN:
+				// 	taskSet.addTask(new DriveTask(0, drive, DriveMode.ALIGN));
+				// 	break;
 					
 				case INTAKE:
 					if (tokenList.get(0).type == TokenType.BOOLEAN) { // expecting Boolean next
@@ -138,7 +138,7 @@ public class AutoCompiler {
 					if (tokenList.get(0).type == TokenType.BOOLEAN) { // expecting Boolean next
 						boolean ShooterActive = ((DataToken<Boolean>) tokenList.remove(0)).getValue();
 						// sets task to different mode depending on boolean
-						ShooterTask shooterTask = ShooterActive ? new ShooterTask(shooter, ShooterMode.ON) : new ShooterTask(shooter, ShooterMode.STOP);
+						ShooterTask shooterTask = ShooterActive ? new ShooterTask(shooter, ShooterMode.OUT) : new ShooterTask(shooter, ShooterMode.STOP);
 
 						if (tokenList.get(0).type == TokenType.NUMBER) { // if there is a Number next (for run time)
 							double time = ((DataToken<Double>) tokenList.remove(0)).getValue();
