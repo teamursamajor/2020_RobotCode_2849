@@ -36,6 +36,7 @@ public class Shooter extends Subsystem<Shooter.ShooterMode> implements UrsaRobot
         // Controlling the power of the motors based on the subsystem mode
         switch (subsystemMode) {
         case OUT:
+            // TODO adjust power?
             shooterMotor.set(0.60);
             break;
         case STOP:
