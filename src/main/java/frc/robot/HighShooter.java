@@ -10,10 +10,6 @@ import edu.wpi.first.wpiutil.math.MathUtil;
  */
 public class HighShooter extends Subsystem<HighShooter.ShooterMode> implements UrsaRobot {
 
-    private Feeder feeder;
-    private Encoder encoder;
-    private PIDController pidController;
-
     /**
      * Modes for High Shooter
      */
@@ -22,7 +18,10 @@ public class HighShooter extends Subsystem<HighShooter.ShooterMode> implements U
     }
 
     private final Spark shooterMotor;
-
+    private Encoder encoder;
+    private PIDController pidController;
+    private Feeder feeder;
+    
     /**
 	 * Constructor for the High Shooter subsystem.
      * Only one HighShooter object should be instantiated at any time.
@@ -37,7 +36,7 @@ public class HighShooter extends Subsystem<HighShooter.ShooterMode> implements U
         encoder.setDistancePerPulse(1/2048.0);
 
         // TODO TUNE VALUES
-        double kp = 1/1000.0;
+        double kp = 1/1300.0;
         double ki = 1/1300.0;
         double kd = 0.0;
         // double tolerance = 1;
@@ -59,10 +58,7 @@ public class HighShooter extends Subsystem<HighShooter.ShooterMode> implements U
             if (pidController.atSetpoint())
                 feeder.setMode(Feeder.FeederMode.IN);
             double rpm = encoder.getRate()*60.0;
-            // TODO might need to multiply output power by -1?
-            double outputPower = pidController.calculate(rpm, -2600.0);
-            // TODO for testing
-            double minPower = -0.75, maxPower = 0.75;
+            double outputPower = pidController.calculate(rpm, -2600.0);            double minPower = -0.75, maxPower = 0.75;
             outputPower = MathUtil.clamp(outputPower, minPower, maxPower);
             System.out.println("RPM: " + rpm);
             System.out.println("Output: " + outputPower);
