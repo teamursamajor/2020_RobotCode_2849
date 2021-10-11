@@ -21,8 +21,8 @@ public class ControlMap {
 
     public ControlMap() {
         // Outtake
-        map.put("shooter", XboxController.BUTTON_X);
-        // map.put("shooter_off", XboxController.BUTTON_Y);
+        map.put("shooter_out", XboxController.BUTTON_X);
+        map.put("shooter_off", XboxController.BUTTON_Y);
 
         // Intake
         map.put("intake_belt", XboxController.BUTTON_RIGHTBUMPER);

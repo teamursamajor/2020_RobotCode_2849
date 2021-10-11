@@ -6,7 +6,6 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.auto.compiler.AutoCompiler;
 // import frc.auto.compiler.AutoSelector;
@@ -22,6 +21,8 @@ import frc.diagnostics.Logger.LogLevel;
  * project.
  */
 public class Robot extends TimedRobot implements UrsaRobot {
+
+	
 
 	// Subsystems
 	private Drive drive;
@@ -107,8 +108,12 @@ public class Robot extends TimedRobot implements UrsaRobot {
 	 * This function is run when autonomous mode is first started up and should be
 	 * used for any autonomous initialization code.
 	 */
+
+
+		
 	@Override
 	public void autonomousInit() {
+		
 		Logger.log("Started Autonomous mode", LogLevel.INFO);
 		robotMode = "Autonomous";
 
@@ -126,6 +131,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 	}
 
 	/**

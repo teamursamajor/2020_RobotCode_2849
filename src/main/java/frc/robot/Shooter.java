@@ -21,15 +21,17 @@ public class Shooter extends Subsystem<Shooter.ShooterMode> implements UrsaRobot
      * Only one Shooter object should be instantiated at any time.
      */
     public Shooter() {
-        shooterMotor = new Spark(BELT);
+        shooterMotor = new Spark(19);
         setMode(ShooterMode.STOP);
     }
 
     public void readControls() {
+        /*
         if (xbox.getButton(controls.map.get("shooter_out")))
             setMode(ShooterMode.OUT);
         else
             setMode(ShooterMode.STOP);
+            */
     }
     
     public void runSubsystem() throws InterruptedException {
