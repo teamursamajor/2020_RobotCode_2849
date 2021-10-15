@@ -40,7 +40,7 @@ public class Intake extends Subsystem<Intake.IntakeMode> implements UrsaRobot {
     public void runSubsystem() throws InterruptedException {
         switch (subsystemMode) {
         case IN:
-            intakeMotor.set(-0.69420);
+            intakeMotor.set(-0.4);
             // feeder.setMode(Feeder.FeederMode.IN);
             break;
         case STOP:

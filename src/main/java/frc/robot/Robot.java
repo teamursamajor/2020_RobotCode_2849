@@ -29,7 +29,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
 	private Spinner spinner;
 	private Intake intake;
 	private Belt belt;
-	// private Outtake outtake;
+	private Outtake outtake;
 	private Climb climb;
 	// private MusicPlayer musicPlayer;
 	private Shooter shooter;
@@ -66,8 +66,8 @@ public class Robot extends TimedRobot implements UrsaRobot {
 		belt.initialize("BeltThread");
 
 		// TODO depending on which we go with only use either outtake or shooter
-		// outtake = new Outtake();
-		// outtake.initialize("OuttakeThread");
+		outtake = new Outtake();
+		outtake.initialize("OuttakeThread");
 
 		// feeder = new Feeder();
 		// feeder.initialize("FeederThread");
@@ -164,7 +164,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
 		climb.readControls();
 		intake.readControls();
 		belt.readControls();
-		// outtake.readControls();
+		outtake.readControls();
 		spinner.readControls();
 		// musicPlayer.readControls();
 		vision.readControls();
@@ -198,7 +198,7 @@ public class Robot extends TimedRobot implements UrsaRobot {
 		climb.setMode(Climb.ClimbMode.STOP);
 		intake.setMode(Intake.IntakeMode.STOP);
 		belt.setMode(Belt.BeltMode.STOP);
-		// outtake.setMode(Outtake.OuttakeMode.STOP);
+		outtake.setMode(Outtake.OuttakeMode.STOP);
 		shooter.setMode(Shooter.ShooterMode.STOP);
 		spinner.setMode(Spinner.SpinnerMode.STOP);
 		// feeder.setMode(Feeder.FeederMode.STOP);

@@ -22,7 +22,7 @@ public interface UrsaRobot {
 
 	// Spark Ports
 	// TODO revert SPINNER to 1
-	public static final int SPINNER = 5, INTAKE = 2, BELT = 3, SHOOTER = 0, FEEDER = 1, OUTTAKE = 11;
+	public static final int SPINNER = 5, INTAKE = 2, BELT = 3, SHOOTER = 0, FEEDER = 1, OUTTAKE = 4;
 
 	// Sensor Ports
 	public static final int FEEDER_SWITCH_PORT = 3, OUTTAKE_SWITCH_PORT = 0;
